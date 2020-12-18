@@ -1,0 +1,175 @@
+\documentclass[a4paper,12pt,twoside]{book}
+
+% standard incantations
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[german]{babel}
+\usepackage{csquotes}
+
+% clickable links in the PDF
+\usepackage{hyperref}
+\usepackage{float}
+% bibliography
+\usepackage{biblatex}
+\addbibresource{literatur.bib}
+
+% glossary
+\usepackage[xindy]{glossaries} 
+\input{glossary}
+\makeglossaries
+
+% add literatur to toc
+\usepackage[nottoc]{tocbibind}
+
+% graphics and images
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{wrapfig}
+
+% color packages
+\usepackage{color, colortbl}
+\definecolor{Gray}{RGB}{216,229,234}
+\definecolor{EUBlue}{RGB}{45,172,227}
+\definecolor{White}{RGB}{255,255,255}
+\usepackage[first=0,last=9]{lcg}
+\newcommand{\ra}{\rand0.\arabic{rand}}
+
+% multirow table
+\usepackage{multirow}
+
+% footnote package
+\usepackage{tablefootnote}
+
+% --------------------------------------------------------------------
+% Definitions of title informations
+% --------------------------------------------------------------------
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+
+\makeatletter
+\def\printtitle{	
+    {\centering \@title\par}}
+\makeatother			
+
+\makeatletter
+\def\printauthor{
+    {\centering \large \@author}}
+\makeatother
+
+% --------------------------------------------------------------------
+% Config Title & Author
+% --------------------------------------------------------------------
+\title{
+\HRule{0.5pt} \\
+\LARGE \textbf{\uppercase{Sentiments of Bundestag}}
+\HRule{2pt} \\ [0.5cm]
+\normalsize \textsc{Graph-basiertes Informationssystem zur Analyse sozialer Interaktion im Deutschen Bundestag}
+\\[2.0cm]
+\normalsize \today
+}
+
+\author{
+\normalsize Betreut von
+\normalsize Prof. Dr. Thomas Hoppe\\
+\normalsize Informationssysteme\\
+\normalsize M.Sc. Angewandte Informatik\\
+\normalsize Hochschule für Technik und Wirtschaft\\
+\normalsize Treskowallee 8, 10318 Berlin, Deutschland\\
+}
+
+\begin{document}
+% ------------------------------------------------------------------------------
+% Maketitle
+% ------------------------------------------------------------------------------
+\thispagestyle{empty}
+\printtitle
+  	\vfill
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=200px, keepaspectratio]{logos/bundestag.png}
+\end{figure}
+  	\vfill
+\printauthor		
+\newpage
+
+\pagenumbering{roman}
+\setcounter{page}{3}
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+\newpage
+
+\listoffigures
+\newpage
+
+\listoftables
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{6}
+
+\chapter{Einleitung}
+\include{chapters/01-Einleitung/01-Einleitung}
+\include{chapters/01-Einleitung/02-Aufbau}
+
+\chapter{Crawler}
+\include{chapters/02-Crawler/01-Einleitung}
+\include{chapters/02-Crawler/02-Grundlagen}
+\include{chapters/02-Crawler/03-Anforderungen-Konzept}
+\include{chapters/02-Crawler/04-Implementierung}
+\include{chapters/02-Crawler/05-Zusammenfassung-Ausblick}
+
+\chapter{Kommunikationsmodell}
+\include{chapters/03-Kommunikationsmodell/01-Einleitung}
+\include{chapters/03-Kommunikationsmodell/02-Grundlagen}
+\include{chapters/03-Kommunikationsmodell/03-Anforderungen-Konzept}
+\include{chapters/03-Kommunikationsmodell/04-Implementierung}
+\include{chapters/03-Kommunikationsmodell/05-Zusammenfassung-Ausblick}
+
+\chapter{Sentiment Analyse}
+\include{chapters/04-Sentiment-Analyse/01-Einleitung}
+\include{chapters/04-Sentiment-Analyse/02-Grundlagen}
+\include{chapters/04-Sentiment-Analyse/03-Anforderungen-Konzept}
+\include{chapters/04-Sentiment-Analyse/04-Implementierung}
+\include{chapters/04-Sentiment-Analyse/05-Zusammenfassung-Ausblick}
+
+\chapter{Analyse der Interaktion zwischen Abgeordneten}
+\include{chapters/05-Interaktion-Abgeord/01-Einleitung}
+\include{chapters/05-Interaktion-Abgeord/02-Grundlagen}
+\include{chapters/05-Interaktion-Abgeord/03-Anforderungen-Konzept}
+\include{chapters/05-Interaktion-Abgeord/04-Implementierung}
+\include{chapters/05-Interaktion-Abgeord/05-Zusammenfassung-Ausblick}
+
+\chapter{Analyse der Interaktion zwischen Fraktionen}
+\include{chapters/06-Interaktion-Fraktionen/01-Einleitung}
+\include{chapters/06-Interaktion-Fraktionen/02-Grundlagen}
+\include{chapters/06-Interaktion-Fraktionen/03-Anforderungen-Konzept}
+\include{chapters/06-Interaktion-Fraktionen/04-Implementierung}
+\include{chapters/06-Interaktion-Fraktionen/05-Zusammenfassung-Ausblick}
+
+\chapter{Graphauswertung}
+\include{chapters/07-Graphauswertung/01-Einleitung}
+\include{chapters/07-Graphauswertung/02-Grundlagen}
+\include{chapters/07-Graphauswertung/03-Anforderungen-Konzept}
+\include{chapters/07-Graphauswertung/04-Implementierung}
+\include{chapters/07-Graphauswertung/05-Zusammenfassung-Ausblick}
+
+\chapter{Benutzeroberfläche}
+\include{chapters/08-Benutzeroberfläche/01-Einleitung}
+\include{chapters/08-Benutzeroberfläche/02-Grundlagen}
+\include{chapters/08-Benutzeroberfläche/03-Anforderungen-Konzept}
+\include{chapters/08-Benutzeroberfläche/04-Implementierung}
+\include{chapters/08-Benutzeroberfläche/05-Zusammenfassung-Ausblick}
+
+\pagenumbering{roman}
+\setcounter{page}{6}
+
+\printbibliography[title={Literaturverzeichnis}]
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\newpage
+
+\printglossaries
+\addcontentsline{toc}{chapter}{Glossar}
+\newpage
+
+\end{document}
