@@ -1,2 +1,2 @@
 # Dokumentation
-Sentiments-of-Bundestag: Graph-basiertes Informationssystem zur Analyse sozialerInteraktion im Deutschen Bundestag 
+## Sentiments-of-Bundestag: Graph-basiertes Informationssystem zur Analyse sozialerInteraktion im Deutschen Bundestag 
