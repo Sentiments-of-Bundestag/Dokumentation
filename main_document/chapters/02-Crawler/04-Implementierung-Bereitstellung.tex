@@ -1,0 +1,47 @@
+\section{Implementierung und Bereitstellung der Lösung}\label{sec:02_04_implementierung_bereitstellung}
+
+\subsection{Implementierung des Crawlers}
+Für die Umsetzung des Crawler wurde die Entscheidung getroffen eine Web-Anwendung (Rest-Schnittstelle, Crawl-Prozess und Scheduler) zu bauen. Dafür wurde Spring Boot~\cite{SpringBoot242} als Java-basierender Framework für die Entwicklung von Web-Anwendungen gewählt. Damit lassen sich Konfigurationen (für Rest-APIs, Datenbanktreiber, etc.) mit Hilfe des Spring-Initializers vereinfachen. Außerdem verfügt Spring Boot über einen eigenen Task-Scheduler der für den Crawl-Manager verwendet werden kann. Die finale Lösung beinhaltet vier Packages: \textbf{crawler} mit den Funktionalitäten für den Crawl-Prozess und das Parsen, \textbf{models} und \textbf{repositories} für den DB-Manager und \textbf{web} mit den Controllers für die Rest-Schnittstelle und den Services für den Crawl-Manager. Das gesamte Projekt-Verzeichnis inkl. Code ist auf dem Github-Repository \textit{Sentiments-of-Bundestag/Crawler}~\cite{Crawler2021} zu finden. Dort kommt unter anderem für die Ausführung Javascript-basierende Inhalte für den Download bestimmter Teile (Protokoll-Slides) der Webseite die \\\textbf{HtmlUnit}-Bibliothek~\cite{HtmlUnit2021} zum Einsatz (siehe ~\ref{subsubsec:techAnforderungen}).
+
+\subsection{Bereitstellung der Lösung}
+Der Crawler wurde auf dem Virtual-Server der Gruppe 1 (141.45.146.161) an der HTW (nur im HTW-Netz sichtbar) als Ubuntu-Service bereitgestellt. Der Crawler-Service liefert eine Rest-Schnittstelle, die jedoch nur auf dem infosys1 Rechner aus Sicherheitsgründen zugänglich ist. Die Konfiguration des Crawler-Services, die unter \textit{/etc/systemd/system/crawler.service} angelegt wird, sieht wie folgt aus (Start des Crawlers: systemctl enable crawler):
+\begin{lstlisting}
+[Unit]
+Description=Crawler App
+...
+User=local
+[Service]
+ExecStart=/usr/bin/java -jar ../Crawler-1.0-SNAPSHOT.jar
+Restart=always
+SyslogIdentifier=crawler
+...
+[Install]
+WantedBy=multi-user.target
+\end{lstlisting}
+Da für den Crawler eine MongoDB benötigt wird, soll diese auch bei der Bereitstellung konfiguriert werden. Dabei muss sichergestellt werden, dass der zugriff auf die Datenbank nur mit den entsprechenden Zugangsdaten erfolgt. Also soll nach dem Hinzufügen eines neuen Admin-User die Security-Konfiguration von mongod unter \textit{sudo nano /etc/mongod.conf} auf \textit{authorization: enabled} umgestellt werden. Da die MongoDB von der Gruppe 2 (Kommunikationsmodell) verwendet wird, sollen dafür entsprechend die Firewall-Regeln angepasst werden. Der nachfolgende Auszug aus unserer Konfiguration-Datei (/root/Firewall.sh) zeigt wie dies beispielhaft erfolgen sollte.
+\begin{lstlisting}
+...
+#
+# Erlaube zugang im 145.45.x.x port 27017 MongoDB
+#
+iptables -A INPUT -s 141.45.0.0/16 -p tcp -m tcp --dport 27017 -j ACCEPT
+...
+\end{lstlisting}
+
+Der bereitgestellten Crawler basiert auf Java 11 und ist somit eine Plattform-unabhängige Lösung, die auf allen Betriebssystemen angeboten werden kann. Die Steuerung des Crawlers erfolgt ausschließlich über die Rest-Schnittstelle mit folgenden Abfragen (hier mit curl in der Shell-Konsole):
+\begin{lstlisting}
+# opendata: https://www.bundestag.de/services/opendata
+# Start a default crawl to opendata
+$ curl -X POST http://localhost:8080/task/default
+# Start the default cron process to opendata: Mon - Fri, 23
+$ curl -X POST http://localhost:8080/task/cron
+# List all running tasks
+$ curl -X GET http://localhost:8080/tasks 
+# Cancel planed task
+$ curl -X POST http://localhost:8080/task/cancel/{task_id}
+# Cancel all planed tasks
+$ curl -X POST http://localhost:8080/tasks/cancel
+\end{lstlisting}
+
+Der Crawler auf dem infosys1-Server (infosys1.f4.htw-berlin.de) läuft seit dem 27.11.2020 mit ein Paar Unterbrechungen für Aktualisierungen problemlos und konnte zum Zeitpunkt der Verfassung dieser Dokumentation schon 204 Protokollen herunterladen, parsen und in der MongoDB speichern, Stammdaten von 4.086 Abgeordneten sammeln und dabei mehr als 500 Urls durchsuchen. Was den Datenaustausch mit anderen Gruppen angeht, konnte bis jetzt erfolgreich durch Gruppe 2 auf unsere MongoDB zugegriffen werden und Mitteilungen von neu gecrawlten Daten konnten fehlerfrei zugestellt werden.\\
+Aus den vom Crawler gesammelten Daten wird nun durch Gruppe 2 ein Kommunikationsmodell gebaut, das von den anderen Gruppen für weitere Verarbeitungen und Analysen verwendet wird. Der Aufbau dieses Kommunikationsmodells wird nun von Gruppe 2 im nächsten Kapitel aufgegriffen. 
