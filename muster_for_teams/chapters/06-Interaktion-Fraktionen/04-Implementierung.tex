@@ -11,5 +11,6 @@ Format, das das Abfragen und die Analyse der Daten erleichtert.
     \caption{ETL-Prozess zur Erfassung, Transformation und zum Laden von Daten}
     \label{fig:faction-etl}
 \end{figure}
-In diesem Fall handelt es sich um die Erfassung von Dokumenten, also Sitzungen des Bundestags, und deren Transformierung in einem gerichteten Graph, dessen Knoten
-die Fraktionen der gesamten Legislaturperiode und dessen Kanten die Beziehungen dazwischen sind. Abbildung \ref{fig:faction-etl} stellt eine grobe Architektur dar.  
+In diesem Fall handelt es sich um die Erfassung von Dokumenten, also Sitzungen des Bundestags, und deren Transformierung in einem gerichteten Graph, dessen Knoten und Kanten jeweils die 
+Fraktionen der gesamten Legislaturperiode und ihre gegenseitige Interaktionen sind. Abbildung \ref{fig:faction-etl} stellt eine grobe Architektur der ETL-Pipeline dar.\\
+Die Anwendung besteht aus vier Komponenten - eine Komponente pro Phase in der Pipeline und eine HTTP-Schnittstelle zum Auslösen des gesamten Vorgangs.  
