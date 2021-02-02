@@ -68,5 +68,8 @@ Mittels \ref{math:faction-hash-table} kann eine Repräsentation für eine Frakti
 aller Fraktionsmitglieder in Legislaturperiode $L$ entspricht. Somit sind alle Variablen zur Berechung der Gewichtungen vorhanden.\\
 Der \textbf{Aggregator} (siehe Abbildung \ref{fig:faction-etl}) iteriert über jede Interaktion, berechnet die Gewichtung und führt alle Eigenschaften der
 Interaktion zusammen mit der Gewichtung in einem Objekt über, das als eine Beziehung in einer Graph-Datenbank gespeichert werden kann. 
-\\
 \subsection{Laden}
+Die Anzahl der Kommentare in einer Legislaturperiode beträgt i.d.R mehrere Hunderttausend (c.a $300 000$ für die 19. Legislaturperiode). 
+Die Speicherkapazität eines durchschnittlichen Rechners ist ungenügend, um alle Kommentare gleichzeitig in RAM aufzubewahren oder alle Kommentare auf einmal 
+in der Graph-Datenbank zu speichern. Aus diesem Grund werden die Sitzungen hintereinander verarbeitet, wobei die Kommentare in einer Sitzung schubweise 
+an die Graph-Datenbank weitergegeben werden. Eine Batchgröße von $10 000$ Kommentare hat die Laufzeit eines Updates der gesamten Datenbank um den Faktor 4 verkleinert.
