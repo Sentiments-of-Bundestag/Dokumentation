@@ -1,1 +1,43 @@
 \section{Anforderungsanalyse und Konzept}\label{sec:06_03_anforderungen_konzept}
+%-umrechnung
+%-filtern nach datum/fraktion/sitzung
+%-ausgabe des akkumulierten sentimentwerts 
+%-graphdatenbank
+%-query akkumulierung
+%- applaus
+
+\subsection{Aufgabenstellung}
+Aufgabe war es, unter Verwendung der von Gruppe 2 und Gruppe 3 zur Verfügung gestellten Daten einen Graphen aufzubauen, aus dem die aggregierten Sentiments zwischen Fraktionen ablesbar sind. Dieser Graph sollte in einer Graphdatenbank abgelegt werden und über eine Netwerkschnittstelle abrufbar sein.
+
+\subsection{Anforderungsanalyse}
+Zur Anforderungsanalyse wurden zunächst die vorliegenden Daten und deren Schnittstelle betrachtet. Die Daten sind in einer MongoDB abgelegt, auf die unsere Arbeitsgruppe einen Lesezugriff hat. Daraus ergibt sich die erste Anforderung unserer Anwendung: Daten aus einer MongoDB müssen gelesen werden können.
+
+Anschließend wurde die Schnittstelle zur Anwendung der Gruppe 7 festgelegt. Da diese eine Analyse des Graphen vornehmen möchten wurde und damit möglichst individuellen Zugriff auf die Datenbank braucht, wurde auf das festlegen einer REST-Schnittstelle verzichtet. Stattdessen wurde sich darauf geeinigt, dass Gruppe 7 Zugriff auf die Graphdatenbank erhalten wird. Daraus ergibt sich also die Anforderung an unsere Applikation einen Zugriff auf die Datenbank zur Verfügung zu stellen. Im weiteren Verlauf des Projekts stellte sich heraus, dass die Sentiments der Interaktionen gewichtet abgelegt werden müssen, was die Abfrage mittels Queries etwas erschwert. Hierbei wurde sich darauf geeinigt, dass wir eine Query zur Verfügung stellen, die Interaktionssentiments aggregiert, welche als Grundlage für Queries an unsere Datenbank dient.
+
+Eine Weitere Anforderung an unsere Anwendung besteht darin, die Abgebildeten Interaktionen nach Datum, Sitzung, Fraktion und Applaus filtern zu können. Daraus ergibt sich die Anforderung, dass diese als Felder in der Datenbank vorhanden sein müssen, sodass sie per Query gefiltert werden können. Das Filtern nach Applaus ergab sich hierbei im Laufe des Projekts, da überproportional viele Interaktionen, die nur aus Applaus bestehen, auftreten. Deren Sentiments können das Gesamtergebnis verzerren und sollen deshalb filterbar sein. 
+
+Eine weitere Anforderung ergibt sich aus dem Datenbestand. Da sowohl Interaktionen zwischen Personen auf deren Fraktion übertragen werden sollen, als auch Interaktionen zwischen Fraktionen an sich in den Graphen aufgenommen werden sollen, müssen deren Sentiments in irgendeiner Form gewichtet werden. Eine Anforderung an unsere Applikation ist also, mit Sentiments so umzugehen, dass für die dazugehörige Fraktion unterschiedlich stark ins Gewicht fallen, je nachdem wie viele Personen an der Interaktion beteiligt waren.
+
+Um die Datenbank kontinuierlich zu füllen, sobald neue Sitzungen stattfinden, sollte ein Mechanismus eingebaut werden, der für das aktualisieren der Datenbank sorgt, sobald neue Daten vorliegen. Dazu wurde sich darauf geeinigt, einen REST-Endpoint zu implementieren, mit dem die in der Datenpipeline vor unserer liegenden Applikation eine Aktualisierung auslösen kann.
+
+\subsection{Konzept}
+Um die Ständige Erreichbarkeit und Aktualisierung zu ermöglichen, wurde unsere Anwendung als Serverapplikation konzeptioniert. Diese sollte aus zwei unabhängigen Teilen bestehen, also der Graphdatenbank und der Aggregationsapplikation. Für die Graphdatenbank wurde Neo4J ausgewählt.
+
+\subsubsection{Aggregation}
+Um die Sentiments der Interaktionen zwischen Fraktionsmitgliedern proportional zu Sentiments zwischen Fraktionen zu aggregieren wurden diese zunächst gewichtet. Dabei wurden zwei Formeln angewandt, die im folgenden erklärt werden sollen.
+
+Für die Interaktion zwischen Fraktionsmitgliedern $a$ und $b$ wird den Sentiments das gewicht 
+$$w=\frac{1}{N_{F_a}} \cdot \frac{1}{N_{F_b}}$$
+zugeordnet. Dabei stehen $N_{F_a}$ und $N_{F_b}$ jeweils für die Fraktionsgröße der Personen $a$ und $b$. Diese Formel wird angewandt, damit ein Sentiment zwischen zwei Fraktionsmitgliedern nicht direkt auf ihre Fraktion übertragen wird. Beispielsweise könnten sich zwei Fraktionen gut verstehen, obwohl zwei ihrer Mitglieder sich überhaupt nicht verstehen. Mit oben beschriebener Gewichtung wird in diesem Fall einem Sentiment zwischen den Beiden nur so viel Gewicht gegeben, wie sie selbst Anteil der Fraktion sind.
+
+Für Interaktionen zwischen einem Fraktionsmitglied $a$ und einer Fraktion $k$ wurde ebenfalls eine Formel ausgearbeitet. Da in einer Sitzung meist nur eine Teilgruppe aller Fraktionsmitglieder anwesend ist, sollte ein Sentiment auch entsprechend der Anzahl anwesender Mitglieder gewertet werden. Daraus ergibt sich die Formel
+$$w=\frac{1}{N_{F_a}} \cdot \frac{N_{a_k}}{N_{k}}$$ mit $N_{F_a}$ als Anzahl der Fraktionsmitglieder der Fraktion von Person $a$, $N_{a_k}$ als Anzahl der Anwesenden Mitglieder der Fraktion $k$ und $N_{k}$ als Gesamtanzahl der Mitglieder von Fraktion $k$. 
+
+\subsubsection{Architektur}
+Die Serverapplikation wurde zunächst als Java Springboot Applikation konzeptioniert. Während der Implementierung sind damit leider technische Schwierigkeiten aufgetreten, weshalb das Konzept dann in einer Python Applikation umgesetzt wurde.
+
+%-auslesen
+%-fraktionsmitgliederanzahl bestimmen
+%-gewichtungen ermitteln
+%-in der query aggregieren, filtern nach
+%-rest aktualisierungsendpoint
