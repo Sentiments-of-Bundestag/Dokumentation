@@ -73,4 +73,21 @@ Die Speicherkapazität eines durchschnittlichen Rechners ist ungenügend, um all
 in der Graph-Datenbank zu speichern. Aus diesem Grund werden die Sitzungen hintereinander verarbeitet, wobei die Kommentare in einer Sitzung schubweise 
 an die Graph-Datenbank weitergegeben werden. Eine Batchgröße von $10 000$ Kommentaren hat die Laufzeit eines Updates der gesamten Datenbank um den Faktor 4 verkleinert. %im vergleich zu was?
 
+\subsection{Abfrage}
+Folgende Abfrage gibt eine Tabelle aus, die die aggregierten Sentiments zwischen allen Fraktionen angibt.
+%\begin{minted}{cypher}
+\begin{verbatim}
+MATCH p=(sender:Faction)-[r:COMMENTED]->(receiver:Faction) 
+WITH sender, receiver, sum(r.weight) AS weightsum,
+	collect(r) AS rlist 
+UNWIND rlist as r 
+RETURN sender.name, receiver.name,
+	sum((r.weight/weightsum)*r.polarity)
+\end{verbatim}
+
+%\end{minted}
+
+Dazu werden zuerst alle Relationen mit einzigartigem Sender und Empfänger gruppiert und deren Gewichtssumme ausgerechnet. In diesem Schritt werden alle Relationen auch zu einer Liste zusammengefasst. Das ist notwendig, da in einer WITH expression alle Ausgaben die gleiche Anzahl an Werten für einen Grouping Key zurückgeben müssen. In diesem Fall wird jedem Sender-Empfängerpaar eine Gewichtssumme und eine Relationsliste zugeordnet, welche dann weiterverarbeitet wird. Im nächsten Schritt wird die Relationsliste wieder in ihre Elemente zerlegt um die sum() Akkumulationsfunktion benutzen zu können. Das Resultat der Query ist dann der gewichtete Sentimentmittelwert für jedes Sender-Empfänger-Paar.
+
+
 %implementierung der berechnung der gesamtsentiments als query

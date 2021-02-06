@@ -36,8 +36,10 @@ $$w=\frac{1}{N_{F_a}} \cdot \frac{N_{a_k}}{N_{k}}$$ mit $N_{F_a}$ als Anzahl der
 \subsubsection{Architektur}
 Die Serverapplikation wurde zunächst als Java Springboot Applikation konzeptioniert. Während der Implementierung sind damit leider technische Schwierigkeiten aufgetreten, weshalb das Konzept dann in einer Python Applikation umgesetzt wurde.
 
-%-auslesen
-%-fraktionsmitgliederanzahl bestimmen
-%-gewichtungen ermitteln
-%-in der query aggregieren, filtern nach
-%-rest aktualisierungsendpoint
+Für die oben beschriebenen Gewichtungen muss als erstes die Mitgliederanzahl jeder Fraktion ermittelt werden. Dazu wurde eine MongoDB Query entwickelt, die alle Fraktionsmitglieder, die bisher in den Protokollen der behandelten Legislaturperiode vorkommen, ihrer Fraktion zuordnet und zählt. Dieses Vorgehen sollte nach dem ursprünglichen Konzept in SpringBoot umgesetzt werden, wurde aber letztendlich der Grund für den Wechsel zu Python, da das ausführen eigener MongoDB Queries in Python deutlich einfacher zu realisieren ist.
+
+Sobald die Mitgliederanzahl jeder Fraktion bestimmt ist sollen alle Sitzungen nacheinander Abgearbeitet werden und ihre Interaktionen samt dazugehöriger ausgerechneter Gewichte in der Graphdatenbank abegelegt werden.
+
+Zur Abfrage aggregierter Sentimentwerte sollten Cypher Queries implementiert werden, die jeweils den gewichteten Mittelwert aller den Filterkriterien entsprechenden Interaktionssentiments berechnen. Da beim gewichteten Mittelwert durch die Summe aller Gewichte geteilt wird, ist es in diesem Fall egal, welche Anzahl an Interaktionen den Filterkriterien entsprechen. Das ist auch der Grund, warum die Gewichtungen gesondert in der Datenbank abgelegt werden.
+
+Ein weiterer Teil der Applikation ist der Endpunkt zur Aktualisierung der Datenbank. Dieser sorgt dafür, dass die gesamte aktuelle Legislaturperiode neu eingelesen wird. Leider ist es notwendig, die gesamte Legislaturperiode neu einzulesen, da sich die Gewichte von Interaktionen vergangener Sitzungen in ändern können. Dies ist der Fall, wenn ein Fraktionsmitglied in dem neuen Sitzungsprotokoll vorkommt, das vorher in keinem Protokoll genannt war. Damit ändert sich die Gesamtzahl der Fraktionsmitglieder und somit auch die Gewichtungen.
