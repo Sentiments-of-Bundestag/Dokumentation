@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt,twoside]{article}
+\documentclass[a4paper,12pt,twoside]{book}
 
 % standard incantations
 \usepackage[T1]{fontenc}
@@ -100,25 +100,37 @@
 \newpage
 
 \listoffigures
+\newpage
 
 \listoftables
+\newpage
 
 \pagenumbering{arabic}
 \setcounter{page}{6}
 
+\chapter{Crawler}
 \include{chapters/02-Crawler/01-Einleitung}
 \include{chapters/02-Crawler/02-Grundlagen}
 \include{chapters/02-Crawler/03-Anforderungen-Konzept}
 \include{chapters/02-Crawler/04-Implementierung}
 \include{chapters/02-Crawler/05-Zusammenfassung-Ausblick}
 
+\chapter{Analyse der Interaktion zwischen Fraktionen}
+\include{chapters/06-Interaktion-Fraktionen/01-Einleitung}
+\include{chapters/06-Interaktion-Fraktionen/02-Grundlagen}
+\include{chapters/06-Interaktion-Fraktionen/03-Anforderungen-Konzept}
+\include{chapters/06-Interaktion-Fraktionen/04-Implementierung}
+\include{chapters/06-Interaktion-Fraktionen/05-Zusammenfassung-Ausblick}
+
 \pagenumbering{roman}
 \setcounter{page}{6}
 
 \printbibliography[title={Literaturverzeichnis}]
-\addcontentsline{toc}{section}{Literaturverzeichnis}
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\newpage
 
 \printglossaries
-\addcontentsline{toc}{section}{Glossar}
+\addcontentsline{toc}{chapter}{Glossar}
+\newpage
 
 \end{document}
