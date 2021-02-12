@@ -1,1 +1,37 @@
+%\documentclass{article}
+%\usepackage[utf8]{inputenc}
+%
+%\begin{document}
+
 \section{Zusammenfassung und Ausblick}\label{sec:06_05_zusammenfassung}
+Ziel dieses Teilprojekts war es, eine Datentransformationsapplikation zur Analyse der Interaktionen zwischen Abgeordneten zu entwickeln. Es war notwendig, folgendes zu untersuchen und zu definieren:
+\begin{itemize}
+  \item Modell der transformierten Enddaten und Datenbank zum Speichern der Ergebnisse für die weitere Analyse von Gruppe 7 und Gruppe 8. 
+  \item ein Backend Service, das in der Lage ist, die Sitzungsprotokolle abzufragen, sie in das entsprechende Modell zu transformieren und die Ergebnisse in der Datenbank zu speichern.
+  \item eine Architektur, die auf dem HTW Server deployed ist und in der Lage ist auf Änderungen in der Datenpipeline zu reagieren und immer aktuelle und vollständige Daten zu liefern. 
+\end{itemize}
+
+\subsection{Ergebnisse}
+Im Laufe der Arbeit standen wir vor vielen Herausforderungen und mussten unseren ersten Aktionsplan ändern, damit er der gesamten Datenpipeline und den Anforderungen der Verbraucher entspricht - Gruppe 7. Zuerst wollten wir ein Java-Backend mit Spring Boot implementieren, mussten jedoch auf Python umsteigen, um Speicher- und Leistungsprobleme zu lösen. Wir glauben jedoch, dass wir alle unsere Ziele erfüllt und umgesetzt haben:
+\begin{itemize}
+    \item eine Neo4J Datenbank steht zu verfügung und enthält die Interaktionen zwischen Fraktionen
+    \item jeder Kommentar oder Reaktion zwischen Abgeordnete wird gewichtet.[link] 
+    \item eine Python Backend-Applikation ist implementiert und ist als Docker Container auf den Uni-Server gehostet.
+    \item der Service kann über eine HTTP-Rest Schnittstelle über neue Session-Ids  benachrichtigt werden, ist in der Lage die neue Daten zu verarbeiten und in der Datenbank zu speichern.
+\end{itemize}
+
+
+\subsection{Retrospektive und Verbesserungsmöglichkeiten}
+Wir bewerten die Ergebnisse und Erfolge unseres Projekts für den Proof-of-Concept-Meilenstein als erfolgreich. Obwohl wir es geschafft haben, unsere Ziele zu erreichen, gibt es Punkte, an denen wir unsere Arbeitsweise und die Funktionalität unserer Applikation besser gestalten konnten.
+
+Als zukünftiges Ziel setzen wir uns den gleichzeitigen Code in unserer Applikation besser zu synchronisieren um viel Geschwindigkeit beim Lesen aus MongoDB und Schreiben in Neo4J zu gewinnen. Es wäre möglich unsere Service perfomanter und zuverlässiger zu gestalten, wenn wir folgende Werkzeuge ausprobieren und implementieren:
+\begin{itemize}
+    \item Motor (Async Driver) für MongoDB - MongoDBs Queries werden als async Cursor definiert und die Daten werden erst geholt, wenn sie gebraucht werden. [https://motor.readthedocs.io/en/stable/]
+    \item Asynchronous I/O mit asyncio — eine high-level API in der standard Bibliothek von Python, die die Arbeit mit asynchrone Prozessen in Python vereinfacht. [https://docs.python.org/3/library/asyncio.html]
+    \item concurrent.futures — Launching parallel tasks - eine high-level API um eine Menge von ähnliche Prozesse als einzelne Threads auszuführen. [https://docs.python.org/3/library/concurrent.futures.html]
+\end{itemize}
+Außerdem haben wir schon nach vier Monate zusammenarbeit die "Schwächen" und Stärken unseres Team identifiziert. Das wäre uns sehr viel helfen, wenn wir unsere Arbeit in der Zukunft planen und die Afgaben zwischen uns verteilen.
+
+
+%
+%\end{document}
