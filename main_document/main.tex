@@ -1,4 +1,36 @@
-\documentclass[a4paper,12pt,twoside]{book}
+\documentclass[a4paper,12pt,twoside]{book} 
+\usepackage[utf8]{inputenc}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
 
 % standard incantations
 \usepackage[T1]{fontenc}
@@ -11,12 +43,13 @@
 \usepackage{hyperref}
 \usepackage{float}
 % bibliography
-\usepackage{biblatex}
+\usepackage[sorting=none]{biblatex}
 \addbibresource{literatur.bib}
 
 % glossary
 \usepackage[xindy]{glossaries} 
 \input{glossary}
+
 \makeglossaries
 
 % add literatur to toc
@@ -29,7 +62,7 @@
 
 % color packages
 \usepackage{color, colortbl}
-\definecolor{Gray}{RGB}{216,229,234}
+\definecolor{Gray}{RGB}{220,220,220}
 \definecolor{EUBlue}{RGB}{45,172,227}
 \definecolor{White}{RGB}{255,255,255}
 \usepackage[first=0,last=9]{lcg}
@@ -40,6 +73,19 @@
 
 % footnote package
 \usepackage{tablefootnote}
+
+\lstset{
+  captionpos=b,
+  commentstyle=\color{UStuttDarkGreen},
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,
+  %keywordstyle=\color{UStuttDarkBlue},
+  showspaces=false,
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,
+  stringstyle=\color{UStuttDarkBlue},
+  tabsize=2
+}
 
 % --------------------------------------------------------------------
 % Definitions of title informations
@@ -97,27 +143,67 @@
 
 \setcounter{tocdepth}{2}
 \tableofcontents
-\newpage
 
 \listoffigures
-\newpage
 
 \listoftables
-\newpage
 
 \pagenumbering{arabic}
 \setcounter{page}{6}
 
-\chapter{Einleitung}
+\chapter{Vorwort}
 \include{chapters/01-Einleitung/01-Einleitung}
 \include{chapters/01-Einleitung/02-Aufbau}
 
 \chapter{Crawler}
+\thispagestyle{empty}
+\begin{table}[ht]
+\caption{Gruppe 1 (Crawler) - Arbeitsaufteilung}
+\label{tab:zeittafelEU}
+\centering
+\begin{tabular}{m{12em}|m{12em}|m{8em}}
+\hline
+\rowcolor{Gray}
+Aufgabe &Gruppenmietglieder &Anteil\\
+\hline
+\hline
+\rowcolor{White}
+Crawl-Manager& Boris Foko Kouti & ff\\
+\hline
+\hline
+\rowcolor{White}
+& Marlon Daniel Kohlberger & ff\\
+\cline{2-3}
+\rowcolor{White}
+\multirow{-2}{*}{Crawl-Utilities}& Boris Foko Kouti & ff\\
+\hline
+\hline
+\rowcolor{White}
+& Marlon Daniel Kohlberger & ff\\
+\cline{2-3}
+\rowcolor{White}
+\multirow{-2}{*}{DB-Manager}& Boris Foko Kouti & ff\\
+\hline
+\hline
+\cline{2-3}
+\rowcolor{White}
+& Arnauld Feussi & ff\\
+\rowcolor{White}
+& Marlon Daniel Kohlberger & ff\\
+\cline{2-3}
+\rowcolor{White}
+\multirow{-2}{*}{Dokumenation}& Boris Foko Kouti & ff\\
+\hline
+\hline
+\rowcolor{White}
+Bereitstellung der Lösung& Boris Foko Kouti & ff\\
+\hline
+\end{tabular}
+\end{table}
 \include{chapters/02-Crawler/01-Einleitung}
-\include{chapters/02-Crawler/02-Grundlagen}
-\include{chapters/02-Crawler/03-Anforderungen-Konzept}
-\include{chapters/02-Crawler/04-Implementierung}
-\include{chapters/02-Crawler/05-Zusammenfassung-Ausblick}
+\include{chapters/02-Crawler/02-Anforderungen}
+\include{chapters/02-Crawler/03-Loesung-Konzept}
+\include{chapters/02-Crawler/04-Implementierung-Bereitstellung}
 
 \chapter{Kommunikationsmodell}
 \include{chapters/03-Kommunikationsmodell/01-Einleitung}

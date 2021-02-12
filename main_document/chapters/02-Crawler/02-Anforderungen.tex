@@ -1,0 +1,32 @@
+\section{Anforderungen und Rahmenbedingungen}\label{sec:02_02_anforderungen_rahmen}
+Der zu entwickelnden Crawler soll in bestimmten Rahmenbedingungen einige Anforderungen erfüllen. Diese sowie die technischen und organisatorischen Rahmenbedingungen dazu werden in diesem Abschnitt aufgelistet. 
+\subsection{Anforderungen an dem Crawler}\label{subsec:02_02_anforderungen}
+Die Anforderungen an dem Crawler sind in~\cite{Hoppe2020Uebung} zusammengefasst und sehen vor, dass der Crawler kontinuierlich laufen sollte und dabei nach folgenden Dateien suchen:
+\begin{itemize}
+  \item \textbf{Protokolle}: Ein Protokoll ist eine XML-Datei, die den gesamten Ablauf einer Plenarsitzung (Inhaltsverzeichnis, Sitzungsverlauf mit Sitzungsbeginn, Tagesordnungspunkte, Sitzungsende, Anlagen, Rednerliste und  gewisse Konfigs) beinhaltet. Da sich die Formatierung der Protokollen in den Jahren stets verbessert hat, soll hier auf die Legislaturperioden geachtet werden:
+  \begin{itemize}
+    \item 19. Legislaturperiode: diese sind sehr gut strukturiert und leicht zu parsen
+    \item 18. Legislaturperiode: schlechter formatiert als die 19. Legislaturperiode. Hierfür wird vom Prof. Dr. Thomas Hoppe eine mit besser formatierte Version zur Verfügung gestellt
+  \end{itemize}
+  \item \textbf{Stammdaten der Abgeordneten}: Ist eine XML-Datei, die Informationen über Abgeordneten seit 1949 sammelt
+  \item \textit{Optional} \textbf{Namentliche Abstimmungen}: Liste aller namentlichen Abstimmungen im Bundestag seit dem 18.12.2009 in PDF-Format und seit dem 18.10.2012 auch in XLSX-Format~\cite{NamentlicheAbstimmung20}
+  \item Es muss sichergestellt sein, dass alle Daten immer auf dem neusten Stand sind. Dafür soll die Frequenz des Crawlers sich an dem Sitzungskalender des Bundestags~\cite{Sitzungskalender2021} orientieren
+\end{itemize}
+
+\subsection{Rahmenbedingungen}\label{subsec:02_02_rahmenbedingungen}
+\subsubsection{Organisatorische Rahmenbedingungen}
+Für die Planung des gesamten Projekts ist in einem zwei Wochen-Takt ein Plenum für den Brainstorming und eventuelle Teams-übergreifende Abstimmungen festgelegt worden. Im Team-Crawler (Gruppe 1) ist folgende Planung abgemacht worden:
+\begin{itemize}
+    \item Ziel bis zum 13.11.2020: Testdaten für andere Gruppen, erster lauffähiger Prototyp
+    \item Ziel bis zum 27.11.2020: Vorläufiger Release und Integration-Test mit anderen Gruppen (Kommunikationsmodell)
+    \item Ziel bis zum 04.12.2020: finale Version und Anfang der Dokumentation
+    \item Ziel bis zum 25.02.2021: Fertigstellung der Dokumentation und Abgabe
+\end{itemize}
+Neben den organisatorischen Rahmenbedingungen sind technische Rahmenbedingungen zu betrachten bzw. sind Fehler (Probleme) zu vermeiden (zu lösen).
+\subsubsection{Technische Rahmenbedingungen: Probleme beim Crawlen}\label{subsubsec:techAnforderungen}
+\begin{itemize}
+    \item Sperrung durch Server-Administrator (Server-Regel). Es soll vermieden werden, dass der ausführende Rechner wegen zu häufige Abfragen vom Server-Admin gesperrt wird und nur noch ein 500-Fehlercode erhält
+    \item Ajax basierende Inhalte. Die Open Data Webseite verwendet Ajax für die Bereitstellung der Daten und lädt diese im Hintergrund. Ein einfacher Download der Seite genug da nicht. Außerdem nutzen die meisten Links, hinter denen Dateien stehen, Javascript (es ist z. B. der Fall bei Slides und verborgenen Regionen). Dies muss entsprechend gehandelt werden
+    \item Mongo-DB-Konfiguration und Zurverfügungstellung der Daten für die Gruppe Kommunikationsmodell 
+    %\item Das robots.txt Protokoll
+\end{itemize}
