@@ -284,3 +284,6 @@ TSWLatexianTemp*
 #*Notes.bib.texpadtmp
 _minted-main
 main.pdf
+
+# intellij
+.idea/

@@ -1,5 +1,18 @@
-\documentclass[a4paper,12pt,twoside]{book} 
-\usepackage[utf8]{inputenc}
+\documentclass[a4paper,12pt,twoside]{book}
+
+\usepackage[german]{babel}
+
+\usepackage{iftex}
+\ifLuaTeX
+  \usepackage[utf8]{luainputenc}
+\else
+  \usepackage[utf8]{inputenc}
+\fi
+
+% standard incantations
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{csquotes}
 
 \usepackage{listings}
 \usepackage{xcolor}
@@ -32,13 +45,6 @@
 %"mystyle" code listing set
 \lstset{style=mystyle}
 
-% standard incantations
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage[german]{babel}
-\usepackage{csquotes}
-
 % clickable links in the PDF
 \usepackage{hyperref}
 \usepackage{float}
@@ -70,6 +76,10 @@
 
 % multirow table
 \usepackage{multirow}
+
+% better tables
+\usepackage{tabularx}
+\usepackage[a4paper]{geometry}
 
 % footnote package
 \usepackage{tablefootnote}
@@ -206,11 +216,7 @@ Bereitstellung der Lösung& Boris Foko Kouti & ff\\
 \include{chapters/02-Crawler/04-Implementierung-Bereitstellung}
 
 \chapter{Kommunikationsmodell}
-\include{chapters/03-Kommunikationsmodell/01-Einleitung}
-\include{chapters/03-Kommunikationsmodell/02-Grundlagen}
-\include{chapters/03-Kommunikationsmodell/03-Anforderungen-Konzept}
-\include{chapters/03-Kommunikationsmodell/04-Implementierung}
-\include{chapters/03-Kommunikationsmodell/05-Zusammenfassung-Ausblick}
+\include{chapters/03-Kommunikationsmodell/cme}
 
 \chapter{Sentiment Analyse}
 \include{chapters/04-Sentiment-Analyse/01-Einleitung}

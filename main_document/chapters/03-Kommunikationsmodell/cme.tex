@@ -1,0 +1,294 @@
+\section{Einleitung}\label{sec:03_01_einleitung}
+\subsection{Zielstellung}
+
+\subsection{Anforderungsdefinition}
+
+\begin{table}[H]
+    \renewcommand{\arraystretch}{2.5} % Default value: 1
+    %\renewcommand\baselinestretch{0.5}
+    \centering
+    \begin{tabularx}{\textwidth}{c|c|X}
+    %\begin{tabular}{l|l|p{0.67\textwidth}}
+                                & \textbf{FR01} & \noindent\parbox[c]{\hsize}{
+                                                  Ein passendes Kommunikationsmodell und
+                                                  Datenmodell muss gewählt werden} \\
+                                & \textbf{FR02} & \noindent\parbox[c]{\hsize}{
+                                                  Das Ausgabeformat von Gruppe 1 muss eingelesen
+                                                  werden können} \\
+                                & \textbf{FR03} & \noindent\parbox[c]{\hsize}{
+                                                  Interaktionen basierend auf den Kommentaren
+                                                  zu Redebeiträgen müssen extrahiert werden} \\
+                                & \textbf{FR04} & \noindent\parbox[c]{\hsize}{
+                                                  Extrahierte Interaktionen müssen für den
+                                                  Zugriff späterer Gruppen persistiert werden} \\
+        \textbf{Muss-Kriterien} & \textbf{FR05} & \noindent\parbox[c]{\hsize}{
+                                                  Spätere Gruppen müssen auf die persistierten
+                                                  Nachrichten zugreifen können} \\
+                                & \textbf{FR06} & \noindent\parbox[c]{\hsize}{
+                                                  Gruppe 1 muss die Möglichkeit haben, uns über
+                                                  die Verfügbarkeit neuer Daten zu
+                                                  benachrichtigen} \\
+                                & \textbf{FR07} & \noindent\parbox[c]{\hsize}{
+                                                  Gruppe 3 muss von uns benachrichtigt werden,
+                                                  wenn neue Daten zur Verfügung stehen} \\
+                                & \textbf{FR08} & \noindent\parbox[c]{\hsize}{
+                                                  Parteien und Abgeordnete müssen über Sitzungen
+                                                  hinweg eindeutig zuordenbar sein} \\
+                                & \textbf{FR09} & \noindent\parbox[c]{\hsize}{
+                                                  Daten von Gruppe 1 müssen aus deren MongoDB
+                                                  ausgelesen werden können} \\
+        \hline
+
+        \textbf{Soll-Kriterien} & \textbf{FR10} & \noindent\parbox[c]{\hsize}{
+                                                  Das Open Data Ausgabeformat des Bundestags soll
+                                                  eingelesen werden können} \\
+        \hline
+
+        \textbf{Kann-Kriterien} & \textbf{FR11} & \noindent\parbox[c]{\hsize}{
+                                                  Interaktionen innerhalb der Redebeiträge können
+                                                  extrahiert werden} \\
+
+    \end{tabularx}
+    \label{tab:03_requirements}
+\end{table}
+
+\subsection{Wahl des Kommunikationsmodell}
+
+\section{Umsetzung}\label{sec:03_02_umsetzung}
+
+
+\subsection{Communication Model Extractor (CME)}
+
+\subsection{Eingabeformate}
+Wie in den Anforderungen FR02 und FR10 definiert, muss als Eingabeformat
+einerseits das JSON Format der Gruppe 1 und andererseits soll auch das
+Open Data XML Format des Bundestags unterstützt werden. So wurden
+spezielle Parser für die jeweiligen Formate entwickelt, deren Ausgabe gleich
+formatiert ist und somit für die nächste Instanz eine einheitliche
+Schnittstelle bildet. Dieses Ausgabeformat enthält dabei neben Metadaten zur
+Sitzung selbst, wie z.~B. den Sitzungsstartzeitpunkt oder die Sitzungsnummer,
+sogenannte InteractionCandidates. Diese gruppieren, wie der Name bereits
+nahelegt, Daten, welche eventuelle für die Auswertung relevante Interaktion
+enthalten. So gruppiert ein InteractionCandidate den Redner (Speaker),
+einen Absatz von dessen Rede (Paragraph) und den eventuell darauf folgenden
+Kommentarblock (Comment).
+
+\subsection{Methodik der Kommunikations-Analyse}
+Die zu analysierenden Daten (InteractionCandidates) bieten zwei verschiedene
+Kommunikationstypen als Datengrundlage für die Erkennung von Interaktion:
+
+\begin{enumerate}
+    \item \textbf{Kommentare (FR03)}: werden von den Redeteilen gesondert
+        dargestellt und mit zusätzlicher Information bezüglich der
+        kommunikativen Einordnung des Beitrags versehen.
+    \item \textbf{Redeteile (FR10)}: werden in den Protokollen als
+        Paragraphen oder sinngemäß als Absätze aufgeführt.
+\end{enumerate}
+
+Aufgrund der Unterschiedlichkeit müssen beide Typen gesondert analysiert werden.
+
+\subsubsection{Kommentare}
+
+Kommentare werden nach rigiden strukturellen Regeln in den Protokollen der
+Bundestagssitzungen erfasst und liefern Informationen zum Sender des
+Kommentars. Dies kann eine oder mehrere Fraktionen oder eine oder mehrere an
+der Sitzung teilnehmende Personen sein. Dabei lassen sich Kommentare in drei
+Kategorien unterteilen:
+
+\begin{itemize}
+    \item \textbf{Publikumsresonanzen}: Z.~B. Beifall oder Entrüstung des
+        Senders, bei der eine genaue Zitierung durch die Stenographen nicht
+        möglich ist. Hier folgen Sender durch Präpositionen abgetrennt auf den
+        Kommentarinhalt. Bsp.: \enquote{Beifall bei der CDU}; \enquote{Zurufe
+        von der Linken und Grünen}
+    \item \textbf{Zitate}: Hier wird der Wortlaut eines Kommentars
+        wiedergegeben. Bei diesen Kommentaren wird die kommentierende Person
+        dem Wortlaut vorangestellt und durch einen Doppelpunkt abgetrennt.
+        Bsp.: \enquote{Dr. Klaus Hermann: Ganz toll gemacht}; \enquote{Dr.
+        Alexander Gauland: Schwachsinn}
+    \item \textbf{Beobachtungen der Protokollanten}: Spezielle Situationen in
+        denen ein oder mehrere Sitzungsteilnehmer nennenswerte Handlungen
+        vornehmen. Auch hier wird in der Regel der Sender der Nachricht
+        vorangestellt, wenngleich keine Trennung durch einen Doppelpunkt
+        erfolgt. Bsp.: \enquote{Manfred von Kuchenhausen verlässt die Sitzung}
+\end{itemize}
+
+Je nach erkannter Kommentarform kommen also verschiedene strukturelle
+Analyse-Vorgänge für die Feststellung von Sendern zum Einsatz.
+
+\paragraph{Kommentare mit abweichender Struktur}
+\subsubsection{Redeteile}
+Redeteile besitzen weniger Struktur als Kommentare, da sie nicht den Regeln
+der Stenographen unterliegen, sondern des individuellen Redners. So muss der
+Empfänger einer Aussage erst ermittelt werden.
+
+Redeteile werden daher auch nur als Interaktionen gewertet, sobald Fraktionen
+oder Mitglieder des Bundestags als mögliche Interaktionsempfänger im Fließtext
+erkannt werden.
+
+Die Erkennung von MDBs erfolgt über die Feststellung bekannter, eindeutiger
+Nachnamen, denen eine formale Anrede (Herr/Hr., Frau/Fr., Kollege, Doktor)
+vorangeht. Parteien werden anhand von ihren Namen bzw. deren Abkürzungen,
+beziehungsweise durch gängige aber eindeutige Kurzformen identifiziert. Die
+festgestellte Person oder Partei wird anschließend als Empfänger der
+Nachricht behandelt, während die sprechende Person, also der durch den
+Sitzungspräsidenten zuletzt eingeleitete Redner, die Rolle des Absenders
+einnimmt.
+
+Die Empfängerermittlung bei Redeanteilen verbleibt in der entstandenen
+Implementierung in einem recht rudimentären Zustand, da viele der inhärenten
+Probleme des Ansatzes nicht behandelt werden konnten. So kann etwa die
+Unterscheidung zwischen mehreren MDBs mit gleichen Nachnamen oder die
+kolloquiale Verwendungen von Farben (\enquote{Rot} für SPD oder die Linke) oder
+Begriffen (\enquote{Liberale} stellvertretend für die FDP) als Substitut für
+Fraktionen nicht behandelt werden. Um diese Problematiken zu umgehen
+werden in der Paragraphen-Analyse nur solche Interaktionen gewertet,
+welche sich an eindeutig identifizierbare MDBs oder Fraktionen richten.
+Nachnamen wie \enquote{Müller}, die mehrere MDBs bezeichnen können, aber auch in
+anderen Sachverhalte eingesetzte Begriffe, wie \enquote{Union}, werden somit aus der
+Schlüsselwort-Liste verbannt, mit der die Redeabschnitte abgetastet werden.
+Dadurch wird eine unbestimmt große Menge an Interaktionen nicht registriert,
+was mit Sicherheit eine Verzerrung der Projektergebnisse, aber gleichzeitig
+auch ein wesentliches Verbesserungspotential für die mögliche Fortsetzungen
+des Projekts darstellt. Gleichzeitig sollte nicht außer Acht gelassen werden,
+dass Interaktionen in Redeteilen nach unseren Messungen einen recht geringen
+Anteil der Interaktionen im Bundestag ausmachen. Die Steigerung der Anzahl
+erkannter Interaktionen durch unsere Methode der Redebeitrag-Analyse beträgt
+für die bisherigen Protokolle der 19. Wahlperiode lediglich 8\% gegenüber der
+alleinigen Betrachtung der Kommentare.
+
+\subsection{Ermittlung von teilnehmenden Personen}
+Personen müssen über Sitzungen hinweg eindeutig identifizierbar sein, damit
+nachfolgende Gruppen Informationen zu Parteizugehörigkeit und Namen korrekt
+zuweisen können (FR08). Personen werden in der \enquote{mdb} Collection der MongoDB
+gesammelt. Initialisiert werden kann diese Liste mithilfe der Stammdaten der
+Bundestagsabgeordneten des Bundestags. Diese als XML zur Verfügung gestellte
+Liste enthält alle relevanten Informationen, die bei der Identifizierung
+helfen (Namen und Namensänderungen, Parteizugehörigkeit mit von-bis
+Datumsangabe, Titel etc.).
+
+Da die Stammdaten unvollständig sind, auch weil Gastredner Reden halten oder
+Bundestagsabgeordnete in den Stammdaten fehlen, müssen weitere Redner während
+der Analyse hinzugefügt werden. Gerade in den Kommentaren können meist Vor-
+und Nachnamen extrahiert werden, um ein Abgleich mit den MDB-Daten
+vorzunehmen. Leider werden Namen oft inkonsistent geschrieben (z.~B. wird
+der zweite Vorname manchmal ausgeschrieben, abgekürzt oder weggelassen) oder
+die Stenographen vertippen sich. Auch wird das Format der Kommentarsektion
+nicht immer eingehalten.
+
+Weil wir fehlende Redner und Rechtschreibfehler nicht unterscheiden können,
+gelangen doppelte Einträge in die Datenbank. Wir haben Mechanismen eingebaut,
+um solche Fehler zu erkennen, können Sie aber nicht ganz ausschließen.
+
+\subsection{Infrastruktur Setup mit Docker}
+Um ein einfaches Deployment sicherzustellen, wurde sowohl die mongodb als
+auch der Service selbst mit Docker bzw. docker-compose abstrahiert.
+
+Die Standardkonfiguration des mongodb Containers wurde lediglich um
+Berechtigungen erweitert.
+
+\subsubsection{Datensicherheitsvorfall}
+
+Während der Projektimplementierung wurde der MongoDB Server, auf dem die
+Kommunikationsdaten abgelegt wurden, aufgrund von Fehlkonfigurationen
+kompromittiert.
+
+Die Firewall wurde zwar korrekt konfiguriert, der Docker-Daemon öffnet mit
+seinen Root-Rechten Container jedoch standardmäßig nach außen. Außerdem wurde
+kein Benutzername oder Passwort für die Datenbank gesetzt. Somit konnte ein
+Angreifer den offenen MongoDB-Port finden, die Datenbank löschen und eine
+Erpressernachricht hinterlassen - ein klassischer Ransomware-Angriff.
+
+Weil keine der Daten prägnant waren (da sie ohnehin im Netz frei verfügbar
+waren), konnte über den Verlust hinweg gesehen werden.
+
+Der zuständige Laboringenieur wurde kontaktiert und der Server zurückgesetzt.
+Nach einer Analyse der Fehler wurden Zugangsdaten für die Datenbank angelegt
+sowie Docker umkonfiguriert.
+
+Danach wurden die Maßnahmen getestet, um sicherzustellen, dass nur noch
+Nutzer mit SSH und Datenbank-Zugangsdaten Zugriff haben.
+
+Zukünftig wäre es sinnvoll den Docker-Daemon als Nicht-Root-User laufen zu
+lassen, um die Anwendung weiter abzusichern.
+
+\subsection{Schnittstelle für Zugriff auf den Communication Model Extractor]}
+
+Um den gewünschten Workflow einer Pipeline zu ermöglichen, entschieden wir
+uns eine API anzubieten, wodurch die Kommunikation zur vorherigen und
+folgenden Gruppe realisiert wurde.
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=\textwidth]{example-image-a}
+    \end{center}
+    \caption{TODO: write me}
+    \label{fig:02_api_call_flow}
+\end{figure}
+
+Es wurde sich mit Gruppe 1 darauf geeinigt, dass der CME einen Endpunkt
+anbietet, um die Information zu erhalten, wenn neue Protokolle aus dem
+Bundestag in deren Datenbank kreiert wurden. Zusätzlich bekamen wir
+Zugangsdaten, um auf deren Datenbank zugreifen zu können. So werden uns die
+Protokoll-ID's an \url{http://infosys2.f4.htw-berlin.de:9001/cme/data/} gesendet
+und der CME holt sich die gewünschten Protokolle zu einem späteren Zeitpunkt
+aus deren Datenbank. Danach kann die Auswertung geschehen.
+
+Um der darauffolgenden Gruppe Bescheid zu geben, wird nach dem Prozess der
+Auswertung ebenfalls eine HTTP Anfrage gesendet, in der über die neuen
+Protokoll-ID's informiert wird. Unsere API bietet dafür verschiedene Endpunkte
+an, um an alle notwendigen Informationen zu gelangen.
+
+Diese Endpunkte sind alle in einem Endpunkt festgehalten, die die API
+dokumentiert und hier abgerufen werden kann:
+\url{http://infosys2.f4.htw-berlin.de:9001/cme/doc/docs}
+
+Demnach enthält der CME folgende Endpunkte:
+\begin{itemize}
+    \item /cme/data/sessions/ - damit wird eine Liste aller existierenden
+        Sitzungen zurückgegeben
+    \item /cme/data/session/\{session\_id\} - um eine bestimmte Sitzung mit den
+        ermittelten Interaktionen zu erlangen
+    \item /cme/data/mdb - nützlich, um nach Mitgliedern des Bundestags zu
+        suchen, mithilfe der Query-Parameter mdb\_id, speaker\_id, forename
+        \& surname kann gefiltert werden
+    \item /cme/data/faction - damit können alle existierenden Fraktionen mit
+        jeweiliger ID abgerufen werden
+\end{itemize}
+
+Der Server ist nur über das HTW-Netzwerk erreichbar. Zusätzlich ist die API mit
+Basic Authentication geschützt. Dadurch kann nur auf die Daten zugegriffen
+werden, wenn sich mit Username und Passwort authentifiziert wird.
+
+Es wurden drei Clients, sprich User, angelegt, die auf die API zugreifen
+dürfen. Je einer für die anderen Gruppen crawler\_client \& sentiment\_client und
+cme\_admin für unser Team, um Testen zu können und bei Bugs der Ursache auf den
+Grund gehen zu können.
+
+\section{Fazit}\label{sec:03_05_fazit}
+
+Abschließend konnten die meisten Anforderungen erfolgreich umgesetzt werden.
+
+Der Service bietet Schnittstellen zur vorherigen und nachfolgenden Gruppe und
+sowie automatisierte Verarbeitungs-Mechanismen (notify). Auch die frühzeitige
+Bereitstellung einer akzeptierten Kommunikations-Modellierung auf Basis der XML-
+Rohdaten konnte realisiert werden. Der Großteil des Datenbestands wird
+analysiert, sodass sowohl Kommentare als auch Redeteile auf Kommunikationen
+überprüft werden.
+
+Allerdings verwirft der Service, aufgrund von Inkonsistenzen in der Syntax und
+Rechtschreibung sowie aufgrund von fehlenden kontextbasierten Analyse-
+Mechanismen, potentielle Interaktionen. Während in Kommentaren primär durch
+Abweichungen von Protokoll-Syntax und Rechtschreibfehler Probleme entstanden,
+so fehlte in den Redeteilen oft die nötige Information um die Empfänger von
+Interaktionen eindeutig zu bestimmen. Daher mussten Interaktionen verworfen
+werden und teils wurden in Kommentaren inkorrekt genannte Personen als
+Personenduplikate in den Datenbestand aufgenommen.
+
+Daher wurde das Ziel der Gruppe “Kommunikationsmodell” in Funktionalität und
+Integration zwar erreicht, allerdings wird deutliches Verbesserungspotential
+für die Extraktion von noch mehr Interaktionen und die Eliminierung von
+Artefakten gesehen
+
+Die ausgelieferte Deployment-Strategie und die Modulbeschreibungen in dieser
+Dokumentation sollten bei der Weiterentwicklung des Projekts hilfreich sein.
