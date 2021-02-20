@@ -1,14 +1,40 @@
 \section{Einleitung}\label{sec:03_01_einleitung}
+Im Rahmen des Projekts \enquote{Sentiments of Bundestag} (SoB) \todo{glos} sollten
+Bundestagsprotokolle analysiert werden, um den \enquote{Ton} des Bundestags zu
+Bewerten. Dieses Teilprojekt von Gruppe 2 ist für das \enquote{Kommunikationsmodell}
+(\enquote{Communication Model Extractor}, CME \todo{glos}) zuständig. Es ist
+der letzte Service der sich mit den Rohdaten der Bundesregierung beschäftigt.
+Aufbauend auf den hier erstellten Daten werden anschließend von Gruppe 3 die
+Sentimente berechnet.
+
 \subsection{Zielstellung}
+
+Dieser Service soll aus den Open Data XML-Dateien der 19. Wahlperiode des
+Bundestages bzw. der leicht abgewandelten Variante dieser Daten, welche von
+Gruppe 1 in Form von JSON-Dateien zur Verfügung gestellt werden,
+Interaktionen zwischen Fraktionen und oder Abgeordneten extrahieren.
+
+Für diese Extraktion werden die Rohdaten analysiert und darauf aufbauend ein
+passendes Kommunikationsmodell gewählt. Ebenfalls wird ein Datenmodell
+entwickelt, welches zur Speicherung und Weitergabe an die folgenden Gruppen
+dient.
 
 \subsection{Anforderungsdefinition}
 
+Auf Grundlage der im vorherigen Abschnitt beschriebenen Zielsetzung sowie der
+Diskussionen in den Plenarsitzungen während des Semesters, erfolgt in diesem
+Kapitel eine Zusammenfassung von Anforderungen, welche an das zu entwickelnde
+System gestellt werden. Diese werden in funktionale und nicht funktionale
+Anforderungen sowie in Muss-, Soll- und Kann-Kriterien unterteilt.
+
+Funktionale Anforderungen sind dabei Anforderungen, die beschreiben, was die
+Software können soll. Nicht-funktionale Anforderungen dagegen beschreiben wie
+die Software funktionieren soll.
+
 \begin{table}[H]
     \renewcommand{\arraystretch}{2.5} % Default value: 1
-    %\renewcommand\baselinestretch{0.5}
     \centering
     \begin{tabularx}{\textwidth}{c|c|X}
-    %\begin{tabular}{l|l|p{0.67\textwidth}}
                                 & \textbf{FR01} & \noindent\parbox[c]{\hsize}{
                                                   Ein passendes Kommunikationsmodell und
                                                   Datenmodell muss gewählt werden} \\
@@ -53,11 +79,84 @@
 \end{table}
 
 \subsection{Wahl des Kommunikationsmodell}
+FR01 erfordert die Auswahl eines passenden Kommunikations- und Datenmodells.
+Aus diesem Grund wurden zu Beginn des Semesters bereits vorliegenden
+Plenarprotokolle im Open Data Format der Bundesregierung untersucht.
+
+Bei dieser Untersuchung zeigte sich, dass die für uns interessanten Daten so
+angeordnet sind, dass jede Sitzung in Tagesordnungspunkte unterteilt ist,
+welche wiederum aus einer Vielzahl von Reden besteht. Eine solche Rede
+enthält dabei Informationen über den Redner, die in einzelne Absätze
+zerteilte Rede und optionale Kommentare anderer Parlamentarier oder
+Fraktionen zu diesen Absätzen. So sind in diesen Strukturen Interaktionen
+erkennbar, z.~B. in den Kommentaren an den Redner gerichtete Interaktionen oder
+auch in den Absätzen Interaktionen zwischen dem Redner und anderen
+Parlamentariern.
+
+Basierend auf diesen Erkenntnissen und in Absprache mit Gruppe 3, 4 und 5,
+welche für die Sentimentanalyse sowie die Auswertungen zwischen Fraktionen und
+Abgeordneten verantwortlich sind, wurde ein Sender-Empfänger-Modell gewählt.
+In diesem kann der Sender und Empfänger jeweils entweder ein
+Bundestagsabgeordneter oder eine Fraktion sein. Auf Basis des Inhalts der
+Nachricht, die vom Sender zum Empfänger geschickt wird, wird später von
+Gruppe 3 das Sentiment ermittelt.
 
 \section{Umsetzung}\label{sec:03_02_umsetzung}
-
+\todo{text? or drop first subsection?}
 
 \subsection{Communication Model Extractor (CME)}
+Nachdem die Anforderungen definiert wurden, wurde sich im Team die Struktur
+überlegt, wie die Applikation aufgebaut werden soll, um effizient die Aufgabe
+zu erfüllen.
+
+Es wurde sich für die Programmiersprache Python entschieden, da sich alle
+Teammitglieder damit gut auskennen. Da das Kommunikationsmodell außerdem an
+zweiter Stelle der Pipeline steht, schien es sinnvoll, schnelle Ergebnisse
+vorweisen zu können, was ebenfalls für Python spricht.
+
+Aus den funktionalen Anforderungen FR5, FR6 und FR7 ergibt sich, dass eine
+Kommunikation zu den Gruppen 1 und 3 nötig ist. Aufgrund hoher Kompatibilität
+wurde sich für eine REST-Schnittstelle entschieden. Diese API wurde in dem
+Python-Modul \enquote{api.py} mithilfe der FastAPI-Bibliothek implementiert. Sie
+beantwortet Anfragen zu Protokollen (Sessions) Fraktionen (Factions) und
+Bundestagsabgeordneten (MDBs). Außerdem wird eine SWAGGER-Dokumentation
+bereitgestellt.
+
+Zur Steuerung der Anwendung wird ein CLI, welches im \enquote{cli.py}-Modul umgesetzt
+wurde, in Form der cme-Applikation zur Verfügung gestellt. Dieses ist in
+verschiedene Unterkommandos aufgeteilt. Mithilfe dieser ist es z.B. möglich
+Protokolle manuell aus dem lokalen Speicher einzulesen (XML- oder JSON-Format)
+oder den Server zu starten. Mit \enquote{init} werden erstmalig Bundestagsabgeordnete
+eingelesen. \enquote{dump} ermöglicht die Interaktion mit der Datenbank, um einzelne
+Dokumente daraus zu extrahieren.
+
+Um die Anwendungslogik von der Business-Logik zu trennen, wird der \enquote{Controller}
+eingeführt. Es ist das zentrale Modul, welches die Prozesse koordiniert.
+
+Für die generische Verarbeitung der Rohdaten in den verschiedenen Datenformaten
+von Gruppe 1 (FR02) und der Open Data Protokolle des Bundestags (FR10) wurde
+das \enquote{Data}-Modul implementiert. Dieses wandelt die Rohdaten unter anderem in
+sogenannte InteractionCandidates um, welche dann mithilfe des \enquote{Extraction}-
+Moduls verarbeitet und ausgewertet werden (FR03 und FR11). So extrahiert dieses
+aus den InteractionCandidates die stattgefundenen Interaktionen basierend auf
+dem Sender-Empfänger-Modell und legt diese in einem sogenannten Transcript ab.
+Dieses Transcript wird anschließend mithilfe des \enquote{Database}-Moduls, welches für
+jeglichen Datenbankzugriff zuständig ist, in der Datenbank abgelegt.
+
+Zuletzt enthält \enquote{Domain} Datenmodelle für verschiedene Objekte, wie z.~B. MDB,
+Faction \& Interaction. Es wird von so gut wie jedem Modul benutzt.
+
+Die soeben beschriebenen Module und der damit verbundene Kontrollfluss zwischen
+diesen ist in \autoref{fig:03_project_structure} dargestellt.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=\textwidth]{example-image-a}
+    \end{center}
+    \caption{TODO: write me}
+    \label{fig:03_project_structure}
+\end{figure}
+\todo{figure caption}
 
 \subsection{Eingabeformate}
 Wie in den Anforderungen FR02 und FR10 definiert, muss als Eingabeformat
@@ -85,77 +184,111 @@ Kommunikationstypen als Datengrundlage für die Erkennung von Interaktion:
         Paragraphen oder sinngemäß als Absätze aufgeführt.
 \end{enumerate}
 
-Aufgrund der Unterschiedlichkeit müssen beide Typen gesondert analysiert werden.
+Aufgrund der Unterschiedlichkeit mussten beide Typen gesondert analysiert werden.
 
 \subsubsection{Kommentare}
 
 Kommentare werden nach rigiden strukturellen Regeln in den Protokollen der
 Bundestagssitzungen erfasst und liefern Informationen zum Sender des
-Kommentars. Dies kann eine oder mehrere Fraktionen oder eine oder mehrere an
-der Sitzung teilnehmende Personen sein. Dabei lassen sich Kommentare in drei
-Kategorien unterteilen:
+Kommentars. Dies kann eine oder mehrere Fraktionen oder eine oder mehrere
+an der Sitzung teilnehmende Personen sein. Dabei lassen sich Kommentare in
+drei Kategorien unterteilen:
 
 \begin{itemize}
     \item \textbf{Publikumsresonanzen}: Z.~B. Beifall oder Entrüstung des
         Senders, bei der eine genaue Zitierung durch die Stenographen nicht
-        möglich ist. Hier folgen Sender durch Präpositionen abgetrennt auf den
-        Kommentarinhalt. Bsp.: \enquote{Beifall bei der CDU}; \enquote{Zurufe
-        von der Linken und Grünen}
+        möglich ist. Hier folgen Sender durch Präpositionen abgetrennt auf
+        den Kommentarinhalt. Bsp.: \enquote{Beifall bei der CDU};
+        \enquote{Zurufe von der Linken und Grünen}
+
     \item \textbf{Zitate}: Hier wird der Wortlaut eines Kommentars
         wiedergegeben. Bei diesen Kommentaren wird die kommentierende Person
         dem Wortlaut vorangestellt und durch einen Doppelpunkt abgetrennt.
         Bsp.: \enquote{Dr. Klaus Hermann: Ganz toll gemacht}; \enquote{Dr.
         Alexander Gauland: Schwachsinn}
+
     \item \textbf{Beobachtungen der Protokollanten}: Spezielle Situationen in
         denen ein oder mehrere Sitzungsteilnehmer nennenswerte Handlungen
         vornehmen. Auch hier wird in der Regel der Sender der Nachricht
         vorangestellt, wenngleich keine Trennung durch einen Doppelpunkt
         erfolgt. Bsp.: \enquote{Manfred von Kuchenhausen verlässt die Sitzung}
+
 \end{itemize}
 
 Je nach erkannter Kommentarform kommen also verschiedene strukturelle
 Analyse-Vorgänge für die Feststellung von Sendern zum Einsatz.
 
 \paragraph{Kommentare mit abweichender Struktur}
-\subsubsection{Redeteile}
-Redeteile besitzen weniger Struktur als Kommentare, da sie nicht den Regeln
-der Stenographen unterliegen, sondern des individuellen Redners. So muss der
-Empfänger einer Aussage erst ermittelt werden.
 
-Redeteile werden daher auch nur als Interaktionen gewertet, sobald Fraktionen
-oder Mitglieder des Bundestags als mögliche Interaktionsempfänger im Fließtext
-erkannt werden.
+Es gibt weitere Eigenschaften, die die Extraktion der Interaktionen
+erschweren. So können pro Kommentar-Abschnitt mehrere Strukturen mit
+unterschiedlichen Inhalten auftreten, oder es werden insbesondere bei
+Publikumsresonanzen mehrere Absender aufgeführt (etwa
+\enquote{Beifall von SPD und die Linke}), wodurch zusätzlich eine korrekte
+Auftrennung der Sender auf Basis von Konjunktionen bzw. Interpunktion
+notwendig wird. Außerdem gibt es gelegentlich sekundäre Kommentare, bei denen
+auf vorherige Kommentare reagiert wird. Die einzigen zuverlässigen
+Formatierungen, die auf solche Verhältnisse hinweisen, sind die expliziten
+grammatikalische Struktur nach der Namensnennung:
+\enquote{an [neuer Empfänger] gerichtet} bzw. \enquote{zur [Ziel-Fraktion] gewandt}
+wirken innerhalb von Kommentaren als klares Merkmal für einen vom Redner
+abweichenden Empfänger. Das Schlüsselwort \enquote{Gegenruf} wird darüber
+hinaus häufig verwendet, um auf einen Dialog zwischen Kommentierenden
+hinzuweisen - da in diesen Fällen allerdings der Kommentarinhalt oft
+mindestens teilweise weiterhin auf den Redner abzielt, wurde bei solchen
+Kommentaren ebenfalls auf den Redner als Empfänger referenziert. Diese
+Problematik könnte in Fortsetzungen der Arbeit eventuell präziser behandelt
+werden, da in längeren Kommentar-Dialogstrukturen recht häufig auf die
+eindeutige Empfängerbezeichnung verzichtet wird nachdem diese initial
+eingeleitet werden, wodurch in unserer Methode viele für menschliche Leser
+offensichtliche Interaktionen nicht als solche registriert wurden. Nicht
+zuletzt werden die genannten syntaktischen Strukturen gelegentlich durch
+Rechtschreib- oder Zeichensetzungsfehler durchbrochen, wobei in diesen Fällen
+die gesamte Interaktion verloren geht.
+
+\subsubsection{Redeteile}
+Redeteile besitzen weniger Struktur als Kommentare, da sie nicht den Regeln der
+Stenographen unterliegen, sondern des individuellen Redners. So muss der
+Empfänger einer Aussage erst ermittelt werden. Redeteile wurden daher auch nur
+als Interaktionen gewertet, sobald Fraktionen oder Mitglieder des Bundestags
+als mögliche Interaktionsempfänger im Fließtext erkannt wurden.
 
 Die Erkennung von MDBs erfolgt über die Feststellung bekannter, eindeutiger
 Nachnamen, denen eine formale Anrede (Herr/Hr., Frau/Fr., Kollege, Doktor)
-vorangeht. Parteien werden anhand von ihren Namen bzw. deren Abkürzungen,
+vorangeht. Parteien wurden anhand von ihren Namen bzw. deren Abkürzungen,
 beziehungsweise durch gängige aber eindeutige Kurzformen identifiziert. Die
-festgestellte Person oder Partei wird anschließend als Empfänger der
-Nachricht behandelt, während die sprechende Person, also der durch den
+festgestellte Person oder Partei wurde anschließend als Empfänger der Nachricht
+behandelt, während die sprechende Person, also der durch den
 Sitzungspräsidenten zuletzt eingeleitete Redner, die Rolle des Absenders
-einnimmt.
+einnahm.
 
-Die Empfängerermittlung bei Redeanteilen verbleibt in der entstandenen
+Die Empfängerermittlung bei Redeanteilen verblieb in der entstandenen
 Implementierung in einem recht rudimentären Zustand, da viele der inhärenten
-Probleme des Ansatzes nicht behandelt werden konnten. So kann etwa die
+Probleme des Ansatzes nicht behandelt werden konnten. So konnte etwa die
 Unterscheidung zwischen mehreren MDBs mit gleichen Nachnamen oder die
 kolloquiale Verwendungen von Farben (\enquote{Rot} für SPD oder die Linke) oder
-Begriffen (\enquote{Liberale} stellvertretend für die FDP) als Substitut für
-Fraktionen nicht behandelt werden. Um diese Problematiken zu umgehen
-werden in der Paragraphen-Analyse nur solche Interaktionen gewertet,
-welche sich an eindeutig identifizierbare MDBs oder Fraktionen richten.
-Nachnamen wie \enquote{Müller}, die mehrere MDBs bezeichnen können, aber auch in
-anderen Sachverhalte eingesetzte Begriffe, wie \enquote{Union}, werden somit aus der
-Schlüsselwort-Liste verbannt, mit der die Redeabschnitte abgetastet werden.
-Dadurch wird eine unbestimmt große Menge an Interaktionen nicht registriert,
-was mit Sicherheit eine Verzerrung der Projektergebnisse, aber gleichzeitig
-auch ein wesentliches Verbesserungspotential für die mögliche Fortsetzungen
-des Projekts darstellt. Gleichzeitig sollte nicht außer Acht gelassen werden,
-dass Interaktionen in Redeteilen nach unseren Messungen einen recht geringen
-Anteil der Interaktionen im Bundestag ausmachen. Die Steigerung der Anzahl
-erkannter Interaktionen durch unsere Methode der Redebeitrag-Analyse beträgt
-für die bisherigen Protokolle der 19. Wahlperiode lediglich 8\% gegenüber der
-alleinigen Betrachtung der Kommentare.
+Begriffen (\enquote{Liberale} stellvertretend für die FDP) als Substitut für Fraktionen
+nicht behandelt werden. Um diese Problematiken zu umgehen wurden in der
+Paragraphen-Analyse nur solche Interaktionen gewertet, welche sich an eindeutig
+identifizierbare MDBs oder Fraktionen richten. Nachnamen wie \enquote{Müller}, die
+mehrere MDBs bezeichnen können, aber auch in anderen Sachverhalte eingesetzte
+Begriffe, wie \enquote{Union}, wurden somit aus der Schlüsselwort-Liste verbannt, mit
+der die Redeabschnitte abgetastet wurden. Auch die Nennung von Nachnamen als
+Referenz, etwa bei Beiträgen, die sich auf Morddrohungen gerichtet an im
+Bundestag auftretende Personen thematisierte, wurde im späteren Verlauf der
+Arbeit als Grund für Mängel in der Ergebnissen \todo{fehler?} identifiziert, in diesem Fall in
+der Form von fehlerhaften Interaktionen. Durch diese Probleme wurde eine
+unbestimmt große Menge von Fehlern durch die Redeteil-Analyse produziert,
+sowohl in nicht erkannte Interaktionen als auch fälschlicherweise als
+Interaktionen kategorisierte Beiträgen, was mit Sicherheit eine Verzerrung der
+Projektergebnisse, aber gleichzeitig auch ein wesentliches
+Verbesserungspotential für die mögliche Fortsetzungen dieses Teilprojekts
+darstellt. Gleichzeitig sollte nicht außer Acht gelassen werden, dass
+Interaktionen in Redeteilen nach unseren Messungen einen recht geringen Anteil
+der Interaktionen im Bundestag ausmachen. Die Steigerung der Anzahl erkannter
+Interaktionen durch unsere Methode der Redebeitrag-Analyse betrug für die
+bisherigen Protokolle der 19. Wahlperiode lediglich 8\% gegenüber der alleinigen
+Betrachtung der Kommentare.
 
 \subsection{Ermittlung von teilnehmenden Personen}
 Personen müssen über Sitzungen hinweg eindeutig identifizierbar sein, damit
@@ -223,8 +356,9 @@ folgenden Gruppe realisiert wurde.
         \includegraphics[width=\textwidth]{example-image-a}
     \end{center}
     \caption{TODO: write me}
-    \label{fig:02_api_call_flow}
+    \label{fig:03_api_call_flow}
 \end{figure}
+\todo{figure caption}
 
 Es wurde sich mit Gruppe 1 darauf geeinigt, dass der CME einen Endpunkt
 anbietet, um die Information zu erhalten, wenn neue Protokolle aus dem
@@ -285,7 +419,7 @@ Interaktionen eindeutig zu bestimmen. Daher mussten Interaktionen verworfen
 werden und teils wurden in Kommentaren inkorrekt genannte Personen als
 Personenduplikate in den Datenbestand aufgenommen.
 
-Daher wurde das Ziel der Gruppe “Kommunikationsmodell” in Funktionalität und
+Daher wurde das Ziel der Gruppe \enquote{Kommunikationsmodell} in Funktionalität und
 Integration zwar erreicht, allerdings wird deutliches Verbesserungspotential
 für die Extraktion von noch mehr Interaktionen und die Eliminierung von
 Artefakten gesehen
