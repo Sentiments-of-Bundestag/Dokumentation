@@ -1,1 +1,75 @@
 \section{Implementierung}\label{sec:07_04_implementierung}
+In diesem Kapitel werden Einzelheiten zur Umsetzung der entwickelten Applikation beschrieben.
+Des Weiteren erfolgt eine Darstellung der notwendigen Schritte zur Bereitstellung der Anwendung auf dem HTW Server.
+
+\subsection{Umsetzung}
+Die Backend-Anwendung wurde als Python Flask Applikation entwickelt. Der gesamte Quellcode ist im GitHub Repository \textit{Sentiments-of-Bundestag/ Graphenauswertung}~\cite{github_graphenauswertung} verfügbar.
+
+Die Applikation wird durch Ausführen der Datei \lstinline{app.py} gestartet.
+Diese stellt zunächst die Verbindung mit den beiden Neo4j Datenbanken her.
+Zur Kommunikation mit den beiden Datenbanken existiert jeweils eine Klasse, die den Zugriff auf die jeweilige Datenbank verwaltet und Methoden zur Abfrage der Inhalte der Datenbank bereitstellt.
+Die Zugangsdaten für die Datenbanken werden als Umgebungsvariablen bereitgestellt. Diese werden beim Start der Applikation aus der Datei \lstinline{.env} eingelesen.
+Aus Sicherheitsgründen, ist diese Datei nicht Teil der Quellcodeverwaltung.
+Einige komplexere Prozeduren wie bspw. die Berechnug des PageRank wurden ausgelagert und werden von den Datenbankklassen importiert.
+Die Defintion der Schnittstellen erfolgt in Form von Methoden, die mit dem Pfad annotiert sind, unter dem die jeweilige Schnittstelle erreichbar ist.
+Aufgrund der großen Datenmenge und der damit verbundenen hohen Laufzeit werden alle Anfragen für 12 Stunden gecached.
+Dazu wird die Bibliothek Flask-Caching mit dem Cache Typ SimpleCache verwendet, welcher einem In-Memory Python Dictionary entspricht.\cite{flask_caching}
+Die Implementierung der Schnittstellenmethoden besteht in der Regel aus einem Aufruf einer Methode der Datenbankklassen, wobei das Ergebnis zur Übertragung in der HTTP Response in das JSON Format umgewandelt wird.
+
+Die Methoden der Datenbankklassen sind alle nach dem gleichen Muster aufgebaut.
+Die nachfolgende Methode, welche die verfügbaren Fraktionen abfragt, kann als Beispiel dienen.
+
+\begin{lstlisting}[caption={Zugriff auf Neo4j DB: get\_factions}, captionpos=b]
+def get_factions(self,
+                 sentiment_type="NEUTRAL",
+                 session_id=None):
+
+    where = self.get_where_clause(sentiment_type, session_id)
+    with self.driver.session() as session:
+        query = \
+            "MATCH (sender:{0})-[r:{1}]-(recipient:{0}) " \
+            "{2} " \
+            "with sender, " \
+            "collect(distinct r.sessionId) as sesList, " \
+            "collect(r) as rlist unwind rlist as r " \
+            "RETURN DISTINCT sender.name as name, " \
+            "sender.size as size, " \
+            "sender.factionId as factionId, " \
+            "sesList as sessionIds" \
+            .format(NODE_FACTION, REL_COMMENTED, where)
+
+    factions = session.run(query)
+    return factions.data()
+\end{lstlisting}
+
+Die Methoden sind stets so aufgebaut, dass zunächst eine Datenbanksitzung geöffnet wird.
+Zur Datenbankabfrage wird eine Cypher Query konstruiert. Diese hängt von den Parametern der HTTP-Anfrage ab, welche in der \lstinline{WHERE} Klausel der Query abgebildet werden.
+Da viele Methoden die gleichen Parameter unterstützen, ist die Konstruktion der \lstinline{WHERE} Klausel in eine eigene Methode ausgelagert.
+Die Query wird anschließend an die jeweilige Neo4j Datenbank geschickt. Das Resultat wird in einigen Fällen noch weiter verarbeitet und dann als Resultat zurückgegeben.
+Mit dem Abschluss der Methode wird auch die Datenbanksitzung beendet.
+
+Eine Herausforderung bei der Anbindung der Datenbanken bestand darin, dass beide zwar auf Neo4j basieren, jedoch wurde die Beziehung zwischen zwei Knoten (Abgeordnete bzw. Fraktionen) unterschiedlich abgebildet.
+Im Graphen der Abgeordneten wurde eine Nachricht zwischen zwei Knoten als zusätzlicher Knoten abgebildet, während im Graphen der Fraktionen eine Nachricht als Beziehung implementiert wurde.
+Die Arbeit mit der Datenbank der Abgeordneten wurde uns dadurch erleichtert, dass die verantwortliche Gruppe uns beispielhafte Cypher Queries zur Verfügung stellte.
+
+\subsection{Bereistellung}
+Zur Bereitstellung der Anwendung auf einem Server wurde ein Docker Image erstellt, mithilfe dessen die Anwendung gestartet werden kann.
+Dabei wurde wie in \cite{flask_docker} beschrieben vorgegangen.
+Das Docker Image basiert auf dem Standard Docker Image für Python und wird gebaut, indem zunächst die Bibliotheken, von denen die Anwendung abhängig ist installiert werden.
+Anschließend wird der Quellcode und die Konfigurationsdateien in das Docker Image kopiert.
+Zum Start der Anwendung wird ein Shell Skript aufgerufen, welches den uWSGI Applikationsserver startet.
+HTTP-Anfragen auf dem Standard Port 80 werden mithilfe von nginx an den uWSGI Server weitergeleitet.
+Um den Start der Anwendung ohne Angabe des Port Mappings zu gestalten wurde außerdem eine \lstinline{docker-compose} Datei erstellt.
+
+
+Zur Bereistellung auf dem HTW Server (http://infosys6.f4.htw-berlin.de/) wurde Port 80 in der Firewall geöffnet und git und Docker installiert.
+Der Start der neuesten Version der Anwendung auf dem Server erfolgt durch folgende Schritte:
+\begin{itemize}
+  \item Zugriff auf den Server via \lstinline{ssh}
+  \item Herunterladen der neuesten Version des Quellcodes mithilfe von \lstinline{git clone} bzw. \lstinline{git pull}
+  \item Erstellung des neuen Docker Images mithilfe von \lstinline{docker-compose build}
+  \item Start der Applikation mithilfe von \lstinline{docker-compose up}
+\end{itemize}
+
+Die verfügbaren Schnittstellen wurden in der \lstinline{README} des Repositories beschrieben und so der nachfolgenden Gruppe (Nutzeroberfläche) zugänglich gemacht.
+Die Nutzeroberfläche verwendet die Schnittstellen seither als Datengrundlage für sämtliche Diagramme auf der Website.

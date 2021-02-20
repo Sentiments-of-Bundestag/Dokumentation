@@ -1,1 +1,32 @@
 \section{Anforderungsanalyse und Konzept}\label{sec:07_03_anforderungen_konzept}
+
+Die allgemeinen Anforderungen ergeben sich aus der Aufgabenstellung:
+\begin{itemize}
+  \item Ermittlung von Stimmungsmachern im Bundestag
+  \item Mathematische Analysen bezüglich des Sentiments im Bundestag
+\end{itemize}
+
+Zur Identifikation detaillierter Anforderungen fand im frühen Projektverlauf eine Absprache mit Gruppe 8 statt, welche die Nutzeroberfläche entwickelt.
+Im Rahmen dieses Meetings wurde festgelegt, dass folgende Funktionalitäten notwendig sind:
+\begin{itemize}
+  \item Abfrage von Stammdaten:
+    \begin{itemize}
+      \item Sitzungen
+      \item Fraktionen
+      \item Abgeordnete
+    \end{itemize}
+  \item Abfrage des Graphen für Fraktionen und Abgeordnete. Die Übertragung des Graphen erfolgt durch gleichzeitige Übertragung der Beteiligten Knoten (Abgeordnete bzw. Fraktionen) und der Nachrichten, die zwischen diesen verschickt wurden. Dabei werden Nachrichten zwischen zwei beteiligten Knoten aggregiert, um die übertragene Datenmenge zu reduzieren.
+  \item Mathematische Analysen bezüglich des Sentiments im Bundestag. Als Ziel wurde die Darstellung von Boxplots ausgegeben. Daher wurde festgelegt, dass Minimum, unteres Quartil, Median, oberes Quartil und Maximum berechnet werden. Zum Vergleich des Sentiments innerhalb verschiedener Sitzungen soll die Möglichkeit der Filterung nach Sitzung vorgesehen werden.
+\end{itemize}
+
+
+
+\subsection{Architektur}
+
+TODO: Diagramm + Beschreibung
+
+\subsection{Schnittstellen}
+
+1) HTTP Endpoints für Nutzeroberfläche
+
+2) Datenbankzugriff auf Neo4j Datenbanken
