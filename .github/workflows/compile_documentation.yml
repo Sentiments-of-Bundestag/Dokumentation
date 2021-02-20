@@ -31,35 +31,3 @@ jobs:
         with:
           name: SentimentsOfBundestag_documentation
           path: main_document/main.pdf
-  build_latex_full:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v1
-      - name: Github Action for LaTeX with TeXLive
-        uses: V3lop5/latex-action@thin
-        with:
-          working_directory: main_document
-          root_file: main.tex
-      - uses: actions/upload-artifact@full
-        with:
-          name: SentimentsOfBundestag_documentation
-          path: main_document/main.pdf
-  build_latex_thin:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v1
-      - name: Github Action for LaTeX with TeXLive
-        uses: V3lop5/latex-action@thin
-        with:
-          working_directory: main_document
-          root_file: main.tex
-      - uses: actions/upload-artifact@thin
-        with:
-          name: SentimentsOfBundestag_documentation
-          path: main_document/main.pdf
-          
-          
-        
-  
