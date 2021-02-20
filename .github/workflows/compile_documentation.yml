@@ -25,4 +25,5 @@ jobs:
       - name: Compile LaTeX document
         uses: dante-ev/latex-action@master
         with:
-          root_file: main_document/main.tex
+          working_directory: main_document
+          root_file: main.tex
