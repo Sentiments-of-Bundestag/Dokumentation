@@ -21,14 +21,14 @@ Im Rahmen dieses Meetings wurde festgelegt, dass folgende Funktionalitäten notw
 
 \newpage
 \subsection{Architektur}
-Der zentrale Bestandteil des Projekts Graphenauswertung ist die Backend Applikation. Hier werden die Daten, die zuvor über die Datenbankmanager aus den Neo4j Datenbanken von Gruppe 4 und 5 gezogen worden sind zusammen geführt und weiter verarbeitet. Die Daten werden unter anderem zu statistischen Kennzahlen aufbereitet und mittels des PageRank und Reversed PageRank analysiert. Anschließend werden diese Daten über HTTP Schnittstellen für die Nutzeroberfläche zur Verfügung gestellt.
+Der zentrale Bestandteil des Teilprojekts Graphenauswertung ist die Backend Applikation. Hier werden die Daten, die zuvor über die Datenbankmanager aus den Neo4j Datenbanken von Gruppe 4 und 5 gezogen werden, zusammen geführt und weiter verarbeitet. Die Daten werden unter anderem zu statistischen Kennzahlen aufbereitet und mittels des PageRank und Reversed PageRank analysiert. Anschließend werden diese Daten über HTTP Schnittstellen für die Nutzeroberfläche zur Verfügung gestellt.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=450px, keepaspectratio]{logos/graphenauswertung_architektur.JPG}
 	\caption{Graphenauswertung - Komponentendiagramm,\\Quelle: Eigene Darstellung, Tool: \cite{visual_paradigm}}
 \end{figure}
 \subsection{Schnittstellen}
-Im Folgenden wird die Schnittstellen zu dem angrenzenden Teilprojekt beschrieben und an einigen Beispielen erklärt, welche Daten dabei bereitgestellt werden. Als vorletztes Teilprojekt in der Datenkette wird als Backend für die Nutzeroberfläche agiert. Dabei werden die Daten aus den Neo4j Datenbanken herausgezogen, aufbereitet und über HTTP Endpunkte dem Frontend in verschiedener Form zur Verfügung gestellt. Die gesamte Dokumentation und Beispielausgaben der Endpunkte sind auf der README im GitHub Repository \textit{Sentiments-of-Bundestag/ Graphenauswertung}~\cite{github_endpoints} verfügbar.
+Im Folgenden wird die Schnittstellen zu dem angrenzenden Teilprojekt beschrieben und an einigen Beispielen erklärt, welche Daten dabei bereitgestellt werden. Als vorletztes Teilprojekt in der Datenkette wird als Backend für die Nutzeroberfläche agiert. Dabei werden die Daten aus den Neo4j Datenbanken herausgezogen, aufbereitet und über HTTP Endpunkte dem Frontend in verschiedener Form zur Verfügung gestellt. Die gesamte Dokumentation und Beispielausgaben der Endpunkte sind auf der README im GitHub Repository \textit{Sentiments-of-Bundestag/ Graphenauswertung}~\cite{github_endpoints} zu finden.
 \\~\\
 Die HTTP Schnittstelle würde mithilfe des micro web frameworks Python Flask \cite{flask} umgesetzt. Alle verfügbaren Endpunkte sind über GET erreichbar. Einige Endpunkte bieten mittels beigefügter Parameter Filtermöglichkeiten an. 
 \begin{table}[ht]
@@ -67,11 +67,11 @@ Der Endpunkt \textbf{\texttt{/sessions}} gibt eine Liste aller verfügbaren Parl
 ~\\	
 \textbf{\underline{Factions:}} 
 \newline
-Der Endpunkt \textbf{\texttt{/factions}} gibt eine Liste aller Fraktionen zurück. Der Werte in \texttt{sessionIds} stehen für die Parlamentssitzungen in denen Nachrichten mit einer anderen Fraktion oder Abgeordneten ausgetauscht worden sind.
+Der Endpunkt \textbf{\texttt{/factions}} gibt eine Liste aller Fraktionen zurück. Die Werte in \texttt{sessionIds} stehen für die Parlamentssitzungen in denen Nachrichten mit anderen Fraktionen oder Abgeordneten ausgetauscht worden sind.
 \newpage
 ~\\		
 \textbf{\underline{Factions graph:}} \newline
-Der Endpunkt \textbf{\texttt{/factions/graph}} gibt den Fraktionsgraphen basierend auf den Graphen der Datenbank von Gruppe 5 zurück. Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten in die jeweilige Richtung. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist die Summe aller Sentiments für den aggregierten Eintrag berücksichtigten Nachrichten. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
+Der Endpunkt \textbf{\texttt{/factions/graph}} gibt den Fraktionsgraphen basierend auf den Graphen der Datenbank von Gruppe 5 zurück. Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten in die jeweilige Richtung. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist die Summe aller Sentiments aus den für diesen aggregierten Eintrag berücksichtigten Nachrichten. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
 \begin{lstlisting}
 		{
 			"factions": [
@@ -126,14 +126,14 @@ Der Endpunkt \textbf{\texttt{/persons}} gibt eine Liste aller Abgeordneten zurü
 Der Endpunkt \textbf{\texttt{/persons/messages}} gibt eine Liste aller Nachrichten zurück. Die Nachrichten sind nicht aggregiert. Diese Schnittstelle bietet die Filteroptionen: session, person, excludeApplause, POSITIVE und NEGATIV.	
 \\~\\
 \textbf{\underline{Persons graph:}}\newline
-Der Endpunkt \textbf{\texttt{/persons/graph}} gibt den Abgeordnetengraphen, basieren auf die Datenbank der Gruppe 4 zurück. 
-Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist die Summe aller Sentiments aus den für diesen aggregierten Eintrag berücksichtigten Nachrichten. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
+Der Endpunkt \textbf{\texttt{/persons/graph}} gibt den Abgeordnetengraphen, basierend auf den Graphen der Datenbank von Gruppe 4 zurück. 
+Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten in die jeweilige Richtung. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist die Summe aller Sentiments aus den für diesen aggregierten Eintrag berücksichtigten Nachrichten. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
 \\~\\
 \textbf{\underline{Factions ranked:}}\newline
-Der Endpunkt \textbf{\texttt{/factions/ranked}} gibt eine Liste aller Abgeordneten, geordnet nach dem PageRank zurück. Diese Schnittstelle bietet die Filteroptionen: reverse, session, excludeApplause, POSITIVE und NEGATIVE.
+Der Endpunkt \textbf{\texttt{/factions/ranked}} gibt eine Liste aller Fraktionen, geordnet nach dem PageRank zurück. Diese Schnittstelle bietet die Filteroptionen: reverse, session, excludeApplause, POSITIVE und NEGATIVE.
 \\~\\
 \textbf{\underline{Persons ranked:}}\newline
-Der Endpunkt \textbf{\texttt{/persons/ranked}} gibt eine Liste aller Fraktionen, geordnet nach dem PageRank zurück. Diese Schnittstelle bietet die Filteroptionen: reverse, session, excludeApplause, POSITIVE und NEGATIVE.
+Der Endpunkt \textbf{\texttt{/persons/ranked}} gibt eine Liste aller Abgeordneten, geordnet nach dem PageRank zurück. Diese Schnittstelle bietet die Filteroptionen: reverse, session, excludeApplause, POSITIVE und NEGATIVE.
 ~\\
 \begin{lstlisting}
 		[
@@ -159,7 +159,7 @@ Der Endpunkt \textbf{\texttt{/persons/ranked}} gibt eine Liste aller Fraktionen,
 \end{lstlisting}
 ~\\	
 \textbf{\underline{Factions proportions:}}\newline
-Der Endpunkt \textbf{\texttt{/factions/proportions}} gibt eine Liste von allen Fraktionen mit dem jeweiligem Redeanteilen als Prozentwert zurück. Diese Schnittstelle bietet die Filteroptionen: session und excludeApplause.
+Der Endpunkt \textbf{\texttt{/factions/proportions}} gibt eine Liste aller Fraktionen mit dem jeweiligem Redeanteilen als Prozentwert zurück. Diese Schnittstelle bietet die Filteroptionen: session und excludeApplause.
 \\~\\	
 \textbf{\underline{Factions sentiment key figures:}} \newline
 Der Endpunkt \textbf{\texttt{factions/sentiment/keyfigures}} gibt den Sentimentwert aller Fraktionen verrechnet in statistische Kennzahlen zurück. Diese Schnittstelle bietet die Filteroptionen: session und excludeApplause.	
