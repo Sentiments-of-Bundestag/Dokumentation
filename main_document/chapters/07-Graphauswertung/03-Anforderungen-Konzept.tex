@@ -71,7 +71,7 @@ Der Endpunkt \textbf{\texttt{/factions}} gibt eine Liste aller Fraktionen zurüc
 \newpage
 ~\\		
 \textbf{\underline{Factions graph:}} \newline
-Der Endpunkt \textbf{\texttt{/factions/graph}} gibt den Fraktionsgraphen basierend auf den Graphen der Datenbank von Gruppe 5 zurück. Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten in die jeweilige Richtung. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist die Summe aller Sentiments aus den für diesen aggregierten Eintrag berücksichtigten Nachrichten. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
+Der Endpunkt \textbf{\texttt{/factions/graph}} gibt den Fraktionsgraphen basierend auf den Graphen der Datenbank von Gruppe 5 zurück. Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten in die jeweilige Richtung. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist der Durchschnitt aller Sentiments aus den für diesen aggregierten Eintrag berücksichtigten Nachrichten. Der Durchschnitt ist zusätzlich durch die Fraktionsgröße gewichtet. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
 \begin{lstlisting}
 		{
 			"factions": [
@@ -127,7 +127,7 @@ Der Endpunkt \textbf{\texttt{/persons/messages}} gibt eine Liste aller Nachricht
 \\~\\
 \textbf{\underline{Persons graph:}}\newline
 Der Endpunkt \textbf{\texttt{/persons/graph}} gibt den Abgeordnetengraphen, basierend auf den Graphen der Datenbank von Gruppe 4 zurück. 
-Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten in die jeweilige Richtung. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist die Summe aller Sentiments aus den für diesen aggregierten Eintrag berücksichtigten Nachrichten. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
+Die Nachrichten sind bereits aggregiert, also steht jede Verbindung zwischen Sender und Empfänger für alle Nachrichten in die jeweilige Richtung. Der Wert \texttt{count} ist die Summe aller für den aggregierten Eintrag berücksichtigten Nachrichten. Der Wert \texttt{sentiment} ist der Mittelwert aller Sentiments aus den für diesen aggregierten Eintrag berücksichtigten Nachrichten. Diese Schnittstelle bietet die Filteroptionen: person, session, excludeApplause, POSITIVE und NEGATIVE.	
 \\~\\
 \textbf{\underline{Factions ranked:}}\newline
 Der Endpunkt \textbf{\texttt{/factions/ranked}} gibt eine Liste aller Fraktionen, geordnet nach dem PageRank zurück. Diese Schnittstelle bietet die Filteroptionen: reverse, session, excludeApplause, POSITIVE und NEGATIVE.
