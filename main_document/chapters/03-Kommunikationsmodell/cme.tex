@@ -12,10 +12,9 @@ stellen die Basis aller weiteren Verarbeitungsschritte dar.
 
 \subsection{Zielstellung}
 Die \gls{cme}-Software soll aus den \citetitle{OpenData2019}~\cite{OpenData2019}
-\todo{check that we are not the first ones using it otherwise use enquotes}
 \gls{xml}-Dateien der 19. Wahlperiode des Bundestages bzw. der leicht
 abgewandelten Variante dieser Daten, welche von Gruppe 1 in Form von
-\gls{json}-Dateien zur Verfügung gestellt werden, Interaktionen zwischen
+\enquote{\gls{json}}-Dateien zur Verfügung gestellt werden, Interaktionen zwischen
 Fraktionen und oder Abgeordneten extrahieren.
 
 Für diese Extraktion werden die Rohdaten analysiert und darauf aufbauend ein
@@ -27,6 +26,7 @@ zur Weitergabe der Daten und eine weitere Schnittstelle, über welche Gruppe 3
 bei neuen Daten benachrichtigt werden kann, entwickelt.
 
 \subsection{Anforderungsdefinition}
+\label{sec:03_requirements}
 
 Auf Grundlage der im vorherigen Abschnitt beschriebenen Zielsetzung sowie der
 Diskussionen in den Plenarsitzungen während des Semesters, erfolgt in diesem
@@ -34,56 +34,54 @@ Kapitel eine Zusammenfassung von funktionale Anforderungen, welche an das zu
 entwickelnde System gestellt werden. Diese werden in Muss-, Soll- und
 Kann-Kriterien unterteilt.
 
-
 \begin{table}[H]
     \caption{Funktionale Anforderungen}
     \vspace{0.5cm}
     \renewcommand{\arraystretch}{2.5} % Default value: 1
     \centering
     \begin{tabularx}{\textwidth}{c|c|X}
-                                & \textbf{FR01} & \noindent\parbox[c]{\hsize}{
-                                                  Ein passendes Kommunikationsmodell und
-                                                  Datenmodell muss gewählt werden} \\
-                                & \textbf{FR02} & \noindent\parbox[c]{\hsize}{
-                                                  Das Ausgabeformat von Gruppe 1 muss eingelesen
-                                                  werden können} \\
-                                & \textbf{FR03} & \noindent\parbox[c]{\hsize}{
-                                                  Interaktionen basierend auf den Kommentaren
-                                                  zu Redebeiträgen müssen extrahiert werden} \\
-                                & \textbf{FR04} & \noindent\parbox[c]{\hsize}{
-                                                  Extrahierte Interaktionen müssen für den
-                                                  Zugriff späterer Gruppen persistiert werden} \\
+        & \textbf{FR01} & \noindent\parbox[c]{\hsize}{
+            Ein passendes Kommunikationsmodell und
+            Datenmodell muss gewählt werden} \\
+        & \textbf{FR02} & \noindent\parbox[c]{\hsize}{
+            Das Ausgabeformat von Gruppe 1 muss eingelesen
+            werden können} \\
+        & \textbf{FR03} & \noindent\parbox[c]{\hsize}{
+            Interaktionen basierend auf den Kommentaren
+            zu Redebeiträgen müssen extrahiert werden} \\
+        & \textbf{FR04} & \noindent\parbox[c]{\hsize}{
+            Extrahierte Interaktionen müssen für den
+            Zugriff späterer Gruppen persistiert werden} \\
         \textbf{Muss-Kriterien} & \textbf{FR05} & \noindent\parbox[c]{\hsize}{
-                                                  Spätere Gruppen müssen auf die persistierten
-                                                  Nachrichten zugreifen können} \\
-                                & \textbf{FR06} & \noindent\parbox[c]{\hsize}{
-                                                  Gruppe 1 muss die Möglichkeit haben, uns über
-                                                  die Verfügbarkeit neuer Daten zu
-                                                  benachrichtigen} \\
-                                & \textbf{FR07} & \noindent\parbox[c]{\hsize}{
-                                                  Gruppe 3 muss von uns benachrichtigt werden,
-                                                  wenn neue Daten zur Verfügung stehen} \\
-                                & \textbf{FR08} & \noindent\parbox[c]{\hsize}{
-                                                  Parteien und Abgeordnete müssen über Sitzungen
-                                                  hinweg eindeutig zuordenbar sein} \\
-                                & \textbf{FR09} & \noindent\parbox[c]{\hsize}{
-                                                  Daten von Gruppe 1 müssen aus deren MongoDB
-                                                  ausgelesen werden können} \\
+            Spätere Gruppen müssen auf die persistierten
+            Nachrichten zugreifen können} \\
+        & \textbf{FR06} & \noindent\parbox[c]{\hsize}{
+            Gruppe 1 muss die Möglichkeit haben, uns über
+            die Verfügbarkeit neuer Daten zu
+            benachrichtigen} \\
+        & \textbf{FR07} & \noindent\parbox[c]{\hsize}{
+            Gruppe 3 muss von uns benachrichtigt werden,
+            wenn neue Daten zur Verfügung stehen} \\
+        & \textbf{FR08} & \noindent\parbox[c]{\hsize}{
+            Parteien und Abgeordnete müssen über Sitzungen
+            hinweg eindeutig identifizierbar sein} \\
+        & \textbf{FR09} & \noindent\parbox[c]{\hsize}{
+            Daten von Gruppe 1 müssen aus deren MongoDB
+            ausgelesen werden können} \\
         \hline
 
         \textbf{Soll-Kriterien} & \textbf{FR10} & \noindent\parbox[c]{\hsize}{
-                                                  Das Open Data Ausgabeformat des Bundestags soll
-                                                  eingelesen werden können} \\
+            Das Open Data Ausgabeformat des Bundestags soll
+            eingelesen werden können} \\
         \hline
 
         \textbf{Kann-Kriterien} & \textbf{FR11} & \noindent\parbox[c]{\hsize}{
-                                                  Interaktionen innerhalb der Redebeiträge können
-                                                  extrahiert werden} \\
+            Interaktionen innerhalb der Redebeiträge können
+            extrahiert werden} \\
 
     \end{tabularx}
     \label{tab:03_requirements}
 \end{table}
-
 
 \subsection{Wahl des Kommunikationsmodells}
 FR01 erfordert die Auswahl eines passenden Kommunikations- und Datenmodells.
@@ -108,6 +106,7 @@ Repräsentation der Interaktionen gewählt. In diesem kann der Sender und
 Empfänger jeweils entweder ein Bundestagsabgeordneter oder eine Fraktion sein.
 Auf Basis des Inhalts der Nachricht, die vom Sender zum Empfänger geschickt
 wird, wird später von Gruppe 3 das Sentiment ermittelt.
+
 
 \section{Umsetzung}\label{sec:03_02_umsetzung}
 Auf Grundlage der definierten Anforderungen wurde im nächsten Schritt ein
@@ -187,10 +186,10 @@ Kommunikationstypen als Datengrundlage für die Erkennung von Interaktion:
 
 \begin{enumerate}
     \item \textbf{Kommentare (FR03)}: werden von den Redeteilen gesondert
-        dargestellt und mit zusätzlicher Information bezüglich der
-        kommunikativen Einordnung des Beitrags versehen.
+    dargestellt und mit zusätzlicher Information bezüglich der
+    kommunikativen Einordnung des Beitrags versehen.
     \item \textbf{Redeteile (FR10)}: werden in den Protokollen als
-        Paragraphen oder sinngemäß als Absätze aufgeführt.
+    Paragraphen oder sinngemäß als Absätze aufgeführt.
 \end{enumerate}
 
 Aufgrund der Unterschiedlichkeit mussten beide Typen gesondert analysiert werden.
@@ -205,22 +204,22 @@ in die Folgenden drei Kategorien unterteilen:
 
 \begin{itemize}
     \item \textbf{Publikumsresonanzen}: Z.~B. Beifall oder Entrüstung des
-        Senders, bei der eine genaue Zitierung durch die Stenographen nicht
-        möglich ist. Hier folgen Sender durch Präpositionen abgetrennt auf
-        den Kommentarinhalt. Bsp.: \enquote{Beifall bei der CDU};
-        \enquote{Zurufe von der Linken und Grünen}
+    Senders, bei der eine genaue Zitierung durch die Stenographen nicht
+    möglich ist. Hier folgen Sender durch Präpositionen abgetrennt auf
+    den Kommentarinhalt. Bsp.: \enquote{Beifall bei der CDU};
+    \enquote{Zurufe von der Linken und Grünen}
 
     \item \textbf{Zitate}: Hier wird der Wortlaut eines Kommentars
-        wiedergegeben. Bei diesen Kommentaren wird die kommentierende Person
-        dem Wortlaut vorangestellt und durch einen Doppelpunkt abgetrennt.
-        Bsp.: \enquote{Dr. Klaus Hermann: Ganz toll gemacht}; \enquote{Dr.
-        Alexander Gauland: Schwachsinn}
+    wiedergegeben. Bei diesen Kommentaren wird die kommentierende Person
+    dem Wortlaut vorangestellt und durch einen Doppelpunkt abgetrennt.
+    Bsp.: \enquote{Dr. Klaus Hermann: Ganz toll gemacht}; \enquote{Dr.
+    Alexander Gauland: Schwachsinn}
 
     \item \textbf{Beobachtungen der Protokollanten}: Spezielle Situationen in
-        denen ein oder mehrere Sitzungsteilnehmer nennenswerte Handlungen
-        vornehmen. Auch hier wird in der Regel der Sender der Nachricht
-        vorangestellt, wenngleich keine Trennung durch einen Doppelpunkt
-        erfolgt. Bsp.: \enquote{Manfred von Kuchenhausen verlässt die Sitzung}
+    denen ein oder mehrere Sitzungsteilnehmer nennenswerte Handlungen
+    vornehmen. Auch hier wird in der Regel der Sender der Nachricht
+    vorangestellt, wenngleich keine Trennung durch einen Doppelpunkt
+    erfolgt. Bsp.: \enquote{Manfred von Kuchenhausen verlässt die Sitzung}
 
 \end{itemize}
 
@@ -272,23 +271,26 @@ einnahm.
 
 Die Empfängerermittlung bei Redeanteilen verblieb in der entstandenen
 Implementierung in einem recht rudimentären Zustand, da viele der inhärenten
-Probleme des Ansatzes nicht behandelt werden konnten. So konnte etwa die
+Probleme des Ansatzes nicht behandelt werden konnten. So hat etwa die
 Unterscheidung zwischen mehreren \glspl{mdb} mit gleichen Nachnamen oder die
 kolloquiale Verwendung von Farben (\enquote{Rot} für SPD oder die Linke) oder
-Begriffen (\enquote{Liberale} stellvertretend für die FDP) als Substitut für Fraktionen
-nicht behandelt werden. Um diese Problematiken zu umgehen wurden in der
-Paragraphen-Analyse nur solche Interaktionen gewertet, welche sich an eindeutig
-identifizierbare \glspl{mdb} oder Fraktionen richten. Nachnamen wie \enquote{Müller}, die
-mehrere \glspl{mdb} bezeichnen können, aber auch in anderen Sachverhalten eingesetzte
-Begriffe, wie \enquote{Union}, wurden somit aus der Schlüsselwort-Liste entfernt, mit
-der die Redeabschnitte abgetastet wurden. Es sollte allerdings nicht außer Acht gelassen
-werden, dass Interaktionen in Redeteilen nach unseren Messungen einen recht geringen Anteil
+Begriffen (\enquote{Liberale} stellvertretend für die FDP) als Substitut für
+Fraktionen zur Generierung vieler falscher Interaktionen geführt. So kann
+z.~B. \enquote{Rot} einerseits in Kontexten wie \enquote{roter Gentechnik} und
+andererseits zur Nennung der SPD genutzt werden. Aus diesem Grund wurde die
+Funktionalität wieder entfernt. Daher werden nur solche Interaktionen gewertet,
+welche sich an eindeutig identifizierbare \glspl{mdb} oder Fraktionen richten.
+Nachnamen wie \enquote{Müller}, die mehrere \glspl{mdb} bezeichnen können, aber
+auch in anderen Sachverhalten eingesetzte Begriffe, wie \enquote{Union}, wurden
+somit aus der Schlüsselwort-Liste entfernt, mit der die Redeabschnitte
+abgetastet wurden. Es sollte allerdings nicht außer Acht gelassen werden, dass
+Interaktionen in Redeteilen nach unseren Messungen einen recht geringen Anteil
 der Interaktionen im Bundestag ausmachen. Die Steigerung der Anzahl erkannter
 Interaktionen durch unsere Methode der Redebeitrag-Analyse betrug für die
-bisherigen Protokolle der 19. Wahlperiode lediglich 8\% gegenüber der alleinigen
-Betrachtung der Kommentare, was dafür spricht dass auch nach Aufnahme von weiteren
-Fraktionsbegriffen bzw. Nachnamen in die Betrachtung nur relativ wenige Interaktionen
-hinzukommen würden.
+bisherigen Protokolle der 19. Wahlperiode lediglich 8\% gegenüber der
+alleinigen Betrachtung der Kommentare, was dafür spricht, dass auch nach
+Aufnahme von weiteren Fraktionsbegriffen bzw. Nachnamen in die Betrachtung nur
+relativ wenige Interaktionen hinzukommen würden.
 
 \subsection{Ermittlung von teilnehmenden Personen}
 Personen müssen über Sitzungen hinweg eindeutig identifizierbar sein, damit
@@ -417,14 +419,14 @@ dokumentiert und hier abgerufen werden kann:
 Demnach enthält der \gls{cme} folgende Endpunkte:
 \begin{itemize}
     \item /cme/data/sessions/ - damit wird eine Liste aller existierenden
-        Sitzungen zurückgegeben
+    Sitzungen zurückgegeben
     \item /cme/data/session/\{session\_id\} - um eine bestimmte Sitzung mit den
-        ermittelten Interaktionen zu erlangen
+    ermittelten Interaktionen zu erlangen
     \item /cme/data/mdb - nützlich, um nach Mitgliedern des Bundestags zu
-        suchen, mithilfe der Query-Parameter mdb\_id, speaker\_id, forename
-        \& surname kann gefiltert werden
+    suchen, mithilfe der Query-Parameter mdb\_id, speaker\_id, forename
+    \& surname kann gefiltert werden
     \item /cme/data/faction - damit können alle existierenden Fraktionen mit
-        jeweiliger ID abgerufen werden
+    jeweiliger ID abgerufen werden
 \end{itemize}
 
 Der Server ist nur über das \gls{htw}-Netzwerk erreichbar. Zusätzlich ist die \gls{api} mit
@@ -436,33 +438,32 @@ dürfen. Je einer für die anderen Gruppen crawler\_client \& sentiment\_client 
 cme\_admin für unser Team, um Testen zu können und bei Bugs der Ursache auf den
 Grund gehen zu können.
 
+
 \section{Fazit}\label{sec:03_05_fazit}
 
 Im Rahmen des Teilprojektes konnte erfolgreich die Extraktion des
 Kommunikationsmodells basierend auf den
 \enquote{\citetitle{OpenData2019}}-\gls{xml}-Dateien sowie dem
 \gls{json}-Format von Gruppe 1 umgesetzt werden. Dabei wurden alle in
-\todo{add ref} definierten Anforderungen erfolgreich erfüllt. So wurde ...
-\todo{continue}
+\autoref{sec:03_requirements} definierten Anforderungen erfolgreich
+erfüllt.
 
-Abschließend konnten die meisten \todo{welche nicht?} Anforderungen
-erfolgreich umgesetzt werden.
+Der Service bietet Schnittstellen zur vorherigen und nachfolgenden Gruppe sowie
+automatisierte Verarbeitungsmechanismen (notify). Auch die frühzeitige
+Bereitstellung von Testdaten für die nachfolgenden Gruppen in einer akzeptierten
+Kommunikations-Modellierung auf Basis der \gls{xml}-Rohdaten konnte realisiert
+werden. Der Großteil des Datenbestands wird analysiert, sodass sowohl
+Kommentare als auch Redeteile auf Kommunikationen überprüft werden.
 
-Der Service bietet Schnittstellen zur vorherigen und nachfolgenden Gruppe und
-sowie automatisierte Verarbeitungsmechanismen (notify). Auch die frühzeitige
-Bereitstellung einer akzeptierten Kommunikations-Modellierung auf Basis der
-\gls{xml}-Rohdaten konnte realisiert werden. Der Großteil des Datenbestands wird
-analysiert, sodass sowohl Kommentare als auch Redeteile auf Kommunikationen
-überprüft werden.
-
-Allerdings verwirft der Service, aufgrund von Inkonsistenzen in der Syntax und
-Rechtschreibung sowie aufgrund von fehlenden kontextbasierten
-Analyse-Mechanismen, potenzielle Interaktionen. Während in Kommentaren primär durch
-Abweichungen von Protokoll-Syntax und Rechtschreibfehler Probleme entstanden,
-so fehlte in den Redeteilen oft die nötige Information, um die Empfänger von
-Interaktionen eindeutig zu bestimmen. Daher mussten gelegentlich Interaktionen verworfen
-und teils in Kommentaren inkorrekt genannte Personen als
-Personenduplikate in den Datenbestand aufgenommen werden.
+Allerdings verwirft die \gls{cme}-Applikation aufgrund von Inkonsistenzen in
+der Syntax und Rechtschreibung in den Rohdaten sowie aufgrund von fehlenden
+kontextbasierten Analyse-Mechanismen, potenzielle Interaktionen. Während in
+Kommentaren primär durch Abweichungen von Protokoll-Syntax und
+Rechtschreibfehler Probleme entstanden, so fehlte in den Redeteilen oft die
+nötige Information, um die Empfänger von Interaktionen eindeutig zu bestimmen.
+Daher mussten gelegentlich Interaktionen verworfen und teils in Kommentaren
+inkorrekt genannte Personen als Personenduplikate in den Datenbestand
+aufgenommen werden.
 
 \section{Ausblick}\label{sec:03_6_ausblick}
 
@@ -471,13 +472,14 @@ Integration zwar erreicht, allerdings wird Verbesserungspotential
 in der Extraktion von noch mehr Interaktionen und auch in der Eliminierung von
 Artefakten gesehen.
 
-Insbesondere in den Redeteilen finden wird in den mehrfach vorkommenden Nachnamen und
-mehrdeutigen Fraktionsbezeichnern die Möglichkeit durch kontext-basierte Algorithmen, die
-eine eindeutige Empfänger-Bestimmung durchführen könnten, deutlich mehr Interaktionen zu
-extrahieren. In diesem Zug wird auch die Ermittlung von False Positives, also Fällen in
-denen der von uns ermittelte Empfänger eigentlich nur durch indirekte Rede erwähnt wird,
-mit zunehmender Interaktions-Anzahl wichtiger, um zukünftig die korrekte Erkennung von
-Interaktionen zu gewährleisten.
+Insbesondere in den Redeteilen besteht in den mehrfach vorkommenden Nachnamen
+und mehrdeutigen Fraktionsbezeichnern die Möglichkeit deutlich mehr
+Interaktionen zu extrahieren. Dies könnte z.~B. durch kontext-basierte
+Algorithmen, die eine eindeutige Empfänger-Bestimmung durchführen könnten,
+realisiert werden. In diesem Zug wird auch die Ermittlung von False Positives,
+also Fällen in denen der von uns ermittelte Empfänger eigentlich nur durch
+indirekte Rede erwähnt wird, mit zunehmender Interaktionsanzahl wichtiger, um
+zukünftig die korrekte Erkennung von Interaktionen zu gewährleisten.
 
 Die ausgelieferte Deployment-Strategie und die Modulbeschreibungen in dieser
 Dokumentation sollten bei der Weiterentwicklung des Projekts hilfreich sein.
