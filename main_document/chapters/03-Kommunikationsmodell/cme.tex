@@ -30,15 +30,14 @@ bei neuen Daten benachrichtigt werden kann, entwickelt.
 
 Auf Grundlage der im vorherigen Abschnitt beschriebenen Zielsetzung sowie der
 Diskussionen in den Plenarsitzungen während des Semesters, erfolgt in diesem
-Kapitel eine Zusammenfassung von Anforderungen, welche an das zu entwickelnde
-System gestellt werden. Diese werden in funktionale und nicht funktionale
-Anforderungen sowie in Muss-, Soll- und Kann-Kriterien unterteilt.
+Kapitel eine Zusammenfassung von funktionale Anforderungen, welche an das zu
+entwickelnde System gestellt werden. Diese werden in Muss-, Soll- und
+Kann-Kriterien unterteilt.
 
-Funktionale Anforderungen sind dabei Anforderungen, die beschreiben, was die
-Software können soll. Nicht-funktionale Anforderungen dagegen beschreiben wie
-die Software funktionieren soll.
 
 \begin{table}[H]
+    \caption{Funktionale Anforderungen}
+    \vspace{0.5cm}
     \renewcommand{\arraystretch}{2.5} % Default value: 1
     \centering
     \begin{tabularx}{\textwidth}{c|c|X}
@@ -85,7 +84,6 @@ die Software funktionieren soll.
     \label{tab:03_requirements}
 \end{table}
 
-\todo{nicht funktionale? ansonsten oben aus dem text nehmen}
 
 \subsection{Wahl des Kommunikationsmodells}
 FR01 erfordert die Auswahl eines passenden Kommunikations- und Datenmodells.
@@ -126,16 +124,16 @@ prototypischen Applikation beschleunigen können. Z.~B. ist es innerhalb
 weniger Zeilen möglich, einen funktionsfähigen \gls{rest}-Endpoint zur
 Verfügung zu stellen.
 
-Aus den funktionalen Anforderungen FR5, FR6 und FR7 ergibt sich, dass eine
+Aus den funktionalen Anforderungen FR05, FR06 und FR07 ergibt sich, dass eine
 Kommunikation zu den Gruppen 1 und 3 nötig ist. Aufgrund hoher Kompatibilität
-wurde sich für eine \gls{rest}-Schnittstelle entschieden. Diese API wurde in dem
+wurde sich für eine \gls{rest}-Schnittstelle entschieden. Diese \gls{api} wurde in dem
 Python-Modul \enquote{api.py} mithilfe der FastAPI-Bibliothek implementiert. Sie
 beantwortet Anfragen zu Protokollen (Sessions) Fraktionen (Factions) und
 \glspl{mdb}. Außerdem wird eine SWAGGER-Dokumentation
 bereitgestellt.
 
-Zur Steuerung der Anwendung wird ein CLI, welches im \enquote{cli.py}-Modul umgesetzt
-wurde, in Form der cme-Applikation zur Verfügung gestellt. Dieses ist in
+Zur Steuerung der Anwendung wird ein \gls{cli}, welches im \enquote{cli.py}-Modul umgesetzt
+wurde, in Form der \gls{cme}-Applikation zur Verfügung gestellt. Dieses ist in
 verschiedene Unterkommandos aufgeteilt. Mithilfe dieser ist es z.B. möglich
 Protokolle manuell aus dem lokalen Speicher einzulesen (\gls{xml}- oder \gls{json}-Format)
 oder den Server zu starten. Mit \enquote{init} werden erstmalig Bundestagsabgeordnete
@@ -161,19 +159,18 @@ Faction \& Interaction. Es wird von so gut wie jedem Modul benutzt.
 Die soeben beschriebenen Module und der damit verbundene Kontrollfluss zwischen
 diesen ist in \autoref{fig:03_project_structure} dargestellt.
 
-\begin{figure}
+\begin{figure}[ht]
     \begin{center}
-        \includegraphics[width=0.8\textwidth]{images/03-cme/Project-Modules.pdf}
+        \includegraphics[width=0.6\textwidth]{images/03-cme/Project-Modules.pdf}
     \end{center}
-    \caption{TODO: write me}
+    \caption{Applikations-Architektur}
     \label{fig:03_project_structure}
 \end{figure}
-\todo{figure caption}
 
 \subsection{Eingabeformate}
 Wie in den Anforderungen FR02 und FR10 definiert, muss als Eingabeformat
-einerseits das JSON Format der Gruppe 1 und andererseits soll auch das
-Open Data XML Format des Bundestags unterstützt werden. So wurden
+einerseits das \gls{json}-Format der Gruppe 1 und andererseits soll auch das
+Open Data \gls{xml}-Format des Bundestags unterstützt werden. So wurden
 spezielle Parser für die jeweiligen Formate entwickelt, deren Ausgabe gleich
 formatiert ist und somit für die nächste Instanz eine einheitliche
 Schnittstelle bildet. Dieses Ausgabeformat enthält dabei neben Metadaten zur
@@ -354,7 +351,7 @@ einerseits, dass der DB-Port des MongoDB-Containers nur durch den
 \gls{cme}-Container erreichbar ist und andererseits, dass die
 \gls{rest}-Endpoints des \gls{cme}-Containers nur über eine Verbindung von
 Localhost aus erreichbar sind. Der Zugriff von außen erfolgt über einen
-zusätzlich konfigurierten nginx-Reverse-Proxy. Dieser hat neben ssh \todo{glos} den
+zusätzlich konfigurierten nginx-Reverse-Proxy. Dieser hat neben \gls{ssh} den
 einzigen nach außen hin geöffneten Port auf dem Server. Somit muss jeder
 Request durch diesen Reverse-Proxy fließen, bevor er in die
 docker-compose-Umgebung gelangt.
@@ -372,43 +369,41 @@ Nachdem diese Situation dem Team bekannt wurde, wurde dies den entsprechenden
 Parteien gemeldet und das System wurde ein zweites Mal aufgesetzt. Für diese
 zweite Konfiguration wurde ausgiebig die vorliegende
 docker-compose-Konfiguration überprüft. Dabei stellten wir fest, dass die
-Verwendung des \textit{ports}-Arguments ohne die Angabe einer expliziten IP,
+Verwendung des \textit{ports}-Arguments ohne die Angabe einer expliziten \gls{ip},
 wie es in vielen docker-compose-Tutorials zu finden ist, dazu führt, dass der
-Docker-Daemon diesen Port mithilfe einer zusätzlichen IP-Tables-Chain nach
+Docker-Daemon diesen Port mithilfe einer zusätzlichen \gls{ip}-Tables-Chain nach
 außen hin öffnet. Aus diesem Grund wurde in der offiziellen Dokumentation als
 Lösung nach alternativen Möglichkeiten gesucht, Ports freizugeben. Dort wurde
 einerseits die bereits erwähnte Lösung gefunden, welche durch die explizite
-Angabe einer \enquote{Bind}-IP-Adresse wie z.~B. hier
+Angabe einer \enquote{Bind}-\gls{ip}-Adresse wie z.~B. hier
 \enquote{127.0.0.1:9001:9001} dazu führt, dass nur Anfragen, die über diese
 Adresse erfolgen, beantwortet werden. Andererseits wurde das
 \textit{expose}-Argument entdeckt, welches diesen Port nur für alle
 Docker-Container innerhalb derselben docker-compose-Umgebung freigibt.
 
 Zur vollständigen Beseitigung des Problems wurde schließlich, wie auch schon
-im vorherigen Abschnitt beschrieben, \todo{der text muss noch geschrieben
-werden} das \textit{expose}-Argument genutzt, um den MongoDB-Container nur
-innerhalb der docker-compose-Umgebung zugänglich zu machen. Zusätzlich wurde
-das Portbinding des \gls{cme}-Containers, welcher den \gls{rest}-Service
-enthält, auf Localhost beschränkt. Die eigentliche Auflösung von außen erfolgt
-dann über einen nginx-Reverse-Proxy, welcher im Hostsystem unter einem nicht
-privilegierten Nutzer läuft. So ist jeglicher Zugriff auf die
-docker-compose-Umgebung von außen nicht mehr möglich und muss durch den
-Reverse-Proxy.
+im vorherigen Abschnitt beschrieben, das \textit{expose}-Argument genutzt,
+um den MongoDB-Container nur innerhalb der docker-compose-Umgebung zugänglich
+zu machen. Zusätzlich wurde das Portbinding des \gls{cme}-Containers, welcher
+den \gls{rest}-Service enthält, auf Localhost beschränkt. Die eigentliche
+Auflösung von außen erfolgt dann über einen nginx-Reverse-Proxy, welcher im
+Hostsystem unter einem nicht privilegierten Nutzer läuft. So ist jeglicher
+Zugriff auf die docker-compose-Umgebung von außen nicht mehr möglich und muss
+durch den Reverse-Proxy.
 
 \subsection{Schnittstelle für Zugriff auf den Communication Model Extractor}
 
 Um den gewünschten Workflow einer Pipeline zu ermöglichen, entschieden wir
-uns eine API anzubieten, wodurch die Kommunikation zur vorherigen und
+uns eine \gls{api} anzubieten, wodurch die Kommunikation zur vorherigen und
 folgenden Gruppe realisiert wurde.
 
 \begin{figure}[ht]
     \begin{center}
         \includegraphics[width=\textwidth]{images/03-cme/Communications.pdf}
     \end{center}
-    \caption{TODO: write me}
+    \caption{\gls{api}-Kommunikationsfluss}
     \label{fig:03_api_call_flow}
 \end{figure}
-\todo{figure caption}
 
 Es wurde sich mit Gruppe 1 darauf geeinigt, dass der \gls{cme} einen Endpunkt
 anbietet, um die Information zu erhalten, wenn neue Protokolle aus dem
@@ -420,10 +415,10 @@ aus deren Datenbank. Danach kann die Auswertung geschehen.
 
 Um der darauffolgenden Gruppe Bescheid zu geben, wird nach dem Prozess der
 Auswertung ebenfalls eine HTTP Anfrage gesendet, in der über die neuen
-Protokoll-ID's informiert wird. Unsere API bietet dafür verschiedene Endpunkte
+Protokoll-ID's informiert wird. Unsere \gls{api} bietet dafür verschiedene Endpunkte
 an, um an alle notwendigen Informationen zu gelangen.
 
-Diese Endpunkte sind alle in einem Endpunkt festgehalten, die die API
+Diese Endpunkte sind alle in einem Endpunkt festgehalten, die die \gls{api}
 dokumentiert und hier abgerufen werden kann:
 \url{http://infosys2.f4.htw-berlin.de:9001/cme/doc/docs}
 
@@ -440,11 +435,11 @@ Demnach enthält der \gls{cme} folgende Endpunkte:
         jeweiliger ID abgerufen werden
 \end{itemize}
 
-Der Server ist nur über das \gls{htw}-Netzwerk erreichbar. Zusätzlich ist die API mit
+Der Server ist nur über das \gls{htw}-Netzwerk erreichbar. Zusätzlich ist die \gls{api} mit
 Basic Authentication geschützt. Dadurch kann nur auf die Daten zugegriffen
 werden, wenn sich mit Username und Passwort authentifiziert wird.
 
-Es wurden drei Clients, sprich User, angelegt, die auf die API zugreifen
+Es wurden drei Clients, sprich User, angelegt, die auf die \gls{api} zugreifen
 dürfen. Je einer für die anderen Gruppen crawler\_client \& sentiment\_client und
 cme\_admin für unser Team, um Testen zu können und bei Bugs der Ursache auf den
 Grund gehen zu können.
