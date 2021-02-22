@@ -1,23 +1,30 @@
-\section{Einleitung}\label{sec:03_01_einleitung}
-Im Rahmen des Projekts \enquote{Sentiments of Bundestag} (SoB) \todo{glos} sollten
-Bundestagsprotokolle analysiert werden, um den \enquote{Ton} des Bundestags zu
-Bewerten. Dieses Teilprojekt von Gruppe 2 ist für das \enquote{Kommunikationsmodell}
-(\enquote{Communication Model Extractor}, CME \todo{glos}) zuständig. Es ist
-der letzte Service der sich mit den Rohdaten der Bundesregierung beschäftigt.
-Aufbauend auf den hier erstellten Daten werden anschließend von Gruppe 3 die
-Sentimente berechnet.
+\section{Einleitung}
+\label{sec:03_01_einleitung}
+
+Im Rahmen des Projekts \gls{sob} sollten Bundestagsprotokolle analysiert
+werden, um den \enquote{Ton} des Bundestags zu bewerten. Das in diesem
+Kapitel beschriebene Teilprojekt, das von Gruppe 2 bearbeitet wurde, hatte
+die Wahl und Anwendung eines passenden Kommunikationsmodells zum Ziel. Zur
+Erfüllung dieser Zielstellung wurde die \enquote{\gls{cme}}-Software erstellt.
+Diese ist das letzte Pipeline-Element des Gesamtprojektes, das sich mit den Rohdaten der
+Bundesregierung beschäftigt. Die in diesem Teilprojekt generierten Daten
+stellen die Basis aller weiteren Verarbeitungsschritte dar.
 
 \subsection{Zielstellung}
-
-Dieser Service soll aus den Open Data XML-Dateien der 19. Wahlperiode des
-Bundestages bzw. der leicht abgewandelten Variante dieser Daten, welche von
-Gruppe 1 in Form von JSON-Dateien zur Verfügung gestellt werden,
-Interaktionen zwischen Fraktionen und oder Abgeordneten extrahieren.
+Die \gls{cme}-Software soll aus den \citetitle{OpenData2019}~\cite{OpenData2019}
+\todo{check that we are not the first ones using it otherwise use enquotes}
+\gls{xml}-Dateien der 19. Wahlperiode des Bundestages bzw. der leicht
+abgewandelten Variante dieser Daten, welche von Gruppe 1 in Form von
+\gls{json}-Dateien zur Verfügung gestellt werden, Interaktionen zwischen
+Fraktionen und oder Abgeordneten extrahieren.
 
 Für diese Extraktion werden die Rohdaten analysiert und darauf aufbauend ein
-passendes Kommunikationsmodell gewählt. Ebenfalls wird ein Datenmodell
-entwickelt, welches zur Speicherung und Weitergabe an die folgenden Gruppen
-dient.
+passendes Kommunikationsmodell gewählt. Um über neue Protokolle von Gruppe 1
+informiert werden zu können, soll dafür eine Schnittstelle geschaffen werden.
+Ebenfalls werden zur Weitergabe der Ergebnisse an die folgende Gruppe ein
+Datenmodell, welches zur Speicherung der Ergebnisse dient, eine Schnittstelle
+zur Weitergabe der Daten und eine weitere Schnittstelle, über welche Gruppe 3
+bei neuen Daten benachrichtigt werden kann, entwickelt.
 
 \subsection{Anforderungsdefinition}
 
@@ -78,10 +85,13 @@ die Software funktionieren soll.
     \label{tab:03_requirements}
 \end{table}
 
-\subsection{Wahl des Kommunikationsmodell}
+\todo{nicht funktionale? ansonsten oben aus dem text nehmen}
+
+\subsection{Wahl des Kommunikationsmodells}
 FR01 erfordert die Auswahl eines passenden Kommunikations- und Datenmodells.
-Aus diesem Grund wurden zu Beginn des Semesters bereits vorliegenden
-Plenarprotokolle im Open Data Format der Bundesregierung untersucht.
+Aus diesem Grund wurden zu Beginn des Semesters die bereits vorliegenden
+Plenarprotokolle im \enquote{\citetitle{OpenData2019}}-Format der
+Bundesregierung untersucht.
 
 Bei dieser Untersuchung zeigte sich, dass die für uns interessanten Daten so
 angeordnet sind, dass jede Sitzung in Tagesordnungspunkte unterteilt ist,
@@ -95,37 +105,39 @@ Parlamentariern.
 
 Basierend auf diesen Erkenntnissen und in Absprache mit Gruppe 3, 4 und 5,
 welche für die Sentimentanalyse sowie die Auswertungen zwischen Fraktionen und
-Abgeordneten verantwortlich sind, wurde ein Sender-Empfänger-Modell gewählt.
-In diesem kann der Sender und Empfänger jeweils entweder ein
-Bundestagsabgeordneter oder eine Fraktion sein. Auf Basis des Inhalts der
-Nachricht, die vom Sender zum Empfänger geschickt wird, wird später von
-Gruppe 3 das Sentiment ermittelt.
+Abgeordneten verantwortlich sind, wurde ein Sender-Empfänger-Modell für die
+Repräsentation der Interaktionen gewählt. In diesem kann der Sender und
+Empfänger jeweils entweder ein Bundestagsabgeordneter oder eine Fraktion sein.
+Auf Basis des Inhalts der Nachricht, die vom Sender zum Empfänger geschickt
+wird, wird später von Gruppe 3 das Sentiment ermittelt.
 
 \section{Umsetzung}\label{sec:03_02_umsetzung}
-\todo{text? or drop first subsection?}
+Auf Grundlage der definierten Anforderungen wurde im nächsten Schritt ein
+Konzept für deren Umsetzung entwickelt. Dieses sowie die Umsetzung selbst
+wird in den folgenden Abschnitten näher erläutert.
 
-\subsection{Communication Model Extractor (CME)}
-Nachdem die Anforderungen definiert wurden, wurde sich im Team die Struktur
-überlegt, wie die Applikation aufgebaut werden soll, um effizient die Aufgabe
-zu erfüllen.
-
-Es wurde sich für die Programmiersprache Python entschieden, da sich alle
-Teammitglieder damit gut auskennen. Da das Kommunikationsmodell außerdem an
-zweiter Stelle der Pipeline steht, schien es sinnvoll, schnelle Ergebnisse
-vorweisen zu können, was ebenfalls für Python spricht.
+\subsection{\glsentryfull{cme}}
+Für die Entwicklung der \gls{cme}-Software wurde die Programmiersprache Python
+gewählt, da alle Teammitglieder bereits Kenntnisse in dieser mitbrachten und
+um den folgenden Gruppen möglichst schnell erste Ergebnisse liefern zu können,
+mit denen diese arbeiten können. So bietet Python eine Vielzahl an guten und
+einfach zu nutzenden Bibliotheken, welche die Entwicklung einer solchen
+prototypischen Applikation beschleunigen können. Z.~B. ist es innerhalb
+weniger Zeilen möglich, einen funktionsfähigen \gls{rest}-Endpoint zur
+Verfügung zu stellen.
 
 Aus den funktionalen Anforderungen FR5, FR6 und FR7 ergibt sich, dass eine
 Kommunikation zu den Gruppen 1 und 3 nötig ist. Aufgrund hoher Kompatibilität
-wurde sich für eine REST-Schnittstelle entschieden. Diese API wurde in dem
+wurde sich für eine \gls{rest}-Schnittstelle entschieden. Diese API wurde in dem
 Python-Modul \enquote{api.py} mithilfe der FastAPI-Bibliothek implementiert. Sie
 beantwortet Anfragen zu Protokollen (Sessions) Fraktionen (Factions) und
-Bundestagsabgeordneten (MDBs). Außerdem wird eine SWAGGER-Dokumentation
+\glspl{mdb}. Außerdem wird eine SWAGGER-Dokumentation
 bereitgestellt.
 
 Zur Steuerung der Anwendung wird ein CLI, welches im \enquote{cli.py}-Modul umgesetzt
 wurde, in Form der cme-Applikation zur Verfügung gestellt. Dieses ist in
 verschiedene Unterkommandos aufgeteilt. Mithilfe dieser ist es z.B. möglich
-Protokolle manuell aus dem lokalen Speicher einzulesen (XML- oder JSON-Format)
+Protokolle manuell aus dem lokalen Speicher einzulesen (\gls{xml}- oder \gls{json}-Format)
 oder den Server zu starten. Mit \enquote{init} werden erstmalig Bundestagsabgeordnete
 eingelesen. \enquote{dump} ermöglicht die Interaktion mit der Datenbank, um einzelne
 Dokumente daraus zu extrahieren.
@@ -143,7 +155,7 @@ dem Sender-Empfänger-Modell und legt diese in einem sogenannten Transcript ab.
 Dieses Transcript wird anschließend mithilfe des \enquote{Database}-Moduls, welches für
 jeglichen Datenbankzugriff zuständig ist, in der Datenbank abgelegt.
 
-Zuletzt enthält \enquote{Domain} Datenmodelle für verschiedene Objekte, wie z.~B. MDB,
+Zuletzt enthält \enquote{Domain} Datenmodelle für verschiedene Objekte, wie z.~B. \gls{mdb},
 Faction \& Interaction. Es wird von so gut wie jedem Modul benutzt.
 
 Die soeben beschriebenen Module und der damit verbundene Kontrollfluss zwischen
@@ -189,10 +201,10 @@ Aufgrund der Unterschiedlichkeit mussten beide Typen gesondert analysiert werden
 \subsubsection{Kommentare}
 
 Kommentare werden nach rigiden strukturellen Regeln in den Protokollen der
-Bundestagssitzungen erfasst und liefern Informationen zum Sender des
-Kommentars. Dies kann eine oder mehrere Fraktionen oder eine oder mehrere
-an der Sitzung teilnehmende Personen sein. Dabei lassen sich Kommentare in
-drei Kategorien unterteilen:
+Bundestagssitzungen erfasst und liefern unter anderem Informationen zum
+Sender des Kommentars. Dieser kann eine oder mehrere Fraktionen oder eine
+oder mehrere an der Sitzung teilnehmende Personen sein. Kommentare lassen sich
+in die Folgenden drei Kategorien unterteilen:
 
 \begin{itemize}
     \item \textbf{Publikumsresonanzen}: Z.~B. Beifall oder Entrüstung des
@@ -229,22 +241,21 @@ Auftrennung der Sender auf Basis von Konjunktionen bzw. Interpunktion
 notwendig wird. Außerdem gibt es gelegentlich sekundäre Kommentare, bei denen
 auf vorherige Kommentare reagiert wird. Die einzigen zuverlässigen
 Formatierungen, die auf solche Verhältnisse hinweisen, sind die expliziten
-grammatikalische Struktur nach der Namensnennung:
+grammatikalischen Strukturen nach der Namensnennung:
 \enquote{an [neuer Empfänger] gerichtet} bzw. \enquote{zur [Ziel-Fraktion] gewandt}
 wirken innerhalb von Kommentaren als klares Merkmal für einen vom Redner
 abweichenden Empfänger. Das Schlüsselwort \enquote{Gegenruf} wird darüber
 hinaus häufig verwendet, um auf einen Dialog zwischen Kommentierenden
 hinzuweisen - da in diesen Fällen allerdings der Kommentarinhalt oft
 mindestens teilweise weiterhin auf den Redner abzielt, wurde bei solchen
-Kommentaren ebenfalls auf den Redner als Empfänger referenziert. Diese
+Kommentaren ebenfalls der Redner als Empfänger verwendet. Diese
 Problematik könnte in Fortsetzungen der Arbeit eventuell präziser behandelt
 werden, da in längeren Kommentar-Dialogstrukturen recht häufig auf die
-eindeutige Empfängerbezeichnung verzichtet wird nachdem diese initial
-eingeleitet werden, wodurch in unserer Methode viele für menschliche Leser
-offensichtliche Interaktionen nicht als solche registriert wurden. Nicht
-zuletzt werden die genannten syntaktischen Strukturen gelegentlich durch
-Rechtschreib- oder Zeichensetzungsfehler durchbrochen, wobei in diesen Fällen
-die gesamte Interaktion verloren geht.
+eindeutige Empfängerbezeichnung verzichtet wird. Dadurch werden in unserer
+Methode viele für menschliche Leser offensichtliche Interaktionen nicht als
+solche registriert. Nicht zuletzt werden die genannten syntaktischen
+Strukturen gelegentlich durch Rechtschreib- oder Zeichensetzungsfehler
+durchbrochen, wobei in diesen Fällen die gesamte Interaktion verloren geht.
 
 \subsubsection{Redeteile}
 Redeteile besitzen weniger Struktur als Kommentare, da sie nicht den Regeln der
@@ -253,7 +264,7 @@ Empfänger einer Aussage erst ermittelt werden. Redeteile wurden daher auch nur
 als Interaktionen gewertet, sobald Fraktionen oder Mitglieder des Bundestags
 als mögliche Interaktionsempfänger im Fließtext erkannt wurden.
 
-Die Erkennung von MDBs erfolgt über die Feststellung bekannter, eindeutiger
+Die Erkennung von \glspl{mdb} erfolgt über die Feststellung bekannter, eindeutiger
 Nachnamen, denen eine formale Anrede (Herr/Hr., Frau/Fr., Kollege, Doktor)
 vorangeht. Parteien wurden anhand von ihren Namen bzw. deren Abkürzungen,
 beziehungsweise durch gängige aber eindeutige Kurzformen identifiziert. Die
@@ -265,24 +276,24 @@ einnahm.
 Die Empfängerermittlung bei Redeanteilen verblieb in der entstandenen
 Implementierung in einem recht rudimentären Zustand, da viele der inhärenten
 Probleme des Ansatzes nicht behandelt werden konnten. So konnte etwa die
-Unterscheidung zwischen mehreren MDBs mit gleichen Nachnamen oder die
-kolloquiale Verwendungen von Farben (\enquote{Rot} für SPD oder die Linke) oder
+Unterscheidung zwischen mehreren \glspl{mdb} mit gleichen Nachnamen oder die
+kolloquiale Verwendung von Farben (\enquote{Rot} für SPD oder die Linke) oder
 Begriffen (\enquote{Liberale} stellvertretend für die FDP) als Substitut für Fraktionen
 nicht behandelt werden. Um diese Problematiken zu umgehen wurden in der
 Paragraphen-Analyse nur solche Interaktionen gewertet, welche sich an eindeutig
-identifizierbare MDBs oder Fraktionen richten. Nachnamen wie \enquote{Müller}, die
-mehrere MDBs bezeichnen können, aber auch in anderen Sachverhalte eingesetzte
-Begriffe, wie \enquote{Union}, wurden somit aus der Schlüsselwort-Liste verbannt, mit
-der die Redeabschnitte abgetastet wurden. Auch die Nennung von Nachnamen als
-Referenz, etwa bei Beiträgen, die sich auf Morddrohungen gerichtet an im
-Bundestag auftretende Personen thematisierte, wurde im späteren Verlauf der
-Arbeit als Grund für Mängel in der Ergebnissen \todo{fehler?} identifiziert, in diesem Fall in
-der Form von fehlerhaften Interaktionen. Durch diese Probleme wurde eine
-unbestimmt große Menge von Fehlern durch die Redeteil-Analyse produziert,
-sowohl in nicht erkannte Interaktionen als auch fälschlicherweise als
-Interaktionen kategorisierte Beiträgen, was mit Sicherheit eine Verzerrung der
-Projektergebnisse, aber gleichzeitig auch ein wesentliches
-Verbesserungspotential für die mögliche Fortsetzungen dieses Teilprojekts
+identifizierbare \glspl{mdb} oder Fraktionen richten. Nachnamen wie \enquote{Müller}, die
+mehrere \glspl{mdb} bezeichnen können, aber auch in anderen Sachverhalten eingesetzte
+Begriffe, wie \enquote{Union}, wurden somit aus der Schlüsselwort-Liste entfernt, mit
+der die Redeabschnitte abgetastet wurden. \todo{Dieses sehr spezielle Beispiel
+vielleicht näher erläutern?} Auch die Nennung von Nachnamen als Referenz, etwa
+bei Beiträgen, die an \glspl{mdb} gerichtete Morddrohungen thematisieren,
+wurde im späteren Verlauf der Arbeit als Grund für Mängel in den Ergebnissen
+identifiziert, in diesem Fall in der Form von fehlerhaften Interaktionen.
+Durch diese Probleme wurde eine unbestimmt große Menge von Fehlern durch die
+Redeteil-Analyse produziert, sowohl in nicht erkannten Interaktionen als auch in
+fälschlicherweise als Interaktionen kategorisierten Beiträgen, was mit Sicherheit
+eine Verzerrung der Projektergebnisse, aber gleichzeitig auch ein wesentliches
+Verbesserungspotential für mögliche Fortsetzungen dieses Teilprojekts
 darstellt. Gleichzeitig sollte nicht außer Acht gelassen werden, dass
 Interaktionen in Redeteilen nach unseren Messungen einen recht geringen Anteil
 der Interaktionen im Bundestag ausmachen. Die Steigerung der Anzahl erkannter
@@ -293,57 +304,96 @@ Betrachtung der Kommentare.
 \subsection{Ermittlung von teilnehmenden Personen}
 Personen müssen über Sitzungen hinweg eindeutig identifizierbar sein, damit
 nachfolgende Gruppen Informationen zu Parteizugehörigkeit und Namen korrekt
-zuweisen können (FR08). Personen werden in der \enquote{mdb} Collection der MongoDB
+zuweisen können (FR08). Personen werden in der \enquote{mdb}-Collection der MongoDB
 gesammelt. Initialisiert werden kann diese Liste mithilfe der Stammdaten der
-Bundestagsabgeordneten des Bundestags. Diese als XML zur Verfügung gestellte
+Bundestagsabgeordneten des Bundestags. Diese als \gls{xml} zur Verfügung gestellte
 Liste enthält alle relevanten Informationen, die bei der Identifizierung
-helfen (Namen und Namensänderungen, Parteizugehörigkeit mit von-bis
-Datumsangabe, Titel etc.).
+helfen (Namen und Namensänderungen, Parteizugehörigkeit mit von-bis-Datumsangabe,
+Titel etc.).
 
 Da die Stammdaten unvollständig sind, auch weil Gastredner Reden halten oder
 Bundestagsabgeordnete in den Stammdaten fehlen, müssen weitere Redner während
 der Analyse hinzugefügt werden. Gerade in den Kommentaren können meist Vor-
-und Nachnamen extrahiert werden, um ein Abgleich mit den MDB-Daten
+und Nachnamen extrahiert werden, um ein Abgleich mit den \gls{mdb}-Daten
 vorzunehmen. Leider werden Namen oft inkonsistent geschrieben (z.~B. wird
 der zweite Vorname manchmal ausgeschrieben, abgekürzt oder weggelassen) oder
 die Stenographen vertippen sich. Auch wird das Format der Kommentarsektion
 nicht immer eingehalten.
 
-Weil wir fehlende Redner und Rechtschreibfehler nicht unterscheiden können,
-gelangen doppelte Einträge in die Datenbank. Wir haben Mechanismen eingebaut,
-um solche Fehler zu erkennen, können Sie aber nicht ganz ausschließen.
+Weil fehlende Redner und Rechtschreibfehler nicht unterschieden werden können,
+gelangen doppelte Einträge in die Datenbank. Es wurden Mechanismen eingebaut,
+um solche Fehler zu erkennen. Diese können jedoch nicht ganz ausgeschlossen werden.
 
-\subsection{Infrastruktur Setup mit Docker}
-Um ein einfaches Deployment sicherzustellen, wurde sowohl die mongodb als
-auch der Service selbst mit Docker bzw. docker-compose abstrahiert.
+\subsection{Infrastruktur-Setup mit Docker}
+Um ein einfaches Deployment zu ermöglichen, wurde ein Container-basierter
+Deploymentansatz gewählt. Dieser nutzt sowohl einen Container für die im
+Rahmen des Teilprojektes erstellte Software als auch für die MongoDB, welche
+für die Persistierung der Daten genutzt wird.
 
-Die Standardkonfiguration des mongodb Containers wurde lediglich um
-Berechtigungen erweitert.
+Die beiden Container werden mithilfe von docker-compose verwaltet und
+konfiguriert. Dabei gibt es neben der docker-compose-Konfiguration für das
+Deployment auch eine zweite für die lokale Entwicklung. Diese enthält primär
+die MongoDB, da während der Entwicklung der lokale Code mit den entsprechenden
+Modifikationen genutzt werden soll und z.~B. ein ständiges Neubauen des
+Applikation-Images und damit unnötiger Zeitaufwand verhindert werden soll.
+
+Die Konfiguration des MongoDB-Containers erfolgt über Environment-Variablen
+und ein \texit{mongo-init.sh}-Skript, welches beim ersten Starten des
+Containers von dem MongoDB-Server ausgeführt wird. Dieses legt basierend auf
+Environment-Variablen einen neuen DB-User (cme) an, welcher nur in einer
+Datenbank mit dem Namen \textit{cme\_data} Lese- und Schreibrechte hat.
+
+Das Applikation-Image wird bei jedem Starten der docker-compose-Umgebung
+frisch gebaut und enthält die \gls{cme}-Software, welche durch die Tatsache,
+dass es sich dabei um ein installierbares Python-Package handelt, einfach nur
+dort installiert werden muss.
+
+Zusätzlich wurde die Deployment-docker-compose-Konfiguration so konfiguriert,
+dass ein Zugriff auf die Container von außen nicht möglich ist. Dies bedeutet
+einerseits, dass der DB-Port des MongoDB-Containers nur durch den
+\gls{cme}-Container erreichbar ist und andererseits, dass die
+\gls{rest}-Endpoints des \gls{cme}-Containers nur über eine Verbindung von
+Localhost aus erreichbar sind. Der Zugriff von außen erfolgt über einen
+zusätzlich konfigurierten nginx-Reverse-Proxy. Dieser hat neben ssh \todo{glos} den
+einzigen nach außen hin geöffneten Port auf dem Server. Somit muss jeder
+Request durch diesen Reverse-Proxy fließen, bevor er in die
+docker-compose-Umgebung gelangt.
 
 \subsubsection{Datensicherheitsvorfall}
 
-Während der Projektimplementierung wurde der MongoDB Server, auf dem die
-Kommunikationsdaten abgelegt wurden, aufgrund von Fehlkonfigurationen
-kompromittiert.
+Während der initialen Konfiguration der Infrastruktur wurde der interne
+Kommunikationsport des genutzten MongoDB-Containers aufgrund einer
+fehlerhaften docker-compose-Konfiguration durch den Docker-Daemon nach außen
+geöffnet und nicht, wie gedacht, nur lokal. So konnte auf die so für den Rest
+des Internets frei zugängliche MongoDB von außen zugegriffen werden und diese
+wurde kompromittiert.
 
-Die Firewall wurde zwar korrekt konfiguriert, der Docker-Daemon öffnet mit
-seinen Root-Rechten Container jedoch standardmäßig nach außen. Außerdem wurde
-kein Benutzername oder Passwort für die Datenbank gesetzt. Somit konnte ein
-Angreifer den offenen MongoDB-Port finden, die Datenbank löschen und eine
-Erpressernachricht hinterlassen - ein klassischer Ransomware-Angriff.
+Nachdem diese Situation dem Team bekannt wurde, wurde dies den entsprechenden
+Parteien gemeldet und das System wurde ein zweites Mal aufgesetzt. Für diese
+zweite Konfiguration wurde ausgiebig die vorliegende
+docker-compose-Konfiguration überprüft. Dabei stellten wir fest, dass die
+Verwendung des \textit{ports}-Arguments ohne die Angabe einer expliziten IP,
+wie es in vielen docker-compose-Tutorials zu finden ist, dazu führt, dass der
+Docker-Daemon diesen Port mithilfe einer zusätzlichen IP-Tables-Chain nach
+außen hin öffnet. Aus diesem Grund wurde in der offiziellen Dokumentation als
+Lösung nach alternativen Möglichkeiten gesucht, Ports freizugeben. Dort wurde
+einerseits die bereits erwähnte Lösung gefunden, welche durch die explizite
+Angabe einer \enquote{Bind}-IP-Adresse wie z.~B. hier
+\enquote{127.0.0.1:9001:9001} dazu führt, dass nur Anfragen, die über diese
+Adresse erfolgen, beantwortet werden. Andererseits wurde das
+\textit{expose}-Argument entdeckt, welches diesen Port nur für alle
+Docker-Container innerhalb derselben docker-compose-Umgebung freigibt.
 
-Weil keine der Daten prägnant waren (da sie ohnehin im Netz frei verfügbar
-waren), konnte über den Verlust hinweg gesehen werden.
-
-Der zuständige Laboringenieur wurde kontaktiert und der Server zurückgesetzt.
-Nach einer Analyse der Fehler wurden Zugangsdaten für die Datenbank angelegt
-sowie Docker umkonfiguriert.
-
-Danach wurden die Maßnahmen getestet, um sicherzustellen, dass nur noch
-Nutzer mit SSH und Datenbank-Zugangsdaten Zugriff haben.
-
-Zukünftig wäre es sinnvoll den Docker-Daemon als Nicht-Root-User laufen zu
-lassen, um die Anwendung weiter abzusichern.
+Zur vollständigen Beseitigung des Problems wurde schließlich, wie auch schon
+im vorherigen Abschnitt beschrieben, \todo{der text muss noch geschrieben
+werden} das \textit{expose}-Argument genutzt, um den MongoDB-Container nur
+innerhalb der docker-compose-Umgebung zugänglich zu machen. Zusätzlich wurde
+das Portbinding des \gls{cme}-Containers, welcher den \gls{rest}-Service
+enthält, auf Localhost beschränkt. Die eigentliche Auflösung von außen erfolgt
+dann über einen nginx-Reverse-Proxy, welcher im Hostsystem unter einem nicht
+privilegierten Nutzer läuft. So ist jeglicher Zugriff auf die
+docker-compose-Umgebung von außen nicht mehr möglich und muss durch den
+Reverse-Proxy.
 
 \subsection{Schnittstelle für Zugriff auf den Communication Model Extractor}
 
@@ -360,12 +410,12 @@ folgenden Gruppe realisiert wurde.
 \end{figure}
 \todo{figure caption}
 
-Es wurde sich mit Gruppe 1 darauf geeinigt, dass der CME einen Endpunkt
+Es wurde sich mit Gruppe 1 darauf geeinigt, dass der \gls{cme} einen Endpunkt
 anbietet, um die Information zu erhalten, wenn neue Protokolle aus dem
 Bundestag in deren Datenbank kreiert wurden. Zusätzlich bekamen wir
 Zugangsdaten, um auf deren Datenbank zugreifen zu können. So werden uns die
 Protokoll-ID's an \url{http://infosys2.f4.htw-berlin.de:9001/cme/data/} gesendet
-und der CME holt sich die gewünschten Protokolle zu einem späteren Zeitpunkt
+und der \gls{cme} holt sich die gewünschten Protokolle zu einem späteren Zeitpunkt
 aus deren Datenbank. Danach kann die Auswertung geschehen.
 
 Um der darauffolgenden Gruppe Bescheid zu geben, wird nach dem Prozess der
@@ -377,7 +427,7 @@ Diese Endpunkte sind alle in einem Endpunkt festgehalten, die die API
 dokumentiert und hier abgerufen werden kann:
 \url{http://infosys2.f4.htw-berlin.de:9001/cme/doc/docs}
 
-Demnach enthält der CME folgende Endpunkte:
+Demnach enthält der \gls{cme} folgende Endpunkte:
 \begin{itemize}
     \item /cme/data/sessions/ - damit wird eine Liste aller existierenden
         Sitzungen zurückgegeben
@@ -390,7 +440,7 @@ Demnach enthält der CME folgende Endpunkte:
         jeweiliger ID abgerufen werden
 \end{itemize}
 
-Der Server ist nur über das HTW-Netzwerk erreichbar. Zusätzlich ist die API mit
+Der Server ist nur über das \gls{htw}-Netzwerk erreichbar. Zusätzlich ist die API mit
 Basic Authentication geschützt. Dadurch kann nur auf die Daten zugegriffen
 werden, wenn sich mit Username und Passwort authentifiziert wird.
 
@@ -401,20 +451,28 @@ Grund gehen zu können.
 
 \section{Fazit}\label{sec:03_05_fazit}
 
-Abschließend konnten die meisten Anforderungen erfolgreich umgesetzt werden.
+Im Rahmen des Teilprojektes konnte erfolgreich die Extraktion des
+Kommunikationsmodells basierend auf den
+\enquote{\citetitle{OpenData2019}}-\gls{xml}-Dateien sowie dem
+\gls{json}-Format von Gruppe 1 umgesetzt werden. Dabei wurden alle in
+\todo{add ref} definierten Anforderungen erfolgreich erfüllt. So wurde ...
+\todo{continue}
+
+Abschließend konnten die meisten \todo{welche nicht?} Anforderungen
+erfolgreich umgesetzt werden.
 
 Der Service bietet Schnittstellen zur vorherigen und nachfolgenden Gruppe und
-sowie automatisierte Verarbeitungs-Mechanismen (notify). Auch die frühzeitige
-Bereitstellung einer akzeptierten Kommunikations-Modellierung auf Basis der XML-
-Rohdaten konnte realisiert werden. Der Großteil des Datenbestands wird
+sowie automatisierte Verarbeitungsmechanismen (notify). Auch die frühzeitige
+Bereitstellung einer akzeptierten Kommunikations-Modellierung auf Basis der
+\gls{xml}-Rohdaten konnte realisiert werden. Der Großteil des Datenbestands wird
 analysiert, sodass sowohl Kommentare als auch Redeteile auf Kommunikationen
 überprüft werden.
 
 Allerdings verwirft der Service, aufgrund von Inkonsistenzen in der Syntax und
-Rechtschreibung sowie aufgrund von fehlenden kontextbasierten Analyse-
-Mechanismen, potentielle Interaktionen. Während in Kommentaren primär durch
+Rechtschreibung sowie aufgrund von fehlenden kontextbasierten
+Analyse-Mechanismen, potenzielle Interaktionen. Während in Kommentaren primär durch
 Abweichungen von Protokoll-Syntax und Rechtschreibfehler Probleme entstanden,
-so fehlte in den Redeteilen oft die nötige Information um die Empfänger von
+so fehlte in den Redeteilen oft die nötige Information, um die Empfänger von
 Interaktionen eindeutig zu bestimmen. Daher mussten Interaktionen verworfen
 werden und teils wurden in Kommentaren inkorrekt genannte Personen als
 Personenduplikate in den Datenbestand aufgenommen.
@@ -422,7 +480,7 @@ Personenduplikate in den Datenbestand aufgenommen.
 Daher wurde das Ziel der Gruppe \enquote{Kommunikationsmodell} in Funktionalität und
 Integration zwar erreicht, allerdings wird deutliches Verbesserungspotential
 für die Extraktion von noch mehr Interaktionen und die Eliminierung von
-Artefakten gesehen
+Artefakten gesehen. \todo{what? das ist viel zu negativ}
 
 Die ausgelieferte Deployment-Strategie und die Modulbeschreibungen in dieser
 Dokumentation sollten bei der Weiterentwicklung des Projekts hilfreich sein.
