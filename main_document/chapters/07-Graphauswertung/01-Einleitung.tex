@@ -1,1 +1,62 @@
 \section{Einleitung}\label{sec:07_01_einleitung}
+
+Der folgende Teilabschnitt der Ausarbeitung beschäftigt sich mit dem sechsten Teilprojekt: die Graphauswertung. Die Projektgruppe, welche an dem Teilprojekt gearbeitet hat, besteht aus Markus Glutting, Miriam Lischke und Marie Bittiehn.
+
+\subsection{Hintergrund}
+Das Teilprojekt ``Graphauswertung'' baut auf den Ergebnissen der Teilprojekte ``Interaktion zwischen Personen'' (Gruppe 4) und ``Interaktion zwischen Fraktionen'' (Gruppe 5) auf. Genauer formuliert, besteht die Aufgabenstellung darin, die Graphen, welche von Gruppe 4 und 5 erstellt werden, auszuwerten und die Ergebnisse der Auswertung der nachfolgenden Gruppe 8 für ihre Benutzeroberfläche zur Verfügung zu stellen.
+
+\subsection{Problemstellung}
+Durch die Auswertung der Graphen sollen die sogenannten ``Stimmungsmacher'' im Bundestag ermittelt werden. Unter einem Stimmungsmacher ist im vorliegenden Kontext eine Person gemeint, welche viel mit vielen verschiedenen Personen redet und somit eine Stimmung verbreitet. Ob diese verbreitete Stimmung positiv oder negativ ist, ist dabei nicht entscheidend.
+
+Neben der Ermittlung von Stimmungsmachern sollen ebenfalls simple mathematische Analysen auf den Graphen durchgeführt werden. Dadurch soll eine Gesamtbetrachtung der Sitzungen einer Wahlperiode ermöglicht werden, ebenso wie die Option die Sitzungen in Vergleich zueinander stellen zu können.
+
+\subsection{Zielsetzung}
+Um Stimmungsmacher zu ermitteln, soll der PageRank-Algorithmus (siehe Kapitel \ref{sec:07_02_grundlagen}) verwendet werden. Dies bietet sich an, da Stimmungsmacher gleichbedeutend sind zu Personen, welche viele Nachrichten mit einem positiven und/oder einem negativen Sentiments empfangen bzw. versenden. Mithilfe des PageRank-Algorithmus werden eben diesen Personen bzw. Knoten im Graphen hohe Ränge vergeben, wodurch sie identifiziert werden können.
+
+Für die mathematischen Analysen sollen Berechnungen auf den gesamten Graphen durchgeführt und statische Größen wie bspw. der Median oder ein Quartil der Sentiments berechnet werden. Die erstellten Analysen sollen der nachfolgenden Projektgruppe (Benutzeroberfläche) über Schnittstellen zur Verfügung gestellt werden.
+
+Für die Bearbeitung des Teilprojekts wurden zu Projektbeginn folgende Lernziele identifiziert:
+\begin{itemize}
+  \item Kennenlernen des PageRank-Algorithmus
+  \item Kennenlernen von graphenorientierten Datenbanken, insbesondere Neo4j mit Cypher
+  \item Wissensaufbau im Bereich Backend Webapplikationen
+\end{itemize}
+
+\subsection{Prozess}
+Die Bearbeitung des Teilprojekts lässt sich in folgende vier Phasen gliedern:
+\begin{itemize}
+  \item Phase 1 (Oktober 2020): Thematische Einarbeitung und Projektplanung
+  \item Phase 2 (November - Dezember 2020): Implementierung der geplanten Features
+  \item Phase 3 (Januar 2021): Anpassungen in Rücksprache mit der nachfolgenden Projektgruppe (Benutzeroberfläche)
+  \item Phase 4 (Februar 2021): Dokumentation
+\end{itemize}
+
+
+Die Umsetzung des Projekts erfolgte arbeitsteilig durch alle Mitglieder des Projektteams.
+Darüber hinaus bestehen folgende Verantwortlichkeiten:
+
+
+\begin{table}[ht]
+\caption{Gruppe 7 (Graphauswertung) - Aufgabenverteilung}
+\label{tab:7-aufgabenverteilung}
+\begin{tabular}{|p{9cm}|p{5cm}|}
+\hline
+\rowcolor{Gray}
+Aufgabe & Gruppenmitglieder \\
+\hline
+Server-Administration & Markus Glutting \\
+Implementierung: PageRank & Marie Bittiehn \\
+Implementierung: Stammdaten & Alle \\
+Implementierung: Statistische Analysen & Miriam Lischke \\
+Organisation und Projekt Setup & Markus Glutting \\
+Dokumentation & Alle \\
+\hline
+\end{tabular}
+\end{table}
+
+
+Die Entwicklung erfolgte in wöchentlichen Zyklen.
+Zu Beginn eines jeden Zyklus fand die wöchentliche Plenarsitzung im Rahmen der Lehrveranstaltung statt.
+Im Anschluss daran erfolgte eine gruppeninterne Absprache, in der die zuletzt abgeschlossenen Aufgaben besprochen und die nächsten zu erledigenden Aufgaben identifiziert wurden.
+Diese Aufgaben wurden mithilfe von GitHub-Issues dokumentiert und der verantwortlichen Person zugewiesen.
+Bis zur nächsten Plenarsitzung erfolgte die eigenverantwortliche Bearbeitung der Aufgaben.

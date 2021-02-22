@@ -1,1 +1,31 @@
 \section{Grundlagen}\label{sec:07_02_grundlagen}
+
+In diesem Kapitel werden die notwendigen Kenntnisse für das Verständnis der nachfolgenden Kapitel vermittelt. Zuerst wird der PageRank-Algorithmus erläutert mit Fokus auf eine effizientere Berechnung der Ränge mithilfe von Matrizenmultiplikationen. Nachfolgend wird auf die wichtigsten verwendeten Entwicklungsframeworks und -Tools eingegangen.
+
+\subsection{PageRank}
+Der PageRank-Algorithmus ist ein Algorithmus zur Gewichtung von Knoten innerhalb eines Netzwerks anhand ihrer Anzahl an eingehenden Beziehungen. Dabei geht in die Berechnung des PageRanks eines Knoten, neben seiner Anzahl an eingehenden Beziehungen, ebenso der PageRank der auf ihn verweisenden Knoten mit ein.
+
+Aufgrund der daraus entstehenden direkten Abhängigkeit des PageRank eines Knoten von den PageRanks der auf ihn verweisenden Knoten, ist vor allem bei großen Netzwerken ein genaue Berechnung aller PageRanks nicht immer in absehbarer Zeit möglich. Aus diesem Grund werden die Werte für die PageRanks bei der Berechnung meist iterativ angenähert. Dabei wird allen Knoten ein einheitlicher Startwert als PageRank vergeben. Meist wird als Startwert der Wert $1/N$ verwendet, wobei $N$ die Anzahl aller Knoten des Netzwerks ist. Danach wird der PageRank für alle Knoten mehrfach berechnet und so die Werte iterativ angenähert.
+
+Eine Möglichkeit dieser iterativen Annäherung ist ein mehrfaches Iterieren über das gesamte Netzwerk und die rekursive Berechnung des PageRanks für jeden Knoten. Da im vorliegenden Anwendungskontext mit mehreren hundert Knoten und zig Tausend von Beziehungen zwischen den Knoten gerechnet werden kann, wäre das Iterieren über alle Knoten und Beziehungen nicht sehr effizient. Stattdessen können allerdings Matrizenmultiplikationen bzw. eine Eigenvektorberechnung für die PageRank-Berechnung verwendet werden.
+
+Das Netzwerk, welches aus mathematischer Sicht als gerichteter Graph betrachtet werden kann, kann als eine quadratische, stochastische Matrix abgebildet werden \cite{pagerank_eigenvector}. Stochastisch bedeutet in diesem Kontext, dass die Summen der Spalten der Matrix alle 1 betragen \cite{pagerank_eigenvector}. Wenn im Graphen von einem Knoten $j$ eine Beziehung  zum Knoten $i$ besteht, dann wird in der Matrix an der Stelle $ij$ der Wert $1/d^{+}(j)$ eingetragen, wobei $d^{+}(j)$ für den Ausgangsgrad von $j$ steht \cite{pagerank_eigenvector}. Wenn keine Beziehung besteht, wird an der Stelle $ij$ eine 0 eingetragen \cite{pagerank_eigenvector}. Für den Fall, dass ein Knoten $j$ gar keine ausgehenden Beziehungen besitzt, wird in seiner gesamten Spalte $j$ in der Matrix der Wert $1/N$ eingetragen \cite{pagerank_eigenvector}. Dadurch wird verhindert, dass der PageRank in Sackgassen-Knoten gewissermaßen ``versickert''.
+
+Wurde der Graph nun als Matrix abgebildet, so kann der PageRank iterativ mithilfe von Matrixmultiplikationen berechnet werden. Dabei wird der PageRank als Vektor der Länge $N$ dargestellt, meist befüllt mit dem Startwert $1/N$ für alle Knoten. Statt einer gesamten Iteration über das Netzwerk und den rekursiven Berechnungen neuer PageRanks für alle Knoten, muss nun nur eine simple Multiplikation der Matrix mit dem Vektor durchgeführt werden. Das Ergebnis der Multiplikation ist wieder ein Vektor und dieser enthält die neuen PageRanks aller Knoten. Nach mehrfacher Multiplikationen der Matrix mit dem PageRank-Vektoren ändern sich die Werte innerhalb des Vektor nicht mehr. Es wurde iterativ ein dominanter Eigenvektor der Matrix berechnet, welcher gleichzeitig den endgültigen PageRanks der Knoten des Netzwerks entspricht \cite{pagerank_eigenvector}.
+
+Auf gleiche Art und Weise kann der sogenannte ``Reverse PageRank'' berechnet werden. Bei dem Reverse PageRank handelt es sich um den PageRank berechnet auf dem Reverse-Graphen des Originalgraphen \cite{reverse_pagerank}. Dies bedeutet, dass der Reverse PageRank nicht basierend auf den eingehenden Beziehungen der Knoten berechnet wird, sondern auf den ausgehenden Beziehungen.
+
+Um im ersten Schritt den Reverse-Graphen des Originalgraphen zu erhalten, werden die Richtungen der Beziehungen zwischen den Knoten des Originalgraphen umgedreht \cite{reverse_pagerank}. Danach wird der so erzeugte Reverse-Graph ebenfalls als Matrix abgebildet und die PageRank-Werte der Knoten werden mithilfe von Matrizenmultiplikationen berechnet. Die dadurch ermittelten Werte für den Reverse PageRank ähneln den Ergebnissen des klassischen PageRank dahingehend, dass die einzelnen Werte gleich sind, aber anders verteilt. Dies ist dadurch zu erklären, dass bei der Berechnung des Reverse PageRank zwar die Richtungen der Beziehungen umgedreht werden, jedoch keine Beziehungen entfernt oder hinzugefügt werden. Aus diesem Grund sind die Werte gleich, aber durch das Umdrehen der Beziehungen sind sie anders verteilt.
+
+\subsection{Entwicklungsframeworks und -Tools}
+
+Vor der Wahl eines Entwicklungsframeworks galt es zunächst zu entscheiden, welche Programmiersprache verwendet wird.
+Innerhalb der Gruppe war die Python-Bibliothek \lstinline|numpy| bekannt, welche zur performanten Berechnung von Matrizen geeignet ist \cite{numpy}.
+Daher fiel die Entscheidung auf die Programmiersprache Python. Zur Bereitstellung von HTTP-Schnittstellen für die Benutzeroberfläche wurde das Microframework ``Flask'' verwendet.
+Flask zeichnet sich dahingehend aus, dass es einen sehr schlanken Kern hat, der nach Bedarf erweitert werden kann \cite{flask}.
+Dadurch unterscheidet es sich stark von anderen Frameworks wie bspw. Django, welches stattdessen eher darauf abzielt, ein vollständiges Framework für Webanwendungen zu sein \cite{django}.
+
+Der Zugriff auf die Neo4j Datenbaken erfolgt mithilfe des Neo4j Python-Treibers, welcher im Python-Paket \lstinline|neo4j| bereitgestellt wird \cite{pip_neo4j}.
+Es wurde kein Object Graph Mapper verwendet, da eines der Lernziele darin bestand, die Abfragesprache Cypher kennenzulernen.
+
+
