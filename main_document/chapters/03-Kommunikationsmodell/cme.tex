@@ -281,22 +281,14 @@ Paragraphen-Analyse nur solche Interaktionen gewertet, welche sich an eindeutig
 identifizierbare \glspl{mdb} oder Fraktionen richten. Nachnamen wie \enquote{Müller}, die
 mehrere \glspl{mdb} bezeichnen können, aber auch in anderen Sachverhalten eingesetzte
 Begriffe, wie \enquote{Union}, wurden somit aus der Schlüsselwort-Liste entfernt, mit
-der die Redeabschnitte abgetastet wurden. \todo{Dieses sehr spezielle Beispiel
-vielleicht näher erläutern?} Auch die Nennung von Nachnamen als Referenz, etwa
-bei Beiträgen, die an \glspl{mdb} gerichtete Morddrohungen thematisieren,
-wurde im späteren Verlauf der Arbeit als Grund für Mängel in den Ergebnissen
-identifiziert, in diesem Fall in der Form von fehlerhaften Interaktionen.
-Durch diese Probleme wurde eine unbestimmt große Menge von Fehlern durch die
-Redeteil-Analyse produziert, sowohl in nicht erkannten Interaktionen als auch in
-fälschlicherweise als Interaktionen kategorisierten Beiträgen, was mit Sicherheit
-eine Verzerrung der Projektergebnisse, aber gleichzeitig auch ein wesentliches
-Verbesserungspotential für mögliche Fortsetzungen dieses Teilprojekts
-darstellt. Gleichzeitig sollte nicht außer Acht gelassen werden, dass
-Interaktionen in Redeteilen nach unseren Messungen einen recht geringen Anteil
+der die Redeabschnitte abgetastet wurden. Es sollte allerdings nicht außer Acht gelassen
+werden, dass Interaktionen in Redeteilen nach unseren Messungen einen recht geringen Anteil
 der Interaktionen im Bundestag ausmachen. Die Steigerung der Anzahl erkannter
 Interaktionen durch unsere Methode der Redebeitrag-Analyse betrug für die
 bisherigen Protokolle der 19. Wahlperiode lediglich 8\% gegenüber der alleinigen
-Betrachtung der Kommentare.
+Betrachtung der Kommentare, was dafür spricht dass auch nach Aufnahme von weiteren
+Fraktionsbegriffen bzw. Nachnamen in die Betrachtung nur relativ wenige Interaktionen
+hinzukommen würden.
 
 \subsection{Ermittlung von teilnehmenden Personen}
 Personen müssen über Sitzungen hinweg eindeutig identifizierbar sein, damit
@@ -468,14 +460,24 @@ Rechtschreibung sowie aufgrund von fehlenden kontextbasierten
 Analyse-Mechanismen, potenzielle Interaktionen. Während in Kommentaren primär durch
 Abweichungen von Protokoll-Syntax und Rechtschreibfehler Probleme entstanden,
 so fehlte in den Redeteilen oft die nötige Information, um die Empfänger von
-Interaktionen eindeutig zu bestimmen. Daher mussten Interaktionen verworfen
-werden und teils wurden in Kommentaren inkorrekt genannte Personen als
-Personenduplikate in den Datenbestand aufgenommen.
+Interaktionen eindeutig zu bestimmen. Daher mussten gelegentlich Interaktionen verworfen
+und teils in Kommentaren inkorrekt genannte Personen als
+Personenduplikate in den Datenbestand aufgenommen werden.
 
-Daher wurde das Ziel der Gruppe \enquote{Kommunikationsmodell} in Funktionalität und
-Integration zwar erreicht, allerdings wird deutliches Verbesserungspotential
-für die Extraktion von noch mehr Interaktionen und die Eliminierung von
-Artefakten gesehen. \todo{what? das ist viel zu negativ}
+\section{Ausblick}\label{sec:03_6_ausblick}
+
+Das Ziel der Gruppe \enquote{Kommunikationsmodell} wurde in Funktionalität und
+Integration zwar erreicht, allerdings wird Verbesserungspotential
+in der Extraktion von noch mehr Interaktionen und auch in der Eliminierung von
+Artefakten gesehen.
+
+Insbesondere in den Redeteilen finden wird in den mehrfach vorkommenden Nachnamen und
+mehrdeutigen Fraktionsbezeichnern die Möglichkeit durch kontext-basierte Algorithmen, die
+eine eindeutige Empfänger-Bestimmung durchführen könnten, deutlich mehr Interaktionen zu
+extrahieren. In diesem Zug wird auch die Ermittlung von False Positives, also Fällen in
+denen der von uns ermittelte Empfänger eigentlich nur durch indirekte Rede erwähnt wird,
+mit zunehmender Interaktions-Anzahl wichtiger, um zukünftig die korrekte Erkennung von
+Interaktionen zu gewährleisten.
 
 Die ausgelieferte Deployment-Strategie und die Modulbeschreibungen in dieser
 Dokumentation sollten bei der Weiterentwicklung des Projekts hilfreich sein.
