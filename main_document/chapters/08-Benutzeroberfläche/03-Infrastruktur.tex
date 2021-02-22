@@ -1,0 +1,9 @@
+\section{Infrastruktur}\label{sec:08_03_Infrastruktur}
+Die Infrastruktur, welche unser Team zum verwalten des Quellcodes und zum bereitstellen der Webseite genutzt hat, war zum einen an die Absprachen der Studentengruppe und zum anderen an die Vorgaben der Hochschule gebunden. In Abstimmung mit allen Studenten wurde sich dazu entschieden, den Quellcode in Github zu verwalten. Die Bereitstellung erfolgte darüber hinaus über die Server der HTW Berlin, auf denen wir eine Virtuelle Maschine zur Verfügung gestellt bekommen haben.
+
+\subsection{Quellcode Verwaltung}
+Innerhalb der Github Organisation "Sentiments-of-Bundestag" haben wir das Git Repository "frontend\_sentiment" angelegt. Wir haben mithilfe der von Github eingeführten Issues eine Schnittstelle zum Kommunizieren von Problemen angelegt, die von den anderen Gruppen genutzt werden konnte. Über die Readme des Projekts haben wir alle wichtigen Befehle und Hilfestellungen zur Nutzung der Anwendung dokumentiert.
+Durch integrieren eines Linters in den Build-Prozess der Anwendung konnten wir als Gruppe feste Quellcode-Formatierungs-Regeln definieren und befolgen um Clean Code zu implementieren. Als zusätzliche Regelung zur Unterbindung von Problemen beim Programmieren haben wir in Branches gearbeitet und bei Änderungen am Quellcode Rücksprache im Team gehalten. 
+
+\subsection{Bereitstellung}
+Bei der Bereitstellung der Anwendung haben wir die Serverkapazitäten der HTW Berlin genutzt. Uns wurde eine virtuelle Maschine zur Verfügung gestellt. Auf dieser mussten zunächst die Zugriffsregeln der Firewall angepasst werden um den Zugriff auf feste Ports, von außerhalb des HTW Netzwerks, zuzulassen. Außerdem mussten Git und Node.js installiert werden. Git wurde benötigt um den Quellcode aus dem Repository bei Änderungen herunterzuladen. Node.js wurde als Server zur Bereitstellung der React Anwendung benutzt.
