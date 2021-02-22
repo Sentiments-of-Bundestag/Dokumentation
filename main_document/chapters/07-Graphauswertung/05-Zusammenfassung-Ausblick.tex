@@ -3,24 +3,24 @@ In diesem abschließenden Kapitel erfolgt eine Zusammenfassung der Ergebnisse.
 Weiterhin werden die Lernziele bewertet und ein Ausblick über Verbesserungsmöglichkeiten gegeben.
 
 \subsection{Zusammenfassung}
-Im Rahmen des Teilprojekts Graphauswertung wurde eine Backend Applikation entwickelt, welche der Nutzeroberfläche die benötigten Daten zur Verfügung stellt.
-Diese Daten umfassen Stammdaten, PageRank und statistische Kennzahlen und werden als HTTP Schnistellen bereitgestellt.
+Im Rahmen des Teilprojekts Graphauswertung wurde eine Backend Applikation entwickelt, welche der Benutzeroberfläche die benötigten Daten zur Verfügung stellt.
+Diese Daten umfassen Stammdaten, PageRank sowie statistische Kennzahlen und werden als HTTP-Schnittstellen bereitgestellt.
 
 \subsection{Lernziele}
 Die gesetzten Lernziele wurden vollumfänglich erreicht.
-Durch die thematische Einarbeitung konnten alle Gruppenmitglieder einen guten Einblick in den PageRank Algorithmus gewinnen.
+Durch die thematische Einarbeitung konnten alle Gruppenmitglieder einen guten Einblick in den PageRank-Algorithmus gewinnen.
 Im Rahmen der Entwicklung wurden außerdem Kenntnisse im Bereich Neo4j / Cypher und Python Flask Backend Applikationen aufgebaut.
 Zuletzt erfolgte ein Wissensaufbau in der Arbeit mit Docker zur umgebungsunabhängigen Bereitstellung der Applikation.
 
 \subsection{Ausblick}
 Die geforderten Funktionalitäten wurden im Rahmen des Teilprojekts vollumfänglich umgesetzt.
-Dennoch bestehen einige Verbesserungsmöglichkeiten, die im Folgenden beschreiben werden.
+Dennoch bestehen einige Verbesserungsmöglichkeiten, die im Folgenden beschrieben werden.
 
-Der gewählte Cache Typ ist in seiner Funktionalität stark eingeschränkt.
-Durch die Verwendung eines Redis Cache\cite{redis} könnte dieser verbessert werden, sodass bspw. eine automatische Aktualisierung ermöglicht wird und der Cache im Falle einer horizontalen Skalierung über mehrere Instanzen gelten kann.
-Diese Änderung wurde testweise auch umgesetzt, jedoch erst sehr spät im Projektverlauf, sodass diese nicht mehr in die Anwenung integriert wurde, um die Stabilität der Applikation während der Abschlusspräsentation nicht zu gefährden.
+Der gewählte Cache-Typ ist in seiner Funktionalität stark eingeschränkt.
+Durch die Verwendung eines Redis Cache \cite{redis} könnte diese verbessert werden, sodass bspw. eine automatische Aktualisierung ermöglicht wird und der Cache im Falle einer horizontalen Skalierung über mehrere Instanzen gelten kann.
+Diese Änderung wurde testweise auch umgesetzt, jedoch erst sehr spät im Projektverlauf. Um die Stabilität der Applikation während der Abschlusspräsentation nicht zu gefährden, wurde diese Änderung nicht mehr in die Anwendung integriert.
 
 Die Bereitstellung neuer Versionen geht mithilfe weniger manueller Schritte vonstatten.
-Eine Automatisierung dieses Prozesses wäre mithilfe von GitHub Actions möglich.
-Allerdings setzt dies voraus, dass der verwendete GitHub Runner den HTW Server per ssh erreichen kann.
+Eine Automatisierung dieses Prozesses wäre durch die Verwendung von GitHub-Actions möglich.
+Allerdings setzt dies voraus, dass der verwendete GitHub-Runner den HTW-Server per \lstinline|ssh| erreichen kann.
 Aus Sicherheitsgründen wurde dieser Schritt daher nicht umgesetzt.
