@@ -24,8 +24,9 @@ Diese Methode gibt jede Sitzung weiter an die in Kapitel \ref{g3textv} beschrieb
 
 Die Methode wird für zwei Fälle verwendet: 
 Beim Normalfall sendet die Gruppe 2 eine Benachrichtigung mit einer Liste aller neuen Sitzungs-IDs an das REST-API im Code dieser Arbeit. 
-Das REST-API wurde mit Flask entwickelt und besteht aus einer POST-Schnittstelle, welche auf dem von der HTW bereitgestelltem Server unter \textit{/notify} erreichbar ist. 
-Das API wurde unter Zuhilfenahme von \mintinline{latex}{Flask.Blueprints} entwickelt und wird von einem \mintinline{latex}{Waitress}-Webserver bereitgestellt. 
+Das REST-API wurde mit der Bibliothek \mintinline{latex}{Flask} \ref{g3_flask} entwickelt und besteht aus einer POST-Schnittstelle, welche auf dem von der HTW bereitgestelltem Server unter \textit{/notify} erreichbar ist. 
+
+Das API wurde unter Zuhilfenahme von \mintinline{latex}{Flask.Blueprints} \ref{g3_flaskbp} entwickelt und wird von einem \mintinline{latex}{Waitress}-Webserver \ref{g3_waitress} bereitgestellt. 
 Für jede Anfrage wird geprüft, ob Content-Type und Payload dem erwarteten JSON-Daten entsprechen. 
 Sollte dies nicht der Fall sein, wird eine entsprechende Rückmeldung an den Sender zurückgegeben. 
 Für jede erhaltene Sitzungs-ID wird die eingangs beschriebene Methode aufgerufen. 
@@ -39,9 +40,10 @@ Dieses Vorgehen hat den Vorteil, dass eventuell durch Arbeit am Code verpasste B
 Statt Arbeit in ein umfangreiches REST-API für die nachfolgenden Gruppen zu stecken, wurde für diese Arbeit ein reiner MongoDB-Ansatz verwendet. 
 Auf dem zur Verfügung stehenden HTW-Server wurde dafür eine MongoDB Instanz aufgesetzt, welche nur aus dem HTW-Netz erreichbar und zudem nur mit Authentifizierung zugreifbar ist. 
 Jede Sitzung ist hier als eine eigene Collection persistiert. 
-Sobald neue Sitzungen importiert und verarbeitet wurden, werden diese zunächst mit dem MongoDB-Treiber \mintinline{latex}{PyMongo} in die Datenbank geschrieben. 
+Sobald neue Sitzungen importiert und verarbeitet wurden, werden diese zunächst mit dem MongoDB-Treiber \mintinline{latex}{PyMongo} \ref{g3_mongodb} in die Datenbank geschrieben. 
 Anschließend werden die nachfolgenden Gruppen mit einem POST and die jeweilige REST-Schnittstelle benachrichtigt, dass neue Daten vorliegen. 
 Diese greifen dann mit den zuvor versendeten Zugangsdaten direkt auf die Datenbank zu. 
+
 Mit diesem Vorgehen konnte die Komplexität beim Zugriff auf die Ergebnis-Daten gesenkt werden, da es für nahezu alle gängigen Programmiersprachen einen intuitiven MongoDB-Treiber gibt. 
 
 \section{Wortliste}
@@ -52,7 +54,7 @@ Unterschiedliche Berechnungsformeln sind dabei denkbar und werden in Kapitel \re
 Für diese Arbeit wurden Wortlisten verschiedener Institutionen kombiniert und anschließend mit Synonymen erweitert. 
 Ebenfalls wurde eine eigene Bundestags-Wortliste erstellt. 
 
-Die Interest Group on German Sentiment Analysis (IGGSA) stellt eine umfangreiche Liste an Publikationen und Ressourcen zu Sentimentanalysen in der deutschen Sprache zur Verfügung. 
+Die Interest Group on German Sentiment Analysis (IGGSA) stellt eine umfangreiche Liste an Publikationen und Ressourcen zu Sentimentanalysen in der deutschen Sprache zur Verfügung \ref{g3_iggsa}. 
 Hier wurden alle Referenzen auf die in dieser Arbeit verwendeten Quell-Wortlisten gesammelt. 
 Für die Zusammenführung dieser Wortlisten wurden zunächst zwei Herangehensweisen evaluiert: 
 Zum einen war die Erstellung eines eigenständigen Codes denkbar, welcher einmalig die Daten aus allen Quellen einliest, zusammenfasst und eine Ergebnis-Datei ausgibt. 
@@ -67,17 +69,18 @@ Das Aufbauen der Wortliste dauert wenige Minuten.
 Für diese Arbeit wurden die folgenden Quell-Wortlisten verwendet: 
 
 \begin{itemize}
-\item \textit{SentimentWortschatz} (SentiWS) aus "SentiWS - a Publicly Available German-language Resource for Sentiment Analysis" (Universität Leipzig)
-\item \textit{German Polarity Lexicon} aus "Evaluation and extension of a polarity lexicon for German" (Universität Zürich)
-\item \textit{morphcomp} aus "Evaluating the morphological compositionality of polarity" (Leibniz-Institut für Deutsche Sprache, Universität des Saarlandes)
+\item \textit{SentimentWortschatz} (SentiWS) aus \glqq SentiWS - a Publicly Available German-language Resource for Sentiment Analysis\grqq (Universität Leipzig) \ref{g3_sentiws}
+\item \textit{Multi-Domain Sentiment Lexicon for German} (Hochschule Darmstadt) \ref{g3_opm}
+\item \textit{German Polarity Lexicon} aus \glqq Evaluation and extension of a polarity lexicon for German\grqq (Universität Zürich) \ref{g3_polcla}
+\item \textit{morphcomp} aus \glqq Evaluating the morphological compositionality of polarity\grqq (Leibniz-Institut für Deutsche Sprache, Universität des Saarlandes) \ref{g3_morphcomp}
 \end{itemize}
 
 Aus diesen Quellen ergibt sich eine Wortliste mit etwa 14.000 einzigartigen Worten. 
 Die Worte werden dabei mit der in Kapitel \ref{g3textv} beschriebenen Textverarbeitungspipeline lemmatisiert, also auf die Grundform zurückgeführt. 
 Bei Überschneidungen wird ein Mittelwert über alle Polaritäts-Werte eines Wortes gebildet. 
 
-Mithilfe des \textit{Open German WordNet} (OdeNet) werden zu jedem Wort Synonyme gesammelt und ebenfalls der Wortliste hinzugefügt. 
-Der Zugriff auf OdeNet geschieht dabei mit der python Bibliothek \mintinline{latex}{WN}. 
+Mithilfe des \textit{Open German WordNet} (OdeNet) \ref{g3_odenet} werden zu jedem Wort Synonyme gesammelt und ebenfalls der Wortliste hinzugefügt. 
+Der Zugriff auf OdeNet geschieht dabei mit der python Bibliothek \mintinline{latex}{WN} \ref{g3_wn}. 
 Die Verwendung dieser Bibliothek ist trivial, weshalb an dieser Stelle keine weitere Erläuterung gegeben wird. 
 Die Wortliste wird durch das Hinzufügen von Synonymen um weitere rund 2.000 Worte erweitert. 
 
@@ -93,7 +96,7 @@ Anschließend stellt die Klasse ein \mintinline{latex}{Dictionary} bereit, in we
 
 \section{Textverarbeitung}
 \label{g3textv}
-Für die Textverarbeitung nutzt der Code dieser Arbeit vollständig die Funktionalitäten und Strukturen von \mintinline{latex}{spaCy}. 
+Für die Textverarbeitung nutzt der Code dieser Arbeit vollständig die Funktionalitäten und Strukturen von \mintinline{latex}{spaCy} \ref{g3_spacy}. 
 Die \mintinline{latex}{spaCy} Bibliothek stellt eine Textverarbeitungspipeline bereit, welche mithilfe eines vortrainierten Modells funktioniert. 
 Für die deutsche Sprache wurde ein solches Modell mit dem TIGER Korpus der Universität Stuttgart trainiert. 
 Der Korpus umfasst ca. 50.000 Sätze aus Texten der Frankfurter Rundschau. 
@@ -140,7 +143,7 @@ An den gerichteten Kanten befindet sich die Angabe des Satzgliedes, unterhalb de
 \subsection{Negations-Erkennung}
 \label{neg-erkennung}
 Negation, also Ablehnung, Verneinung oder Aufhebung, hat einen erheblichen Einfluss auf das Ergebnis und damit die Korrektheit der Sentimentanalyse, weshalb in dieser Arbeit ein besonderes Augenmerk auf ihre Erkennung gelegt wurde. 
-In \textit{Negation Modeling for German Polarity Classification} präsentieren Forscher der Universität des Saarlandes und des Leibniz-Institut für Deutsche Sprache hierfür einen regelbasierten Ansatz. 
+In \textit{Negation Modeling for German Polarity Classification} \ref{g3_wieg} präsentieren Forscher der Universität des Saarlandes und des Leibniz-Institut für Deutsche Sprache hierfür einen regelbasierten Ansatz. 
 
 Sie definieren unterschiedliche Negationstypen und ihre jeweilige Reichweite. 
 So beeinflussen etwa negierende Adverbien oder Indefinitpronomen wie \textit{nie} den gesamten Satz, wohingegen das Partikel \textit{nicht} lediglich seinen Vorgänger negiert.  
@@ -165,9 +168,9 @@ Verben & Objekt, Subjekt & enden, sinken, lindern \\
 \end{center}
 \end{table}
 
-Angemerkt sei an dieser Stelle, dass es nicht möglich war, alle Regeln aus X zu implementieren, da der von den Forschern genutzte Dependency-Parser umfangreichere Ergebnisse liefert, als jener von \mintinline{latex}{spaCy}. 
+Angemerkt sei an dieser Stelle, dass es nicht möglich war, alle Regeln aus \ref{g3_wieg} zu implementieren, da der von den Forschern genutzte Dependency-Parser umfangreichere Ergebnisse liefert, als jener von \mintinline{latex}{spaCy}. 
 
-Eine Liste mit Negationsworten und dem jeweiligen Negationstyp wurde X entnommen und ist ebenfalls über die Klasse \mintinline{latex}{Lexicon} zugreifbar. 
+Eine Liste mit Negationsworten und dem jeweiligen Negationstyp wurde \ref{g3_polcla} entnommen und ist ebenfalls über die Klasse \mintinline{latex}{Lexicon} zugreifbar. 
 Die Klasse stellt ein \mintinline{latex}{Dictionary} bereit, in welchem die Schlüssel die Negationsworte und die Werte eine Liste der Reichweiten sind. 
 
 Wenn in einem Text ein Negationswort auftritt, werden alle implementierten Regeln geprüft. 
@@ -186,10 +189,10 @@ In der Polaritätsberechnung wird wortweise auf dieses Attribut geprüft und die
 Als \textit{Verstärker} werden sog. Gradpartikel (z.B. sehr, besonders, viel) verstanden, welche direkt vor Adjektiven oder Adverbien in einem Satz auftreten. 
 Sie verstärken ihren Nachfolger, was wiederum in der Polaritätsberechnung berücksichtigt werden soll. 
 
-Aus diesem Grund wird eine Liste mit verstärkenden Gradpartikeln, welche aus der gleichen Quelle wie in Kapitel \ref{neg-erkennung} bezogen werden, eingelesen und über die \mintinline{latex}{Lexicon} Klasse bereitgestellt. 
+Aus diesem Grund wird eine Liste mit verstärkenden Gradpartikeln, welche ebenfalls aus \ref{g3_polcla} bezogen werden, eingelesen und über die \mintinline{latex}{Lexicon} Klasse bereitgestellt. 
 
 Ebenso wie in Kapitel \ref{neg-erkennung} bereits für die Negation beschrieben, wird ein eigenes Attribut zur Signalisierung einer Verstärkung definiert und im entsprechenden Fall auf True gesetzt. 
-Bei der Polaritätsberechnung wird bei einer erkannten Verstärkung die Wort-Polarität mit 1,5 multipliziert. 
+Bei der Polaritätsberechnung wird bei einer erkannten Verstärkung die Wort-Polarität mit 1,5 multipliziert \ref{g3_sentia}. 
 
 In Abbildung \ref{hessel} wird ein Beispiel für das Auftreten eines verstärkenden Gradpartikels gegeben. 
 Hier verstärkt das Wort \textit{sehr} das negative Wort \textit{spät}, womit die errechnete Polarität stärker negativ ausfällt als ohne die Verstärkungs-Erkennung. 
@@ -209,7 +212,7 @@ Bei der Verwendung einer satzbasierten Polaritätsberechnung, bei welcher alle P
 Längere Sätze erhaltenen ein stärker polarisiertes Ergebnis als vergleichbare kurze Sätze. 
 
 Dies ist mit einer im Schnitt höheren Dichte an Worten mit Polaritäts-Wert in längeren Sätzen zu erklären. 
-Aus diesem Grund wurde in dieser Arbeit eine Min-Max-Skalierung (siehe Formeln 1 - 3) auf Dokumentebene implementiert. 
+Aus diesem Grund wurde in dieser Arbeit eine Min-Max-Skalierung (siehe Formeln 1 - 3) auf Dokumentebene implementiert \ref{g3_sentia}. 
 
 Die Entscheidung, diese Normalisierung anhand der Länge des gesamten Textes durchzuführen, wurde aufgrund der Charakteristika der zu analysierenden Interaktionen getroffen. 
 Denn diese bestehen zu einem überwiegenden Teil aus einem einzelnen Satz von jedoch sehr unterschiedlicher Länge. 
