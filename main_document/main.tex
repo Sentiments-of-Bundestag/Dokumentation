@@ -74,6 +74,12 @@
 % footnote package
 \usepackage{tablefootnote}
 
+% gruppe 3
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{interval}
+\usepackage{minted}
+
 \lstset{
   captionpos=b,
   commentstyle=\color{UStuttDarkGreen},
@@ -161,42 +167,50 @@
 \caption{Gruppe 1 (Crawler) - Arbeitsaufteilung}
 \label{tab:zeittafelEU}
 \centering
-\begin{tabular}{m{12em}|m{12em}|m{8em}}
+\begin{tabular}{m{6em}|m{12em}|m{14em}}
 \hline
 \rowcolor{Gray}
 Aufgabe &Gruppenmietglieder &Anteil\\
 \hline
 \hline
 \rowcolor{White}
-Crawl-Manager& Boris Foko Kouti & ff\\
+Crawl-Manager& Boris Foko Kouti & Scheduler, TaskManager, Rest-API\\
 \hline
 \hline
 \rowcolor{White}
-& Marlon Daniel Kohlberger & ff\\
+& Marlon Daniel Kohlberger & XML-Parser\\
 \cline{2-3}
 \rowcolor{White}
-\multirow{-2}{*}{Crawl-Utilities}& Boris Foko Kouti & ff\\
+\multirow{-2}{*}{Crawl-Utilities}& Boris Foko Kouti & Page Loader, Page Analyser\\
 \hline
 \hline
 \rowcolor{White}
-& Marlon Daniel Kohlberger & ff\\
+& Marlon Daniel Kohlberger & DB-Modell\\
 \cline{2-3}
 \rowcolor{White}
-\multirow{-2}{*}{DB-Manager}& Boris Foko Kouti & ff\\
+\multirow{-2}{*}{Datenbank}& Boris Foko Kouti & DB-Manager\\
 \hline
 \hline
 \cline{2-3}
 \rowcolor{White}
-& Arnauld Feussi & ff\\
-\rowcolor{White}
-& Marlon Daniel Kohlberger & ff\\
+& Arnauld Feussi & Erste Vorlage \\
 \cline{2-3}
 \rowcolor{White}
-\multirow{-2}{*}{Dokumenation}& Boris Foko Kouti & ff\\
-\hline
-\hline
+& Marlon Daniel Kohlberger & DB-Modell, Parser, Refactoring \\
+\cline{2-3}
 \rowcolor{White}
-Bereitstellung der Lösung& Boris Foko Kouti & ff\\
+\multirow{-2}{*}{Dokumenation}& Boris Foko Kouti & Einleitung, Crawl-Mechanismus und Bereitstellung\\
+\hline
+\hline
+\cline{2-3}
+\rowcolor{White}
+& Arnauld Feussi & Server Aufsetzung\\
+\cline{2-3}
+\rowcolor{White}
+& Marlon Daniel Kohlberger & Sicherheit Config und Firewall Config\\
+\cline{2-3}
+\rowcolor{White}
+\multirow{-2}{*}{Bereitstellung}& Boris Foko Kouti & Crawler Service und MongoDB\\
 \hline
 \end{tabular}
 \end{table}
@@ -213,6 +227,7 @@ Bereitstellung der Lösung& Boris Foko Kouti & ff\\
 \include{chapters/03-Kommunikationsmodell/05-Zusammenfassung-Ausblick}
 
 \chapter{Sentiment Analyse}
+\normalsize \textsc{Gruppenmitglieder: Awad, Laas, Sboui}
 \include{chapters/04-Sentiment-Analyse/01-Einleitung}
 \include{chapters/04-Sentiment-Analyse/02-Grundlagen}
 \include{chapters/04-Sentiment-Analyse/03-Anforderungen-Konzept}
@@ -220,11 +235,7 @@ Bereitstellung der Lösung& Boris Foko Kouti & ff\\
 \include{chapters/04-Sentiment-Analyse/05-Zusammenfassung-Ausblick}
 
 \chapter{Analyse der Interaktion zwischen Abgeordneten}
-\include{chapters/05-Interaktion-Abgeord/01-Einleitung}
-\include{chapters/05-Interaktion-Abgeord/02-Grundlagen}
-\include{chapters/05-Interaktion-Abgeord/03-Anforderungen-Konzept}
-\include{chapters/05-Interaktion-Abgeord/04-Implementierung}
-\include{chapters/05-Interaktion-Abgeord/05-Zusammenfassung-Ausblick}
+\include{chapters/05-Interaktion-Abgeord/00-all}
 
 \chapter{Analyse der Interaktion zwischen Fraktionen}
 \normalsize \textsc{Mayk Akifovski, Roman Krajewski, Atanas Denkov}
