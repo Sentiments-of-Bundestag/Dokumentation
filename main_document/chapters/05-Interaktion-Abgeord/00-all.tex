@@ -2,7 +2,7 @@
 (Autorin: Jennifer Vormann)\\
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.8\textwidth]{Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/sitzverteilung_19wp_bild.jpg}
+    \includegraphics[width=0.8\textwidth]{chapters/05-Interaktion-Abgeord/sitzverteilung_19wp_bild.jpg}
   \end{center}
   \caption{Sitzverteilung im 19. Deutschen Bundestag \cite{sitze19Bundestag}}
   \label{fig:sitzverteilung}
@@ -40,12 +40,12 @@ Bezüglich des LPGs wird sich für eine Graphdatenbank des Unternehmens \enquote
 \subsection{Graphdatenbank: Neo4j}
 Einleitend ist festzustellen, dass Neo4j einen \enquote{native graph storage} umsetzt und eine sogenannte \enquote{index-free adjacency} Datenbank ist \cite{robinson2015graph}. Das bedeutet einerseits, dass der Datenspeicher speziell für Graphen angepasst ist. Neo4j verwendet dafür mehrere sogenannte \enquote{stores} \cite{neostores}. Beispielsweise existiert ein \enquote{store} individuell für alle Knoten oder auch für alle Relationships. Durch den Term \enquote{index-free adjacency} wird nun andererseits beschrieben, dass innerhalb dieser stores direkte physische Pointer, beispielsweise zwischen den Knoten, existieren und diese somit aufeinander zeigen. Im Gegensatz dazu zeigen relationale Datenbanken logisch direkt oder indirekt über IDs aufeinander. Etwaige Optimierungen des Graphen schlagen sich somit direkt auf die Performance des Systems aus.
 \newline
-Das konkrete Speichern ist mit der Darstellung \ref{fig:Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image21.png} veranschaulicht. Zu sehen sind ein Node und eine Relationship, sowie eine Andeutung deren interner Speichereinheiten.
+Das konkrete Speichern ist mit der Darstellung \ref{fig:chapters/05-Interaktion-Abgeord/image21.png} veranschaulicht. Zu sehen sind ein Node und eine Relationship, sowie eine Andeutung deren interner Speichereinheiten.
 \begin{figure}[hbt!]
     \centering
-    \includegraphics[width=150px, keepaspectratio]{Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image21.png}
+    \includegraphics[width=150px, keepaspectratio]{chapters/05-Interaktion-Abgeord/image21.png}
     \caption{Datenorganisation in Graphdatenbanken - Beispiel Neo4j} \cite{generalStorage}
-    \label{fig:Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image21.png}
+    \label{fig:chapters/05-Interaktion-Abgeord/image21.png}
 \end{figure}
 Wichtig ist an dieser Darstellung, dass Nodes ihre Relationships zweifach gruppiert speichern \cite{neo4jrelationshipgrouping}. Einerseits werden die Relationships gruppiert nach ihrem Namen (auch Typ) gespeichert. Andererseits wird innerhalb jeder dieser Gruppen differenziert zwischen eingehenden- und ausgehenden Relationships. Durch diese zweifache Gruppierung sollten unter anderem Performanceeinbußen durch Inselbildung nach Typ der Relation oder nach Richtung der Relation vernachlässigbar sein. So muss beispielsweise nicht durch alle eingehenden Relationships iteriert werden, wenn man lediglich nach Ausgehenden sucht.
 \subsection{Graphdatenbankschema: Entwurf}
@@ -56,21 +56,21 @@ Außerdem ist die These des Projektes zu beachten. Es ist somit darauf zu achten
 \newline
 Abschließend werden die konkreten Fragestellungen, die an die Graphdatenbank gestellt werden sollen mit den entsprechenden Verantwortlichen ermittelt. Zum Zeitpunkt der Ermittlung, soll beispielsweise zu einigen Eigenschaften ein \enquote{Score} berechnet werden, wie zum Sender, die viele Nachrichten mit positivem Sentiment verschicken \cite{initialQuestionsGroup7}. Diese \enquote{Scores} sollen (teilweise) für jeweilige Zeitabschnitte berechnet werden, beispielsweise pro Monat. Dies ist insofern relevant, als dass gerade zeitliche Abschnitte vermutlich eine entscheidende Rolle einnehmen.
 \newline
-Ein erster, eher umfangreicher, Entwurf ist in Abbildung \ref{fig:Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image8.png} zu sehen. Dieser und folgende Entwürfe wurden nach eigenem Ermessen strukturiert, wobei sich teilweise an Roy-Hubara et al. \cite{graphdatabasemodelling} orientiert wurde.
+Ein erster, eher umfangreicher, Entwurf ist in Abbildung \ref{fig:chapters/05-Interaktion-Abgeord/image8.png} zu sehen. Dieser und folgende Entwürfe wurden nach eigenem Ermessen strukturiert, wobei sich teilweise an Roy-Hubara et al. \cite{graphdatabasemodelling} orientiert wurde.
 \begin{figure}[hbt!]
     \centering
-    \includegraphics[width=375px, keepaspectratio]{Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image8.png}
+    \includegraphics[width=375px, keepaspectratio]{chapters/05-Interaktion-Abgeord/image8.png}
     \caption{Initialer Entwurf Graphdatenbankschema}
-    \label{fig:Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image8.png}
+    \label{fig:chapters/05-Interaktion-Abgeord/image8.png}
 \end{figure}
 Der Grafik sind besonders drei Kernüberlegungen zu entnehmen. Innerhalb der Hauptstruktur hat eine Person eine oder mehrere Fraktionen und eine oder mehrere Parlamentsrollen. Die zweite Kernüberlegung ist die Einführung eines sogenannten \enquote{Timeline trees} (TLT) \cite{robinson2015graph} der mit der Sitzung und den jeweiligen Kommentaren verbunden ist. Er verfügt über die Stufen \enquote{:Year}, \enquote{:Month} und \enquote{:Day}. Grund für die Integration ist das Wissen über die Wichtigkeit des Faktors Zeit für die Folgeanalysen. Ohne besagten TLT wäre eine Laufzeit von O(N) zu erreichen. Mit Wissen zu TLT könnte man diese Struktur ausnutzen, um die Zugriffszeit für den Erhalt einer gefilterten Menge deutlich zu erhöhen. Beispielsweise könnte man den Zugriff auf alle Kommentare des Monats Februar im Jahr 2020 von O(N) auf in etwa O(2) durch den Zugriff 2020:Year $\rightarrow$ Februar:Month optimieren.
 \newline
-Eine dritte Kernüberlegung besteht darin, das Sentiment als externen Knoten aus dem Knoten Kommentar zu extrahieren. Wenn man das eher stetige Sentiment (z.B. 0,34216754) in ein eher diskretes Sentiment (z.B. 0,34) transformiert, ist ein Vorteil bei dem Filtern nach einem bestimmten Sentiment erkennbar (Das Sentiment bewegt sich im Bereich [-1.0, 1.0]). Da diese Transformation bei der Umwandlung der Daten aus der NoSQL-Datenbank in die Neo4j sehr gut möglich ist, sollte diese Überlegung nicht unbemerkt gelassen werden. Da hier beispielsweise nun auf zwei Dezimalstellen nach dem Komma gerundet wurde und das Sentiment sich im Bereich [-1.0, 1.0] bewegt, existieren so 200 verschiedene Gruppen, beziehungsweise demzufolge 200 verschiedene Knotentypen. Der Vorteil wird an einem Beispiel demonstriert. Möchte man eine Menge von Kommentaren erhalten, deren Sentiment positiv ist, müsste man bisher über alle Kommentare iterieren (ca. 70000-250000). Mit der soeben vorgestellten Methode würden sich diese Iterationen auf 100 reduzieren (alle 100 positiven Sentiment-Knoten z.B. 0.01, 0.02, 0.03, ...). Der Basisentwurf ist in Abbildung \ref{fig:Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image9.png} dargestellt.
+Eine dritte Kernüberlegung besteht darin, das Sentiment als externen Knoten aus dem Knoten Kommentar zu extrahieren. Wenn man das eher stetige Sentiment (z.B. 0,34216754) in ein eher diskretes Sentiment (z.B. 0,34) transformiert, ist ein Vorteil bei dem Filtern nach einem bestimmten Sentiment erkennbar (Das Sentiment bewegt sich im Bereich [-1.0, 1.0]). Da diese Transformation bei der Umwandlung der Daten aus der NoSQL-Datenbank in die Neo4j sehr gut möglich ist, sollte diese Überlegung nicht unbemerkt gelassen werden. Da hier beispielsweise nun auf zwei Dezimalstellen nach dem Komma gerundet wurde und das Sentiment sich im Bereich [-1.0, 1.0] bewegt, existieren so 200 verschiedene Gruppen, beziehungsweise demzufolge 200 verschiedene Knotentypen. Der Vorteil wird an einem Beispiel demonstriert. Möchte man eine Menge von Kommentaren erhalten, deren Sentiment positiv ist, müsste man bisher über alle Kommentare iterieren (ca. 70000-250000). Mit der soeben vorgestellten Methode würden sich diese Iterationen auf 100 reduzieren (alle 100 positiven Sentiment-Knoten z.B. 0.01, 0.02, 0.03, ...). Der Basisentwurf ist in Abbildung \ref{fig:chapters/05-Interaktion-Abgeord/image9.png} dargestellt.
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=250px]{Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/diagramm.png} 
+    \includegraphics[width=250px]{chapters/05-Interaktion-Abgeord/diagramm.png} 
     \caption{Datenbankschema}
-    \label{fig:Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/image9.png}
+    \label{fig:chapters/05-Interaktion-Abgeord/image9.png}
 \end{figure}
 Innerhalb der Hauptstruktur ist erkennbar, dass nun zwischen Knoten mit dem Label \enquote{:Commentary} und \enquote{:Faction} eine eingehende- und eine ausgehende Relationship hinzugefügt wurde. Der Grund dafür ist, dass nun teilweise Interaktionen zwischen einem Abgeordneten (einer Person) und einer Partei als Gesamtes identifiziert wurden. Darüber hinaus wurde auf den TLT verzichtet. Grund dafür war, dass dieser anscheinend schwieriger umzusetzen ist.
 \section{Umsetzung}\label{sec:04_03_umsetzung}
@@ -81,9 +81,9 @@ Zunächst haben wir uns mit dem Empfang der Daten aus der MongoDB von Team 3 bes
 Mit der neomodel Library, die als Object Graph Mapper dient, können Klassen definiert werden, die dann von neomodel als Knoten in Neo4j übernommen werden. Außerdem können an diesen Klassen auch die Beziehungen zwischen den Klassen definiert werden. Die entstandenen Dictionaries dienen als Datengrundlage für die Knotenklassen in neomodel.
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=10cm]{Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/faction.jpg} 
+    \includegraphics[width=10cm]{chapters/05-Interaktion-Abgeord/faction.jpg} 
     \caption{Beispiel einer neomodel Klasse}
-    \label{fig:commentary}
+    \label{fig:chapters/05-Interaktion-Abgeord/faction.jpg}
 \end{figure}
 Abbildung 5 zeigt beispielhaft eine Klasse aus dem Programm, um zu verdeutlichen wie neomodel verwendet wird, um einen Node in der Datenbank zu definieren. Durch die Implementierung von StructuredNode wird neomodel mitgeteilt, dass eine Klasse ein Node in der Datenbank sein soll und über die RelationshipTo und RelationshipFrom Funktionen können die Relationen definiert werden, die von diesem Knoten ausgehen oder eingehen.
 \subsection{Neo4j DB Connection}
@@ -100,16 +100,16 @@ Bei einem Test mit einer lokalen Neo4j Datenbank, die außerhalb des HTW-Netzes 
 In seiner jetzigen Form erzeugt das Skript die Neo4j Datenbank in 25 Minuten. Dabei werden rund 278000 Knoten und 830000 Beziehungen zwischen diesen Knoten angelegt. Den größten Anteil dabei haben mit rund 276000 Knoten die Kommentare der Abgeordneten und Fraktionen. Die lange Laufzeit des Programms lässt sich erklären durch das Fehlen eines Batch-Prozesses für die Inserts in die Datenbank. Neomodel bietet zwar eine Möglichkeit für Batch-Inserts, aber es besteht dabei keine Möglichkeit gleichzeitig die Beziehungen mit anzulegen.\\
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=8cm]{Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/5.PNG} 
+    \includegraphics[width=8cm]{chapters/05-Interaktion-Abgeord/5.PNG} 
     \caption{Ausgabe eines Kommentars}
-    \label{fig:commentary}
+    \label{fig:chapters/05-Interaktion-Abgeord/5.PNG}
 \end{figure}
 Ein weiteres Ergebnis und deren Visualisierung zeigt die Abbildung der Personen und des Sendens eines Kommentars in Richtung einer anderen Person oder Fraktion. Wir haben uns für die Darstellung dieses Graphen in die Dokumentation entschieden, weil der Fokus der Arbeit auf den Kommentare und deren Sentiments liegt. Die Graphen, die in Neo4j angezeigt werden können, sind schnell sehr komplex und können nur in kleinen Mengen (default: 300 Nodes) dargestellt werden.
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{Dokumentation-main-2/main_document/chapters/05-Interaktion-Abgeord/6.PNG} 
+    \includegraphics[width=\textwidth]{chapters/05-Interaktion-Abgeord/6.PNG} 
     \caption{Neo4J Graph -> Person - Sender - Commentary - Receiver - Person}
-    \label{fig:personcomment}
+    \label{fig:chapters/05-Interaktion-Abgeord/6.PNG}
 \end{figure}
 \section{Ausblick}\label{sec:04_05_ausblick}
 (Autoren: Jennifer Vormann | Florian Thom)\\
