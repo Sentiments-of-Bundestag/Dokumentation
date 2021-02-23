@@ -1,1 +1,9 @@
 \section{Grundlagen}\label{sec:06_02_grundlagen}
+\subsection{Fraktionen}
+Eine Fraktion bezeichnet eine freiwillige Vereinigung von Abgeordneten des Bundestages, die ohne Konkurrenz ihre politische Ziele gemeinsam verfolgen und i.d.R derselben Partei angehören. Es ist darauf hinzuweisen, dass Fraktionen nicht mit Parteien verwechselt werden sollen. Erstere dienen dem öffentlichen Interesse und letztere dem Privatinteresse. Das heißt, dass Fraktionen aus öffentlichen Mitteln finanziert werden. Weiterhin folgt daraus, dass Fraktionsmitglieder gesetzmäßig an Aufträge und Weisungen ihrer Partei nicht gebunden und nur ihrem Gewissen unterworfen sind, auch wenn das meist einheitliche Abstimmungsverhalten eine Bindung suggeriert. \cite{abgeordneterbpp} Es können also Aussagen im Parlament nicht eins zu eins von Fraktionsmitglied auf Fraktion übertragen werden.
+\subsection{Verwendete Daten}
+Aus der von von Gruppe 2 gestellte Datenbank werden in diesem Abschnitt Interaktionen mit Sentimentwert, sowie deren Sender und Empfänger verwendet. Sender und Empfänger können dabei entweder eine Fraktion oder eine Person sein. Die Fraktionszugehörigkeiten der Personen wird dabei auch der Datenbank entnommen. Obwohl eine Fraktionszugehörigkeitshistorie vorhanden ist, wird der Einfachheit halber immer die aktuelle Fraktion einer Person verwendet, da Fraktionswechsel innerhalb einer Legislaturperiode sehr selten und damit vernachlässigbar sind. Weiterhin wird zur Analyse die eine Rednerliste jeder Sitzung zu Rate gezogen. Aus diesen lässt sich eine Anzahl an Personen ableiten, die in dieser Sitzung für eine Fraktion das Wort ergriffen haben.
+
+\subsection{Gewichteter Mittelwert}
+Um gewichtete Sentiments auszuwerten wurde der gewichtete Mittelwert verwendet. Dieser ist bei $n$ Werten $x_{1...n}$ und Gewichten $w_{1...n}$ wie folgt definiert:
+$$\bar{x}=\frac{\sum_{i=1}^{n} w_{i} \cdot x_{i}}{\sum_{i=1}^{n} w_{i}}$$
