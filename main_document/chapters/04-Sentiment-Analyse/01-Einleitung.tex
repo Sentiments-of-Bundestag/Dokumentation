@@ -127,9 +127,15 @@ Diese Funktion gehört dem Themenbereich der Dependenzgrammatik an, in welcher g
 Ein Wort kann einen Vorgänger (Regent) und mehrere Nachfolger (Dependenten) besitzen. 
 Die Gesamtheit der Beziehungen eines Satzes wird auch Abhängigkeitsbaum genannt. 
 
-Zur Verdeutlichung soll die Abbildung X dienen, welche mithilfe von \mintinline{latex}{spaCy.displaCy} erstellt wurde. 
+Zur Verdeutlichung soll die Abbildung \ref{steffi} dienen, welche mithilfe von \mintinline{latex}{spaCy.displaCy} erstellt wurde. 
 Zu sehen ist hier der Abhängigkeitsbaum des Satzes \textit{\glqq Das ist doch fachlich Quatsch hoch sechs!\grqq}. 
 An den gerichteten Kanten befindet sich die Angabe des Satzgliedes, unterhalb der Worte die Angabe der Wortart. 
+
+\begin{figure}[htb]
+\centerline{\includegraphics[width=1\textwidth]{steffi.png}}
+\caption{Visualisierung der Wortabhängigkeiten (Zitat von Steffi Lemke MdB, 208. Sitzung, 10.02.2021)}
+\label{steffi}
+\end{figure}
 
 \subsection{Negations-Erkennung}
 \label{neg-erkennung}
@@ -165,9 +171,15 @@ Eine Liste mit Negationsworten und dem jeweiligen Negationstyp wurde X entnommen
 Die Klasse stellt ein \mintinline{latex}{Dictionary} bereit, in welchem die Schlüssel die Negationsworte und die Werte eine Liste der Reichweiten sind. 
 
 Wenn in einem Text ein Negationswort auftritt, werden alle implementierten Regeln geprüft. 
-Sollte es zu einem Treffer kommen, etwa wenn das Wort \textit{nicht} auftritt und es einen Vorgänger gibt, werden alle Worte in Reichweite des Negationswortes negiert. 
+Sollte es zu einem Treffer kommen, etwa wenn das Wort \textit{nicht} auftritt (siehe Abb. \ref{brandner}) und es einen Vorgänger gibt, werden alle Worte in Reichweite des Negationswortes negiert. 
 Dies geschieht, indem für die jeweiligen Worte, welche wie in \ref{g3textv} beschrieben \mintinline{latex}{Token}-Objekte sind, ein eigenes Attribut mit der Bezeichnung \mintinline{latex}{negated} auf \mintinline{latex}{True} gesetzt wird. 
-In der Polaritätsberechnung wird dieses Attribut geprüft und entsprechend berücksichtigt. 
+In der Polaritätsberechnung wird wortweise auf dieses Attribut geprüft und die Wort-Polarität bei einer Negierung mit -1 multipliziert. 
+
+\begin{figure}[htb]
+\centerline{\includegraphics[width=1\textwidth]{brandner.png}}
+\caption{Beispielsatz mit Patikel-Negation (Zitat von Stephan Brandner MdB, 207. Sitzung, 29.01.2021)}
+\label{brandner}
+\end{figure}
 
 \subsection{Verstärkungs-Erkennung}
 \label{ver-erkennung}
@@ -177,9 +189,16 @@ Sie verstärken ihren Nachfolger, was wiederum in der Polaritätsberechnung ber�
 Aus diesem Grund wird eine Liste mit verstärkenden Gradpartikeln, welche aus der gleichen Quelle wie in Kapitel \ref{neg-erkennung} bezogen werden, eingelesen und über die \mintinline{latex}{Lexicon} Klasse bereitgestellt. 
 
 Ebenso wie in Kapitel \ref{neg-erkennung} bereits für die Negation beschrieben, wird ein eigenes Attribut zur Signalisierung einer Verstärkung definiert und im entsprechenden Fall auf True gesetzt. 
+Bei der Polaritätsberechnung wird bei einer erkannten Verstärkung die Wort-Polarität mit 1,5 multipliziert. 
 
-In Abbildung X wird ein Beispiel für das Auftreten eines verstärkenden Gradpartikels gegeben. 
+In Abbildung \ref{hessel} wird ein Beispiel für das Auftreten eines verstärkenden Gradpartikels gegeben. 
 Hier verstärkt das Wort \textit{sehr} das negative Wort \textit{spät}, womit die errechnete Polarität stärker negativ ausfällt als ohne die Verstärkungs-Erkennung. 
+
+\begin{figure}[htb]
+\centerline{\includegraphics[width=1\textwidth]{hessel.png}}
+\caption{Beispielsatz mit Gradpartikel-Verstärkung (Zitat von Katja Hessel MdB, 206. Sitzung, 28.01.2021)}
+\label{hessel}
+\end{figure}
 
 \subsection{Polaritätsberechnung}
 \label{polberechnung}
