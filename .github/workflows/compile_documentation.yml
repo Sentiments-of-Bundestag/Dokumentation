@@ -26,7 +26,7 @@ jobs:
         uses: dante-ev/latex-action@master
         with:
           working_directory: main_document
-          args: -pdf -latexoption=-file-line-error -latexoption=-interaction=nonstopmode -latexoption=-f
+          args: -pdf -latexoption=-file-line-error -latexoption=-interaction=nonstopmode -latexoption=-f -shell-escape
           root_file: main.tex
       - uses: actions/upload-artifact@v2
         with:
