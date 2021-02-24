@@ -127,7 +127,7 @@ Aus den funktionalen Anforderungen FR05, FR06 und FR07 ergibt sich, dass eine
 Kommunikation zu den Gruppen 1 und 3 nötig ist. Aufgrund hoher Kompatibilität
 wurde sich für eine \gls{rest}-Schnittstelle entschieden. Diese \gls{api} wurde in dem
 Python-Modul \enquote{api.py} mithilfe der FastAPI-Bibliothek implementiert. Sie
-beantwortet Anfragen zu Protokollen (Sessions) Fraktionen (Factions) und
+beantwortet Anfragen zu Protokollen (Sessions), Fraktionen (Factions) und
 \glspl{mdb}. Außerdem wird eine SWAGGER-Dokumentation
 bereitgestellt.
 
@@ -175,7 +175,7 @@ formatiert ist und somit für die nächste Instanz eine einheitliche
 Schnittstelle bildet. Dieses Ausgabeformat enthält dabei neben Metadaten zur
 Sitzung selbst, wie z.~B. den Sitzungsstartzeitpunkt oder die Sitzungsnummer,
 sogenannte InteractionCandidates. Diese gruppieren, wie der Name bereits
-nahelegt, Daten, welche eventuelle für die Auswertung relevante Interaktion
+nahelegt, Daten, welche eventuelle, für die Auswertung relevante, Interaktionen
 enthalten. So gruppiert ein InteractionCandidate den Redner (Speaker),
 einen Absatz von dessen Rede (Paragraph) und den eventuell darauf folgenden
 Kommentarblock (Comment).
@@ -297,7 +297,7 @@ Personen müssen über Sitzungen hinweg eindeutig identifizierbar sein, damit
 nachfolgende Gruppen Informationen zu Parteizugehörigkeit und Namen korrekt
 zuweisen können (FR08). Personen werden in der \enquote{mdb}-Collection der MongoDB
 gesammelt. Initialisiert werden kann diese Liste mithilfe der Stammdaten der
-Bundestagsabgeordneten des Bundestags. Diese als \gls{xml} zur Verfügung gestellte
+Bundestagsabgeordneten des Bundestags. Diese, als \gls{xml} zur Verfügung gestellte,
 Liste enthält alle relevanten Informationen, die bei der Identifizierung
 helfen (Namen und Namensänderungen, Parteizugehörigkeit mit von-bis-Datumsangabe,
 Titel etc.).
@@ -318,7 +318,7 @@ um solche Fehler zu erkennen. Diese können jedoch nicht ganz ausgeschlossen wer
 \subsection{Infrastruktur-Setup mit Docker}
 Um ein einfaches Deployment zu ermöglichen, wurde ein Container-basierter
 Deploymentansatz gewählt. Dieser nutzt sowohl einen Container für die im
-Rahmen des Teilprojektes erstellte Software als auch für die MongoDB, welche
+Rahmen des Teilprojektes erstellte Software, als auch für die MongoDB, welche
 für die Persistierung der Daten genutzt wird.
 
 Die beiden Container werden mithilfe von docker-compose verwaltet und
@@ -401,15 +401,15 @@ folgenden Gruppe realisiert wurde.
 
 Es wurde sich mit Gruppe 1 darauf geeinigt, dass der \gls{cme} einen Endpunkt
 anbietet, um die Information zu erhalten, wenn neue Protokolle aus dem
-Bundestag in deren Datenbank kreiert wurden. Zusätzlich bekamen wir
-Zugangsdaten, um auf deren Datenbank zugreifen zu können. So werden uns die
+Bundestag in deren Datenbank kreiert wurden. Nach dem Erhalt der Zugangsdaten konnte
+auf die Datenbank der Gruppe 1 zugegriffen werden können. So werden die
 Protokoll-ID's an \url{http://infosys2.f4.htw-berlin.de:9001/cme/data/} gesendet
 und der \gls{cme} holt sich die gewünschten Protokolle zu einem späteren Zeitpunkt
 aus deren Datenbank. Danach kann die Auswertung geschehen.
 
 Um der darauffolgenden Gruppe Bescheid zu geben, wird nach dem Prozess der
 Auswertung ebenfalls eine HTTP Anfrage gesendet, in der über die neuen
-Protokoll-ID's informiert wird. Unsere \gls{api} bietet dafür verschiedene Endpunkte
+Protokoll-ID's informiert wird. Die \gls{api} bietet dafür verschiedene Endpunkte
 an, um an alle notwendigen Informationen zu gelangen.
 
 Diese Endpunkte sind alle in einem Endpunkt festgehalten, die die \gls{api}
@@ -476,7 +476,7 @@ Insbesondere in den Redeteilen besteht in den mehrfach vorkommenden Nachnamen
 und mehrdeutigen Fraktionsbezeichnern die Möglichkeit deutlich mehr
 Interaktionen zu extrahieren. Dies könnte z.~B. durch kontext-basierte
 Algorithmen, die eine eindeutige Empfänger-Bestimmung durchführen könnten,
-realisiert werden. In diesem Zug wird auch die Ermittlung von False Positives,
+realisiert werden. In diesem Zuge wird auch die Ermittlung von False Positives,
 also Fällen in denen der von uns ermittelte Empfänger eigentlich nur durch
 indirekte Rede erwähnt wird, mit zunehmender Interaktionsanzahl wichtiger, um
 zukünftig die korrekte Erkennung von Interaktionen zu gewährleisten.
