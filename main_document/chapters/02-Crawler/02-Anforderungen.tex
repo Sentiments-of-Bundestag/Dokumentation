@@ -1,32 +1,33 @@
 \section{Anforderungen und Rahmenbedingungen}\label{sec:02_02_anforderungen_rahmen}
-Der zu entwickelnden Crawler soll in bestimmten Rahmenbedingungen einige Anforderungen erfüllen. Diese sowie die technischen und organisatorischen Rahmenbedingungen dazu werden in diesem Abschnitt aufgelistet. 
+Der zu entwickelnde Crawler soll in bestimmten Rahmenbedingungen einige Anforderungen erfüllen. Die technischen als auch organisatorischen Anforderungen und Rahmenbedingungen werden in diesem Abschnitt aufgelistet. 
 \subsection{Anforderungen an dem Crawler}\label{subsec:02_02_anforderungen}
-Die Anforderungen an dem Crawler sind in~\cite{Hoppe2020Uebung} zusammengefasst und sehen vor, dass der Crawler kontinuierlich laufen sollte und dabei nach folgenden Dateien suchen:
+Die Anforderungen an den Crawler sind in~\cite{Hoppe2020Uebung} zusammengefasst und sehen vor, dass der Crawler kontinuierlich laufen soll und dabei nach folgenden Dateien sucht:
 \begin{itemize}
-  \item \textbf{Protokolle}: Ein Protokoll ist eine XML-Datei, die den gesamten Ablauf einer Plenarsitzung (Inhaltsverzeichnis, Sitzungsverlauf mit Sitzungsbeginn, Tagesordnungspunkte, Sitzungsende, Anlagen, Rednerliste und  gewisse Konfigs) beinhaltet. Da sich die Formatierung der Protokollen in den Jahren stets verbessert hat, soll hier auf die Legislaturperioden geachtet werden:
+  \item \textbf{Protokolle}: Ein Protokoll ist eine XML-Datei, die den gesamten Ablauf einer Plenarsitzung beinhaltet, so wie dessen Teilnehmer. Da sich die Formatierung der Protokolle in den Jahren stets verändert haben, soll sich hier nur auf die folgenden Legislaturperioden bezogen werden:
   \begin{itemize}
-    \item 19. Legislaturperiode: diese sind sehr gut strukturiert und leicht zu parsen
-    \item 18. Legislaturperiode: schlechter formatiert als die 19. Legislaturperiode. Hierfür wird vom Prof. Dr. Thomas Hoppe eine mit besser formatierte Version zur Verfügung gestellt
+    \item 19. Legislaturperiode: XML-Dokumente, welche somit gut strukturiert sind und das parsen erleichtern
+    \item 18. Legislaturperiode: Text-Datei, welche schlechter strukturiert ist als die 19. Legislaturperiode. Hierzu läuft derzeit ein Projekt, bei welchem die Protokolle mithilfe einer KI in XML-Dokumente umgewandelt werden, welche die selbe Form wie die der 19. Periode aufweisen. Nach Erfolg des genannten Projektes ist es möglich diese Protokolle mit dem selben Parser der 19. Legislatur zu parsen.
   \end{itemize}
-  \item \textbf{Stammdaten der Abgeordneten}: Ist eine XML-Datei, die Informationen über Abgeordneten seit 1949 sammelt
+  \item \textbf{Stammdaten der Abgeordneten}: XML-Dokument, welches Informationen über alle Abgeordneten seit 1949 sammelt
   \item \textit{Optional} \textbf{Namentliche Abstimmungen}: Liste aller namentlichen Abstimmungen im Bundestag seit dem 18.12.2009 in PDF-Format und seit dem 18.10.2012 auch in XLSX-Format~\cite{NamentlicheAbstimmung20}
   \item Es muss sichergestellt sein, dass alle Daten immer auf dem neusten Stand sind. Dafür soll die Frequenz des Crawlers sich an dem Sitzungskalender des Bundestags~\cite{Sitzungskalender2021} orientieren
 \end{itemize}
 
 \subsection{Rahmenbedingungen}\label{subsec:02_02_rahmenbedingungen}
 \subsubsection{Organisatorische Rahmenbedingungen}
-Für die Planung des gesamten Projekts ist in einem zwei Wochen-Takt ein Plenum für den Brainstorming und eventuelle Teams-übergreifende Abstimmungen festgelegt worden. Im Team-Crawler (Gruppe 1) ist folgende Planung abgemacht worden:
+Für die Planung des gesamten Projekts ist in einem zwei Wochen-Takt ein Plenum für das Brainstorming und eventuelle Abstimmungen der unterschiedlichen Gruppen festgelegt worden. Im Team-Crawler (Gruppe 1) ist folgende Planung abgemacht worden:
 \begin{itemize}
     \item Ziel bis zum 13.11.2020: Testdaten für andere Gruppen, erster lauffähiger Prototyp
-    \item Ziel bis zum 27.11.2020: Vorläufiger Release und Integration-Test mit anderen Gruppen (Kommunikationsmodell)
-    \item Ziel bis zum 04.12.2020: finale Version und Anfang der Dokumentation
+    \item Ziel bis zum 27.11.2020: Vorläufiger Release und Integration-Test mit anderen Gruppen (Kommunikationsmodell - Gruppe 2)
+    \item Ziel bis zum 04.12.2020: Finale Version und Anfang der Dokumentation
     \item Ziel bis zum 25.02.2021: Fertigstellung der Dokumentation und Abgabe
 \end{itemize}
-Neben den organisatorischen Rahmenbedingungen sind technische Rahmenbedingungen zu betrachten bzw. sind Fehler (Probleme) zu vermeiden (zu lösen).
+Neben den organisatorischen Rahmenbedingungen sind die technischen ebenfalls zu betrachten. Die beim Crawl-Prozess auftretenden Probleme sind zu vermeiden oder müssen gelöst werden.
 \subsubsection{Technische Rahmenbedingungen: Probleme beim Crawlen}\label{subsubsec:techAnforderungen}
 \begin{itemize}
-    \item Sperrung durch Server-Administrator (Server-Regel). Es soll vermieden werden, dass der ausführende Rechner wegen zu häufige Abfragen vom Server-Admin gesperrt wird und nur noch ein 500-Fehlercode erhält
-    \item Ajax basierende Inhalte. Die Open Data Webseite verwendet Ajax für die Bereitstellung der Daten und lädt diese im Hintergrund. Ein einfacher Download der Seite genug da nicht. Außerdem nutzen die meisten Links, hinter denen Dateien stehen, Javascript (es ist z. B. der Fall bei Slides und verborgenen Regionen). Dies muss entsprechend gehandelt werden
-    \item Mongo-DB-Konfiguration und Zurverfügungstellung der Daten für die Gruppe Kommunikationsmodell 
+    \item \textbf {Sperrung durch Server-Administrator (Server-Regel):} 
+    \\Es soll vermieden werden, dass der ausführende Rechner aufgrund von zu häufigen Abfragen, welche nach einem bestimmten Muster ausgeführt werden, vom Server-Admin gesperrt wird. Eine Sperrung hätte zur Folge, dass Antworten des Servers immer mit einem HTTP-Statuscode 500 gesendet werden.
+    \item \textbf{Ajax basierende Inhalte:} Die Open Data Webseite verwendet Ajax für die Bereitstellung der Daten und lädt diese im Hintergrund. Ajax ist ein Konzept zum asynchronen Datenaustausch zwischen Client und Server. Damit ist es möglich HTTP-Anfragen auszuführen während eine HTML-Seite angezeigt wird. Da somit die Webseite clientseitig gerendert wird, ist ein einfacher Download der Webseite nicht ausreichend. Des Weiteren nutzen die meisten Links, hinter denen Dateien stehen, Javascript. Ein Beispiel wären bestimmt Slides hinter welchen sich verborgene Regionen verbergen. Dies muss entsprechend berücksichtigt werden.
+    \item  \textbf{Bereitstellung:} Mongo-DB-Konfiguration und das zur Verfügung stellen der Daten für die Gruppe 2 des Kommunikationsmodells.
     %\item Das robots.txt Protokoll
 \end{itemize}

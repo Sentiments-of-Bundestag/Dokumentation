@@ -60,7 +60,7 @@ Mittels \ref{math:faction-hash-table} kann eine Repräsentation für eine Frakti
 \begin{equation}
     \begin{aligned}
     \label{math:faction-size-union}
-    F_{m}^{L} = \sum_{i = 2}^{|L|} F_{m}^{(i-1)} \cup F_{m}^{(i)}.
+    F_{m}^{L} = \cup_{i=1}^{L} F_{m}^{(i)}.
     \end{aligned}
 \end{equation}
 \ref{math:faction-size-union} vereinigt sukzessiv die eindeutigen Fraktionsmitglieder der $m$-ten Fraktion aus jeder Sitzung. Das bedeutet, dass $N_m^{L}$ der Gesamtanzahl
@@ -71,7 +71,7 @@ Interaktion zusammen mit der Gewichtung in einem Objekt über, das als eine Bezi
 Die Anzahl der Kommentare in einer Legislaturperiode beträgt i.d.R mehrere Hunderttausend (c.a $300 000$ für die 19. Legislaturperiode). 
 Die Speicherkapazität eines durchschnittlichen Rechners ist ungenügend, um alle Kommentare gleichzeitig in RAM aufzubewahren oder alle Kommentare auf einmal 
 in der Graph-Datenbank zu speichern. Aus diesem Grund werden die Sitzungen hintereinander verarbeitet, wobei die Kommentare in einer Sitzung schubweise 
-an die Graph-Datenbank weitergegeben werden. Eine Batchgröße von $10 000$ Kommentaren hat die Laufzeit eines Updates der gesamten Datenbank um den Faktor 4 verkleinert. %im vergleich zu was?
+an die Graph-Datenbank weitergegeben werden.
 
 \subsection{Abfrage}
 Folgende Abfrage gibt eine Tabelle aus, die die aggregierten Sentiments zwischen allen Fraktionen angibt.
